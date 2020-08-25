@@ -1,10 +1,10 @@
 $(document).ready(function(){
 	$('#card').click(function(){
-		var mamau=$(this).closest('b').find(".mau").attr("data-mamau");
-		var tenmau=$(this).closest('b').find(".mau").text();
+		var mamau=$(this).closest("i").find("#mau").attr("data-value");
+		var tenmau=$(this).closest("i").find("#mau").text();
 //		var tenmau=$('.mau').text();
-		var masize=$(this).closest('b').find(".size").attr("data-size");
-		var tensize=$(this).closest('b').find(".size").text();
+		var masize=$(this).closest("i").find("#size").attr("data-value");
+		var tensize=$(this).closest("i").find("#size").text();
 		var tensp=$('#tensp').text();
 		var giatien=$('#giatien').attr("data-value");
 		var masp=$('#masp').attr("data-value");

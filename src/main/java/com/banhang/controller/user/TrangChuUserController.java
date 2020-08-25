@@ -115,5 +115,25 @@ public class TrangChuUserController {
 		}
 		return -1;
 	}
+	@GetMapping("giohang")
+	public String loadGioHang(HttpSession httpSession,ModelMap map) {
+		if(httpSession.getAttribute("giohang")!=null) {
+			List<GioHang> gioHangs=(List<GioHang>) httpSession.getAttribute("giohang");
+			System.out.println("Size" + gioHangs.size());
+			System.out.println(gioHangs.get(0).toString());
+			map.addAttribute("soluonggiohang", gioHangs.size());
+			map.addAttribute("gioHangs", gioHangs);
+		}
+		return "cart_user";
+	}
+	
+	@GetMapping("giohang/delete/{masp}{mamau}{masize}")
+	public String xoaSanPhamKhoiGio(int masp,int mamau,int masize,HttpSession httpSession,ModelMap map) {
+		return null;
+	}
+	@GetMapping("giohang/update/{masp}{mamau}{masize}{soluong}")
+	public String upadateSanPhamKhoiGio(int masp,int mamau,int masize,HttpSession httpSession,ModelMap map) {
+		return null;
+	}
 	
 }

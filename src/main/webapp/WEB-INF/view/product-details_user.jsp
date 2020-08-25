@@ -112,8 +112,8 @@
 									<span>
 										<label>Màu sản phẩm :</label><i >${chitietsanpham.getMauSanPham().getTenmau()}</i> <label>- -Size : </label>
 										<i>${chitietsanpham.getSizeSanPham().getSize()}</i></br>
-										<b class="mau" style="display: none;" data-mamau="${chitietsanpham.getMauSanPham().getMamau()}">${chitietsanpham.getMauSanPham().getTenmau()}</b>
-										<b class="size" style="display: none;" data-size="${chitietsanpham.getSizeSanPham().getMasize()}">${chitietsanpham.getSizeSanPham().getSize()}</b>
+										<i id="mau" style="display: none;" data-value="${chitietsanpham.getMauSanPham().getMamau()}">${chitietsanpham.getMauSanPham().getTenmau()}</i>
+										<i id="size" style="display: none;"data-value="${chitietsanpham.getSizeSanPham().getMasize()}">${chitietsanpham.getSizeSanPham().getSize()}</i>
 										<label>Số lượng mua:</label>
 										<input type="number" value="1" id="soluong" min="1" max="100" />
 										<button type="button" class="btn btn-fefault cart" id="card">
