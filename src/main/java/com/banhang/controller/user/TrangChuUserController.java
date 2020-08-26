@@ -119,8 +119,8 @@ public class TrangChuUserController {
 	public String loadGioHang(HttpSession httpSession,ModelMap map) {
 		if(httpSession.getAttribute("giohang")!=null) {
 			List<GioHang> gioHangs=(List<GioHang>) httpSession.getAttribute("giohang");
-			System.out.println("Size" + gioHangs.size());
-			System.out.println(gioHangs.get(0).toString());
+			boolean isEmpty=gioHangs.isEmpty();
+			map.addAttribute("isEmpty",isEmpty);
 			map.addAttribute("soluonggiohang", gioHangs.size());
 			map.addAttribute("gioHangs", gioHangs);
 		}

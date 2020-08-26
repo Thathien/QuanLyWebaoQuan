@@ -15,7 +15,7 @@
 			</div>
 			<div class="table-responsive cart_info">
 				<c:choose>
-					<c:when test="${gioHangs.size()!=0}">
+					<c:when test="${isEmpty!=true}">
 					<table class="table table-condensed">
 						<thead>
 							<tr class="cart_menu">
@@ -51,20 +51,20 @@
 									<p>size : ${gioHangs.getTensize()}</p>
 								</td>
 								<td class="cart_price">
-									<p class="cart_total_price">${gioHangs.getGiatien()}</p>
+									<p class="cart_total_price" data-value="${gioHangs.getGiatien()}">${gioHangs.getGiatien()}</p>
 								</td>
 								<td class="cart_quantity">
 									<div class="cart_quantity_button">
-										<a class="cart_quantity_up" href=""> + </a>
-										<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-										<a class="cart_quantity_down" href=""> - </a>
+										
+										<input class="cart_quantity_input" type="number" name="soluong" value="1" autocomplete="off" size="2" id="soluong" min=1 max=99>
+										
 									</div>
 								</td>
 								<td class="cart_total">
 									<p class="cart_total_price"></p>
 								</td>
 								<td class="cart_delete">
-									<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+									<a class="cart_quantity_delete" href=""><i class="fa fa-times" title="Xóa khỏi giỏ hàng"></i></a>
 								</td>
 							</tr>
 						</tbody>

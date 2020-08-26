@@ -67,7 +67,20 @@
 					<div class="col-md-8 clearfix">
 						<div class="shop-menu clearfix pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
+								<li>
+									<c:choose>
+										<c:when test="">
+											<a href="/banaoquan/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng: 
+										<c:if test="${soluonggiohang!=0}">
+										<i style="color: red">${soluonggiohang>0}</i>
+										</c:if>
+										</a>
+										</c:when>
+										<c:otherwise>
+											<a href="/banaoquan/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng </a>
+										</c:otherwise>
+									</c:choose>
+								</li>
 								<c:choose>
 									<c:when test="${taiKhoan==null}">
 										<li><a href="/banaoquan/dangnhap"><i class="fa fa-lock"></i> Đăng nhập</a></li>
