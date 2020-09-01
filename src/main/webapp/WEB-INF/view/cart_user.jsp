@@ -15,7 +15,7 @@
 			</div>
 			<div class="table-responsive cart_info">
 				<c:choose>
-					<c:when test="${isEmpty!=true}">
+					<c:when test="${isEmpty==false}">
 					<table class="table table-condensed">
 						<thead>
 							<tr class="cart_menu">
@@ -41,27 +41,27 @@
 								
 								</td>
 								<td class="cart_description">
-									<h4><a href="">${gioHangs.getTensp()}</a></h4>
-									<p>Mã sản phẩm: ${gioHangs.getMasp()}</p>
+									<h4><a href="" id="ten-sp">${gioHangs.getTensp()}</a></h4>
+									<p class="masp">Mã sản phẩm: ${gioHangs.getMasp()}</p>
 								</td>
 								<td class="cart_price">
-									<p>${gioHangs.getTenmau()}</p>
+									<p class="tenmau-sp">${gioHangs.getTenmau()}</p>
 								</td>
 								<td class="cart_price">
-									<p>size : ${gioHangs.getTensize()}</p>
+									<p class="size-sp">size : ${gioHangs.getTensize()}</p>
 								</td>
 								<td class="cart_price">
-									<p class="cart_total_price" data-value="${gioHangs.getGiatien()}">${gioHangs.getGiatien()}</p>
+									<p class="cart_total_price giatien-sp" data-value="${gioHangs.getGiatien()}">${gioHangs.getGiatien()}</p>
 								</td>
 								<td class="cart_quantity">
 									<div class="cart_quantity_button">
 										
-										<input class="cart_quantity_input" type="number" name="soluong" value="1" autocomplete="off" size="2" id="soluong" min=1 max=99>
+										<input class="cart_quantity_input soluong-sp" type="number" name="soluong-sp" value="1" autocomplete="off" size="2" min=1 max=99>
 										
 									</div>
 								</td>
 								<td class="cart_total">
-									<p class="cart_total_price"></p>
+									<p class="cart_total_price tongtien-sp" ></p>
 								</td>
 								<td class="cart_delete">
 									<a class="cart_quantity_delete" href=""><i class="fa fa-times" title="Xóa khỏi giỏ hàng"></i></a>
@@ -77,7 +77,7 @@
 			</div>
 		</div>
 	</section> <!--/#cart_items-->
-	<c:if test="${gioHangs.size()!=0}">
+	<c:if test="${isEmpty==false}">
 			<section id="do_action">
 				<div class="container">
 					<div class="heading">
@@ -88,10 +88,10 @@
 						<div class="col-sm-6">
 							<div class="total_area">
 								<ul>
-									<li>Cart Sub Total <span>$59</span></li>
-									<li>Eco Tax <span>$2</span></li>
-									<li>Shipping Cost <span>Free</span></li>
-									<li>Total <span>$61</span></li>
+									<li>Tổng số lượng sản phẩm<span id="tongsoluongsp">$59</span></li>
+									<li>Giảm giá <span id="giamgiasp">$2</span></li>
+									<li>Vận chuyển <span id="freeship">Free</span></li>
+									<li>Tổng tiền <span id="tongtiensp">$61</span></li>
 								</ul>
 									<a class="btn btn-default update" href="">Tiếp tục mua sắm</a>
 									<a class="btn btn-default check_out" href="">Thanh toán</a>

@@ -1,4 +1,6 @@
 $(document).ready(function(){
+	
+	//thêm sp vào giỏ hàng
 	$('#card').click(function(){
 		var mamau=$(this).closest("i").find("#mau").attr("data-value");
 		var tenmau=$(this).closest("i").find("#mau").text();
