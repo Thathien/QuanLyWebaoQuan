@@ -41,14 +41,14 @@
 								
 								</td>
 								<td class="cart_description">
-									<h4><a href="" id="ten-sp">${gioHangs.getTensp()}</a></h4>
+									<h4><a href="" class="ten-sp" data-value="${gioHangs.getMasp()}">${gioHangs.getTensp()}</a></h4>
 									<p class="masp">Mã sản phẩm: ${gioHangs.getMasp()}</p>
 								</td>
 								<td class="cart_price">
-									<p class="tenmau-sp">${gioHangs.getTenmau()}</p>
+									<p class="tenmau-sp" data-value="${gioHangs.getMamau()}">${gioHangs.getTenmau()}</p>
 								</td>
 								<td class="cart_price">
-									<p class="size-sp">size : ${gioHangs.getTensize()}</p>
+									<p class="size-sp" data-value="${gioHangs.getMasize()}">size : ${gioHangs.getTensize()}</p>
 								</td>
 								<td class="cart_price">
 									<p class="cart_total_price giatien-sp" data-value="${gioHangs.getGiatien()}">${gioHangs.getGiatien()}</p>

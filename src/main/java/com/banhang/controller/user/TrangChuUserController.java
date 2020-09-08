@@ -127,13 +127,19 @@ public class TrangChuUserController {
 		return "cart_user";
 	}
 	
-	@GetMapping("giohang/delete/{masp}{mamau}{masize}")
-	public String xoaSanPhamKhoiGio(int masp,int mamau,int masize,HttpSession httpSession,ModelMap map) {
-		return null;
+	@GetMapping("giohang/delete/")
+	public Boolean xoaSanPhamKhoiGio(@RequestParam("masp") int masp,@RequestParam("mamau") int mamau,@RequestParam("masize") int masize,HttpSession httpSession,ModelMap map) {
+		List<GioHang> listGioHangs=(List<GioHang>) httpSession.getAttribute("giohang");
+		int vitri=kiemTraSanPhamTonTai(masp, masize, mamau, httpSession);
+		listGioHangs.remove(vitri);
+		return true;
 	}
-	@GetMapping("giohang/update/{masp}{mamau}{masize}{soluong}")
-	public String upadateSanPhamKhoiGio(int masp,int mamau,int masize,HttpSession httpSession,ModelMap map) {
-		return null;
+	@GetMapping("giohang/update/")
+	public Boolean upadateSanPhamKhoiGio(@RequestParam("masp") int masp,@RequestParam("mamau") int mamau,@RequestParam("masize") int masize,@RequestParam("soluong") int soluong,HttpSession httpSession,ModelMap map) {
+		List<GioHang> listGioHangs=(List<GioHang>) httpSession.getAttribute("giohang");
+		int vitri=kiemTraSanPhamTonTai(masp, masize, mamau, httpSession);
+		listGioHangs.get(vitri).setSoluong(soluong);
+		return true;
 	}
 	
 }

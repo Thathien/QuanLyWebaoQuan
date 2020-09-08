@@ -2,11 +2,11 @@ $(document).ready(function(){
 	
 	//thêm sp vào giỏ hàng
 	$('#card').click(function(){
-		var mamau=$(this).closest("i").find("#mau").attr("data-value");
-		var tenmau=$(this).closest("i").find("#mau").text();
+		var mamau=$(this).closest("tr").find("#mau").attr("data-value");
+		var tenmau=$(this).closest("tr").find("#mau").text();
 //		var tenmau=$('.mau').text();
-		var masize=$(this).closest("i").find("#size").attr("data-value");
-		var tensize=$(this).closest("i").find("#size").text();
+		var masize=$(this).closest("tr").find("#size").attr("data-value");
+		var tensize=$(this).closest("tr").find("#size").text();
 		var tensp=$('#tensp').text();
 		var giatien=$('#giatien').attr("data-value");
 		var masp=$('#masp').attr("data-value");

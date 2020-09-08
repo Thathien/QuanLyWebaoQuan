@@ -168,5 +168,6 @@
   	<script src="<c:url value = "/resourcess/user/js/jquery.prettyPhoto.js"/>"></script>
   	<script src="<c:url value = "/resourcess/user/js/main.js"/>"></script>
   	<script src="<c:url value = "/resourcess/user/js/cart.js"/>"></script>
+  	<script src="<c:url value = "/resourcess/user/js/cart_infor.js"/>"></script>
 </body>
 </html>
