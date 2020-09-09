@@ -19,6 +19,7 @@ public class HoaDon {
 	String sdt;
 	String diachigiaohang;
 	int tinhtrang;
+	String ghichu;
 	String ngaylap;
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -30,17 +31,20 @@ public class HoaDon {
 		// TODO Auto-generated constructor stub
 	}
 
-	public HoaDon(int mahoadon, String tenkhachhang, String sdt, String diachigiaohang, int tinhtrang, String ngaylap,
-			Set<ChiTietHoaDon> chiTietHoaDon) {
+	public HoaDon(int mahoadon, String tenkhachhang, String sdt, String diachigiaohang, int tinhtrang, String ghichu,
+			String ngaylap, Set<ChiTietHoaDon> chiTietHoaDon) {
 		super();
 		this.mahoadon = mahoadon;
 		this.tenkhachhang = tenkhachhang;
 		this.sdt = sdt;
 		this.diachigiaohang = diachigiaohang;
 		this.tinhtrang = tinhtrang;
+		this.ghichu = ghichu;
 		this.ngaylap = ngaylap;
 		this.chiTietHoaDon = chiTietHoaDon;
 	}
+
+
 
 	public int getMahoadon() {
 		return mahoadon;
@@ -96,6 +100,14 @@ public class HoaDon {
 
 	public void setChiTietHoaDon(Set<ChiTietHoaDon> chiTietHoaDon) {
 		this.chiTietHoaDon = chiTietHoaDon;
+	}
+
+	public String getGhichu() {
+		return ghichu;
+	}
+
+	public void setGhichu(String ghichu) {
+		this.ghichu = ghichu;
 	}
 	
 }

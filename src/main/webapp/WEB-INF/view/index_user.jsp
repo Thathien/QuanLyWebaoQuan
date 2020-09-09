@@ -88,14 +88,18 @@
 													<p>${ListSanPham.getTensanpham()}</p>
 													<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
 												</div>
-												<div class="product-overlay">
-													<div class="overlay-content">
-														<h2>${ListSanPham.getGiatien()}</h2>
-														<a href="/banaoquan/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product"><p>${ListSanPham.getTensanpham()}</p></a>
-														
-														<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
+												
+													<div class="product-overlay">
+													<a href="/banaoquan/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product">
+														<div class="overlay-content">
+															<h2>${ListSanPham.getGiatien()}</h2>
+															<a href="/banaoquan/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product"><p>${ListSanPham.getTensanpham()}</p></a>
+															
+															<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
+														</div>
+													</a>
 													</div>
-												</div>
+												
 											</div>
 										</div>
 									</div>

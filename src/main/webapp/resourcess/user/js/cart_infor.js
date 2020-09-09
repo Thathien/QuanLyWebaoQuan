@@ -12,23 +12,23 @@ $(document).ready(function(){
 			if(!isEventChange){
 				$(this).html(fomat);
 			}
-			
 			var formattongtien=tongtiensp.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1.").toString();
 			$("#tongtiensp").html(formattongtien+"");
 		});
 		
 	}
-	
 	$('.soluong-sp').change(function(){
+		var machitietsanpham=$(this).closest("tr").attr("data-value");
 		var masp=$(this).closest("tr").find(".ten-sp").attr("data-value");
-		var mamau=$(this).closest("tr").find(".tenmau-sp").text();
+		var mamau=$(this).closest("tr").find(".mamau-sp").attr("data-value");
+		alert("mamau" + mamau);
 		var masize=$(this).closest("tr").find(".size-sp").attr("data-value");
 		var soluong=$(this).val();
 		var giatien=$(this).closest("tr").find(".giatien-sp").attr("data-value").replace(",",".");
 		var tongtien=soluong * parseInt(giatien);
 		var fomat=tongtien.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1.").toString();
 		$(this).closest("td").find(".tongtien-sp").html(fomat);
-		updateTongTienGio(true);
+//		updateTongTienGio(true);
 		$.ajax({
 			url:"/banaoquan/giohang/update/",
 			type: "GET",
@@ -36,6 +36,7 @@ $(document).ready(function(){
 				masp: masp,
 				masize: masize,
 				mamau: mamau,
+//				machitietsanpham:machitietsanpham,
 				soluong:soluong
 			},
 			success: function(value){
@@ -48,7 +49,7 @@ $(document).ready(function(){
 	$('.cart_quantity_delete').click(function(){
 		var self=$(this);
 		var masp=$(this).closest("tr").find(".ten-sp").attr("data-value");
-		var mamau=$(this).closest("tr").find(".tenmau-sp").text();
+		var mamau=$(this).closest("tr").find(".mamau-sp").attr("data-value");
 		var masize=$(this).closest("tr").find(".size-sp").attr("data-value");
 		var x = confirm("Bạn muốn xóa?");
 		if(x){

@@ -20,7 +20,7 @@
 						<thead>
 							<tr class="cart_menu">
 								<td><a href=""><input type="checkbox"></a></td>
-								<td class="image">Ảnh</td>
+								
 								<td class="description">Tên sản phẩm</td>
 								<td class="price">Màu sắc</td>
 								<td class="price">Kích cỡ</td>
@@ -31,42 +31,40 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td class="cart_price">
-									<input type="checkbox">
-								</td>
-								<td class="cart_product">
-								<c:if test="${gioHangs.size()!=0}"></c:if>
-								<a href=""><img src="<c:url value ="/resourcess/user/images/cart/one.png"></c:url>" alt="" /></a>
-								
-								</td>
-								<td class="cart_description">
-									<h4><a href="" class="ten-sp" data-value="${gioHangs.getMasp()}">${gioHangs.getTensp()}</a></h4>
-									<p class="masp">Mã sản phẩm: ${gioHangs.getMasp()}</p>
-								</td>
-								<td class="cart_price">
-									<p class="tenmau-sp" data-value="${gioHangs.getMamau()}">${gioHangs.getTenmau()}</p>
-								</td>
-								<td class="cart_price">
-									<p class="size-sp" data-value="${gioHangs.getMasize()}">size : ${gioHangs.getTensize()}</p>
-								</td>
-								<td class="cart_price">
-									<p class="cart_total_price giatien-sp" data-value="${gioHangs.getGiatien()}">${gioHangs.getGiatien()}</p>
-								</td>
-								<td class="cart_quantity">
-									<div class="cart_quantity_button">
-										
-										<input class="cart_quantity_input soluong-sp" type="number" name="soluong-sp" value="1" autocomplete="off" size="2" min=1 max=99>
-										
-									</div>
-								</td>
-								<td class="cart_total">
-									<p class="cart_total_price tongtien-sp" ></p>
-								</td>
-								<td class="cart_delete">
-									<a class="cart_quantity_delete" href=""><i class="fa fa-times" title="Xóa khỏi giỏ hàng"></i></a>
-								</td>
+							<c:forEach var="gioHangs" items="${gioHangs}">
+								<tr data-value="${gioHangs.getMachitietsanpham()}">
+									<td class="cart_price">
+										<input type="checkbox">
+									</td>
+									</td>
+									<td class="cart_description">
+										<h4><a href="/banaoquan/chi-tiet-san-pham/${gioHangs.getMasp()}" class="ten-sp" data-value="${gioHangs.getMasp()}">${gioHangs.getTensp()}</a></h4>
+										<p class="masp">Mã sản phẩm: ${gioHangs.getMasp()}</p>
+									</td>
+									<td class="cart_price">
+										<p class="mamau-sp" data-value="${gioHangs.getMamau()}">${gioHangs.getTenmau()}</p>
+									</td>
+									<td class="cart_price">
+										<p class="size-sp" data-value="${gioHangs.getMasize()}">size : ${gioHangs.getTensize()}</p>
+									</td>
+									<td class="cart_price">
+										<p class="cart_total_price giatien-sp" data-value="${gioHangs.getGiatien()}">${gioHangs.getGiatien()}</p>
+									</td>
+									<td class="cart_quantity">
+										<div class="cart_quantity_button">
+											
+											<input class="cart_quantity_input soluong-sp" type="number"  value="${gioHangs.getSoluong()}"  size="2" min=1 max=99>
+											
+										</div>
+									</td>
+									<td class="cart_total">
+										<p class="cart_total_price tongtien-sp" ></p>
+									</td>
+									<td class="cart_delete">
+										<a class="cart_quantity_delete" href=""><i class="fa fa-times" title="Xóa khỏi giỏ hàng"></i></a>
+									</td>
 							</tr>
+							</c:forEach>
 						</tbody>
 					</table>
 					</c:when>

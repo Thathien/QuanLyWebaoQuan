@@ -1,6 +1,7 @@
 package com.banhang.entity;
 
 public class GioHang {
+	int machitietsanpham;
 	int masp;
 	int masize;
 	int mamau;
@@ -13,9 +14,11 @@ public class GioHang {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public GioHang(int masp, int masize, int mamau, String tensp, String giatien, String tenmau, String tensize,
-			int soluong) {
+	
+	public GioHang(int machitietsanpham, int masp, int masize, int mamau, String tensp, String giatien, String tenmau,
+			String tensize, int soluong) {
 		super();
+		this.machitietsanpham = machitietsanpham;
 		this.masp = masp;
 		this.masize = masize;
 		this.mamau = mamau;
@@ -25,6 +28,7 @@ public class GioHang {
 		this.tensize = tensize;
 		this.soluong = soluong;
 	}
+
 	public int getMasp() {
 		return masp;
 	}
@@ -72,6 +76,14 @@ public class GioHang {
 	}
 	public void setSoluong(int soluong) {
 		this.soluong = soluong;
+	}
+
+	public int getMachitietsanpham() {
+		return machitietsanpham;
+	}
+
+	public void setMachitietsanpham(int machitietsanpham) {
+		this.machitietsanpham = machitietsanpham;
 	}
 	
 }

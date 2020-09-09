@@ -112,11 +112,11 @@
 									<span>
 										<label>Màu sản phẩm :</label><i >${chitietsanpham.getMauSanPham().getTenmau()}</i> <label>- -Size : </label>
 										<i>${chitietsanpham.getSizeSanPham().getSize()}</i></br>
-										<i id="mau" style="display: none;" data-value="${chitietsanpham.getMauSanPham().getMamau()}">${chitietsanpham.getMauSanPham().getTenmau()}</i>
-										<i id="size" style="display: none;"data-value="${chitietsanpham.getSizeSanPham().getMasize()}">${chitietsanpham.getSizeSanPham().getSize()}</i>
+										<i class="mau" style="display: none;" data-value="${chitietsanpham.getMauSanPham().getMamau()}">${chitietsanpham.getMauSanPham().getTenmau()}</i>
+										<i class="size" style="display: none;"data-value="${chitietsanpham.getSizeSanPham().getMasize()}">${chitietsanpham.getSizeSanPham().getSize()}</i>
 										<label>Số lượng mua:</label>
 										<input type="number" value="1" id="soluong" min="1" max="100" />
-										<button type="button" class="btn btn-fefault cart" id="card">
+										<button type="button" class="btn btn-fefault cart add-tocart" " data-machitietsanpham="${chitietsanpham.getMachitietsanpham()}">
 											<i class="fa fa-shopping-cart"></i>
 											Thêm vào giỏ
 										</button>
