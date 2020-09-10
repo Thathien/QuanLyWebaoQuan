@@ -78,7 +78,7 @@ $(document).ready(function(){
 		var tenkhachhang=$('#tenkhachhang').val();
 		var emailkhachang=$('#emailkhachang').val();
 		var sodienthoai=$("#sodienthoai").val();
-		var hinhthuc=$('#hinhthuc').val;
+		var hinhthucgiao=$('#hinhthuc').val();
 		var diachigiaohang=$('#diachigiaohang').val();
 		var ghichu=$('#ghichu').val();
 		if(!isValidTen(tenkhachhang)){
@@ -94,6 +94,11 @@ $(document).ready(function(){
 			$('#diachigiaohang_error').text("Địa chỉ hợp lệ ")
 			$('#diachigiaohang').focus();
 		}else{
+			alert("tenkhachhang" +tenkhachhang);
+			alert("emailkhachang" +emailkhachang);
+			alert("sodienthoai" +sodienthoai);
+			alert("hinhthuc" +hinhthuc);
+			alert("diachigiaohang" +diachigiaohang);
 			var x = confirm("Bạn muốn thanh toán tất cả sản phẩm trong giỏ ?");
 			if(x){
 				$.ajax({
@@ -103,7 +108,7 @@ $(document).ready(function(){
 						tenkhachhang: tenkhachhang,
 						emailkhachang: emailkhachang,
 						sodienthoai: sodienthoai,
-						hinhthuc: hinhthuc,
+						hinhthucgiao: hinhthucgiao,
 						diachigiaohang: diachigiaohang,
 						ghichu: ghichu
 					},

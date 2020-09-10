@@ -197,14 +197,14 @@ public class TrangChuUserController {
 //		return true;
 //	}
 	@PostMapping("giohang")
-	public String themHoaDon(@RequestParam String tenkhachhang,@RequestParam String emailkhachang,@RequestParam String sodienthoai,@RequestParam String hinhthucgiao,@RequestParam String diachi,@RequestParam String ghiChu,HttpSession httpSession) throws MessagingException {
+	public String themHoaDon(@RequestParam String tenkhachhang,@RequestParam String emailkhachang,@RequestParam String sodienthoai,@RequestParam String hinhthucgiao,@RequestParam String diachigiaohang,@RequestParam String ghichu,HttpSession httpSession) throws MessagingException {
 		if(null!=httpSession.getAttribute("giohang")) {
 			List<GioHang> listGioHangs=(List<GioHang>) httpSession.getAttribute("giohang");
 			HoaDon hoaDon = new HoaDon();
 			hoaDon.setTenkhachhang(tenkhachhang);
 			hoaDon.setSdt(sodienthoai);
-			hoaDon.setDiachigiaohang(diachi);
-			hoaDon.setGhichu(ghiChu);
+			hoaDon.setDiachigiaohang(diachigiaohang);
+			hoaDon.setGhichu(ghichu);
 			String hinhthucgiaohang;
 			if(hinhthucgiao.equals("0")) {
 				hinhthucgiaohang="Giao hàng tận nơi";
@@ -259,7 +259,7 @@ public class TrangChuUserController {
 						+"<h3 style ='color:red'>Ngày đặt: "+ ngaylap+ "</h3>"
 						+"<h3>Hình thức giao hàng:  "+ hinhthucgiaohang+ "</h3>"
 						+"<h3>Số điện thoại liên hệ:  "+ sodienthoai+ "</h3>"
-						+"<h3>Ghi chú:  "+ ghiChu+ "</h3>"
+						+"<h3>Ghi chú:  "+ ghichu+ "</h3>"
 						+"</br>"
 						+"<table>"
 							+"<caption> Thông tin sản phẩm</caption>"

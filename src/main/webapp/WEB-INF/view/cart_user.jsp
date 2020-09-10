@@ -105,7 +105,7 @@
 									<li class="single_field">
 										<label>Hình thức giao hàng</label>
 										<select id="hinhthuc">
-											<option selected="true" value="0">Giao hàng tận nơi</option>
+											<option  value="0">Giao hàng tận nơi</option>
 											<option value="1">Nhận hàng tại cửa hàng</option>
 										</select>
 										<span class="text-danger" id="hinhthuc_error"></span>
@@ -121,9 +121,10 @@
 										<span class="text-danger" id="ghichu_error"></span>
 									</li>
 								</ul>
-								<a class="btn btn-default update" href="/banaoquan/">Tiếp tục mua sắm</a>
-								<a class="btn btn-default check_out" href="" id="thanhtoan">Thanh toán</a>
+								<input type="Submit" class="btn btn-default check_out" value="Thanh toán" id="thanhtoan"/>
+							<!-- 	<a class="btn btn-default check_out" href="" id="thanhtoan">Thanh toán</a> -->
 						</div>
+						<a class="btn btn-default " href="/banaoquan/">Tiếp tục mua sắm</a>
 					</div>
 						<div class="col-sm-6">
 							<div class="total_area">
