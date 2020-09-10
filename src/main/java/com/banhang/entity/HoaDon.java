@@ -21,6 +21,7 @@ public class HoaDon {
 	int tinhtrang;
 	String ghichu;
 	String ngaylap;
+	String hinhthucgiaohang;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "mahoadon")
@@ -32,7 +33,7 @@ public class HoaDon {
 	}
 
 	public HoaDon(int mahoadon, String tenkhachhang, String sdt, String diachigiaohang, int tinhtrang, String ghichu,
-			String ngaylap, Set<ChiTietHoaDon> chiTietHoaDon) {
+			String ngaylap, String hinhthucgiaohang, Set<ChiTietHoaDon> chiTietHoaDon) {
 		super();
 		this.mahoadon = mahoadon;
 		this.tenkhachhang = tenkhachhang;
@@ -41,10 +42,9 @@ public class HoaDon {
 		this.tinhtrang = tinhtrang;
 		this.ghichu = ghichu;
 		this.ngaylap = ngaylap;
+		this.hinhthucgiaohang = hinhthucgiaohang;
 		this.chiTietHoaDon = chiTietHoaDon;
 	}
-
-
 
 	public int getMahoadon() {
 		return mahoadon;
@@ -109,5 +109,14 @@ public class HoaDon {
 	public void setGhichu(String ghichu) {
 		this.ghichu = ghichu;
 	}
+
+	public String getHinhthucgiaohang() {
+		return hinhthucgiaohang;
+	}
+
+	public void setHinhthucgiaohang(String hinhthucgiaohang) {
+		this.hinhthucgiaohang = hinhthucgiaohang;
+	}
+	
 	
 }

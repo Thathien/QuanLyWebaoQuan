@@ -84,7 +84,7 @@
 														<img src="<c:url value ="/resourcess/user/images/shop/${ListSanPham.getHinhsanpham()}"></c:url>" alt="" />
 													</c:otherwise>
 												</c:choose>
-													<h2>${ListSanPham.getGiatien()}</h2>
+													<h2 class="giatiensp" >${ListSanPham.getGiatien()} VNĐ</h2>
 													<p>${ListSanPham.getTensanpham()}</p>
 													<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
 												</div>
@@ -92,10 +92,10 @@
 													<div class="product-overlay">
 													<a href="/banaoquan/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product">
 														<div class="overlay-content">
-															<h2>${ListSanPham.getGiatien()}</h2>
+															<h2 class="giatiensp">${ListSanPham.getGiatien()} VNĐ</h2>
 															<a href="/banaoquan/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product"><p>${ListSanPham.getTensanpham()}</p></a>
 															
-															<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
+															<a href="/banaoquan/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
 														</div>
 													</a>
 													</div>

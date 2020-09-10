@@ -12,11 +12,6 @@ $(document).ready(function(){
 		var giatien=$('#giatien').attr("data-value");
 		var masp=$('#masp').attr("data-value");
 		var soluong=$('#soluong').val();
-//		alert("ma chi tiet san pham :" +machitietsanpham);
-//		alert("ma màu :" +mamau);
-//		alert(" ten mau :"  +tenmau);
-//		alert(" ma size :" +masize);
-//		alert("ten size :" +tensize);
 		$.ajax({
 			url:"/banaoquan/themgiohang",
 			type: "GET",

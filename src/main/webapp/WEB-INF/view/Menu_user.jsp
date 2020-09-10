@@ -71,8 +71,8 @@
 									<c:choose>
 										<c:when test="">
 											<a href="/banaoquan/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng: 
-										<c:if test="${soluonggiohang!=0}">
-										<i style="color: red">${soluonggiohang>0}</i>
+										<c:if test="${soluonggiohang>0}">
+										<i style="color: red">${soluonggiohang}</i>
 										</c:if>
 										</a>
 										</c:when>

@@ -79,20 +79,62 @@
 			<section id="do_action">
 				<div class="container">
 					<div class="heading">
-						<h3>What would you like to do next?</h3>
-						<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
+						<h3>THANH TOÁN</h3>
+						<p></p>
 					</div>
 					<div class="row">
 						<div class="col-sm-6">
+						<div class="chose_area">
+								<ul class="user_info">
+									<li class="single_field">
+										<label>Tên Người mua nhận</label>
+										<input type="text" id="tenkhachhang">
+										<span class="text-danger" id="tenkhachhang_error"></span>
+										
+									</li>
+									<li class="single_field">
+										<label>Email</label>
+										<input type="email" id="emailkhachang">
+										<span class="text-danger" id="emailkhachang_error"></span>
+									</li>
+									<li class="single_field">
+										<label>Số điện thoại liên hệ</label>
+										<input type="text" id="sodienthoai">
+										<span class="text-danger" id="sodienthoai_error"></span>
+									</li>
+									<li class="single_field">
+										<label>Hình thức giao hàng</label>
+										<select id="hinhthuc">
+											<option selected="true" value="0">Giao hàng tận nơi</option>
+											<option value="1">Nhận hàng tại cửa hàng</option>
+										</select>
+										<span class="text-danger" id="hinhthuc_error"></span>
+									</li>
+									<li class="single_field">
+										<label>Địa chỉ giao hàng</label>
+										<textarea name="" rows="2" id="diachigiaohang"></textarea>
+										<span class="text-danger" id="diachigiaohang_error"></span>
+									</li>
+									<li class="single_field">
+										<label>Ghi chú</label>
+										<textarea name="" rows="4" id="ghichu"></textarea>
+										<span class="text-danger" id="ghichu_error"></span>
+									</li>
+								</ul>
+								<a class="btn btn-default update" href="/banaoquan/">Tiếp tục mua sắm</a>
+								<a class="btn btn-default check_out" href="" id="thanhtoan">Thanh toán</a>
+						</div>
+					</div>
+						<div class="col-sm-6">
 							<div class="total_area">
 								<ul>
-									<li>Tổng số lượng sản phẩm<span id="tongsoluongsp">$59</span></li>
-									<li>Giảm giá <span id="giamgiasp">$2</span></li>
-									<li>Vận chuyển <span id="freeship">Free</span></li>
-									<li>Tổng tiền <span id="tongtiensp">$61</span></li>
+									<li>Tổng số lượng sản phẩm<span id="tongsoluongsp"></span></li>
+									<li>Giảm giá <span id="giamgiasp"></span></li>
+									<li>Vận chuyển <span id="freeship"></span></li>
+									<li>Tổng tiền <span id="tongtiensp"></span></li>
 								</ul>
-									<a class="btn btn-default update" href="">Tiếp tục mua sắm</a>
-									<a class="btn btn-default check_out" href="">Thanh toán</a>
+									
+									
 							</div>
 						</div>
 					</div>

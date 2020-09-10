@@ -1706,7 +1706,6 @@ h2.title {
 }
 
 .user_info .single_field {
-    width: 31%
 }
 
 .user_info .single_field.zip-field input {
@@ -1715,7 +1714,7 @@ h2.title {
 }
 
 .user_info>li {
-    float: left;
+
     margin-right: 10px
 }
 

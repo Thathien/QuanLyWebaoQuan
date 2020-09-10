@@ -169,5 +169,7 @@
   	<script src="<c:url value = "/resourcess/user/js/main.js"/>"></script>
   	<script src="<c:url value = "/resourcess/user/js/cart.js"/>"></script>
   	<script src="<c:url value = "/resourcess/user/js/cart_infor.js"/>"></script>
+  	<script src="<c:url value = "/resourcess/user/js/index_user.js"/>"></script>
+  	<script src="<c:url value = "/resourcess/user/js/product-details_user.js"/>"></script>
 </body>
 </html>
