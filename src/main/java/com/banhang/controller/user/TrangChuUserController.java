@@ -8,16 +8,21 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,14 +37,19 @@ import com.banhang.dao.ChiTietHoaDonDao;
 import com.banhang.entity.ChiTietHoaDon;
 import com.banhang.entity.ChiTietHoaDonId;
 import com.banhang.entity.ChiTietSanPham;
+import com.banhang.entity.ChucVu;
 import com.banhang.entity.DanhMucSanPham;
 import com.banhang.entity.GioHang;
 import com.banhang.entity.HoaDon;
+import com.banhang.entity.NhanVien;
 import com.banhang.entity.SanPham;
+import com.banhang.model.DangKyModel;
+import com.banhang.model.DangNhapModel;
 import com.banhang.service.ChiTietHoaDonService;
 import com.banhang.service.ChiTietSanPhamService;
 import com.banhang.service.DanhMucSanPhamService;
 import com.banhang.service.HoaDonService;
+import com.banhang.service.NhanVienService;
 import com.banhang.service.SanPhamService;
 
 @Controller
@@ -65,6 +75,9 @@ public class TrangChuUserController {
 	
 	@Autowired
 	private JavaMailSender mailsender;
+	
+	@Autowired
+	NhanVienService nhanVienService;
 	
 	
 	@GetMapping("/")
@@ -248,7 +261,6 @@ public class TrangChuUserController {
 							+"<td>" +giasp +",000 VNĐ"+"</td>"
 							+"<td>" +giasp+",000 VNĐ"+"</td>"
 						+"</tr>" +"/n";
-					
 				}
 				MimeMessage message= mailsender.createMimeMessage();
 				boolean multipart = true;
@@ -291,5 +303,4 @@ public class TrangChuUserController {
 		}
 		return "fasle";
 	}
-	
 }
