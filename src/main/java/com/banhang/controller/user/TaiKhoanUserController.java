@@ -52,9 +52,9 @@ public class TaiKhoanUserController {
 				taikhoan_session.setHoten(tk.getHoten());
 				taikhoan_session.setTendangnhap(tk.getTendangnhap());
 				taikhoan_session.setMatkhau(tk.getMatkhau());
-				taikhoan_session.setMachucvu(3);
-				map.addAttribute("taikhoan",taikhoan_session);
-//				httpSession.setAttribute("taikhoan", taikhoan_session);
+				taikhoan_session.setMachucvu(tk.getChucVu().getMachucvu());
+//				map.addAttribute("taikhoan",taikhoan_session);
+				httpSession.setAttribute("taikhoan", taikhoan_session);
 				return "redirect:/";
 			}else {
 				map.addAttribute("resultDangNhap","Tài khoản hoặc mật khẩu không hơp lệ");
