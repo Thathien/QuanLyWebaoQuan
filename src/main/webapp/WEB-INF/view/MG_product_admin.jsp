@@ -5,6 +5,74 @@
 <jsp:include page="Header_admin.jsp"></jsp:include>
 <jsp:include page="Menu_admin.jsp"></jsp:include>
 
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Trang quản lý</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Sản phẩm</li>
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table mr-1"></i>
+                               Danh sách sản phẩm
+                               <a href="404.html" class="btn btn-secondary float-right" title="" id="ansanpham">Ẩn</a>
+                                <sub class=" btn float-right">---</sub>
+                                <a href="404.html" class="btn btn-danger float-right" title="" style="margin-left: 10px;" id= xoasanpham>Xóa</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                   <c:choose>
+                                   	<c:when test="${listSanPhams.size()!=0 }">
+                                   		 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Danh mục sản phẩm</th>
+                                                <th>giá tiền</th>
+                                                <th>Mô tả</th>
+                                                <th>Ngày cập nhật</th>
+                                                <th>----</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Danh mục sản phẩm</th>
+                                                <th>giá tiền</th>
+                                                <th>Ngày cập nhật</th>
+                                                <th>----</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                         <c:forEach var="listSanPhams" items="listSanPhams">
+	                                         <tr data-masanpham="${listSanPhams.getMasanpham()}">
+	                                             <td >
+	                                             	${listSanPhams.getTensanpham()}
+	                                             </td>
+	                                             <td>
+	                                             	${listSanPhams.getDanhMucSanPham().getTendanhmuc()}
+	                                             </td>
+	                                             <td>${listSanPhams.getGiatien()}</td>
+	                                             <td>2011/01/25</td>
+	                                             <td>
+	                                             	<a href="" class="btn btn-info " title="" id="chitietsanpham">Chi tiết</a>
+	                                             	<a href="" class="btn btn-primary t" title="" id="capnhatsanpham">Chỉnh sửa</a>
+	                                             </td>
+	                                          </tr>
+                                         </c:forEach>
+                                        </tbody>
+                                    </table>
+                                   	</c:when>
+                                   	<c:otherwise>
+                                   		<h3 style="text-align: center;">Dữ liệu trống</h3>
+                                   	</c:otherwise>
+                                   </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
 
 <jsp:include page="Footer_admin.jsp"></jsp:include>
             </div>

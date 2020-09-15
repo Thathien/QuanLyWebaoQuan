@@ -10,16 +10,16 @@ public class ChiTietHoaDon {
 	ChiTietHoaDonId chiTietHoaDonId;
 	int soluong;
 	String giatien;
-	public ChiTietHoaDon() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public ChiTietHoaDon(ChiTietHoaDonId chiTietHoaDonId, int soluong, String giatien) {
-		super();
-		this.chiTietHoaDonId = chiTietHoaDonId;
-		this.soluong = soluong;
-		this.giatien = giatien;
-	}
+//	public ChiTietHoaDon() {
+//		super();
+//		// TODO Auto-generated constructor stub
+//	}
+//	public ChiTietHoaDon(ChiTietHoaDonId chiTietHoaDonId, int soluong, String giatien) {
+//		super();
+//		this.chiTietHoaDonId = chiTietHoaDonId;
+//		this.soluong = soluong;
+//		this.giatien = giatien;
+//	}
 	public ChiTietHoaDonId getChiTietHoaDonId() {
 		return chiTietHoaDonId;
 	}

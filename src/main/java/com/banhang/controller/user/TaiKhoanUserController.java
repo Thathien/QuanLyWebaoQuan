@@ -11,11 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.banhang.commons.TaiKhoanLogin;
@@ -26,7 +24,7 @@ import com.banhang.model.DangNhapModel;
 import com.banhang.service.NhanVienService;
 
 @Controller
-@SessionAttributes({"taikhoan", "giohang"})
+@SessionAttributes("taikhoan")
 public class TaiKhoanUserController {
 	
 	@Autowired
@@ -53,8 +51,10 @@ public class TaiKhoanUserController {
 				taikhoan_session.setTendangnhap(tk.getTendangnhap());
 				taikhoan_session.setMatkhau(tk.getMatkhau());
 				taikhoan_session.setMachucvu(tk.getChucVu().getMachucvu());
+				System.out.println(taikhoan_session.getHoten()+"   aadadad"+ taikhoan_session.getTendangnhap());
 //				map.addAttribute("taikhoan",taikhoan_session);
 				httpSession.setAttribute("taikhoan", taikhoan_session);
+				TaiKhoanLogin tk1= (TaiKhoanLogin) httpSession.getAttribute("taikhoan");
 				return "redirect:/";
 			}else {
 				map.addAttribute("resultDangNhap","Tài khoản hoặc mật khẩu không hơp lệ");

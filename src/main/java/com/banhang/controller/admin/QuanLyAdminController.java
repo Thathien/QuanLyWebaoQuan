@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.banhang.commons.TaiKhoanLogin;
@@ -62,5 +63,30 @@ public class QuanLyAdminController {
 			}
 		}
 		return "login_admin";
+	}
+	@GetMapping("admin/product/detal/{id}")
+	public String chitietsanpham(@PathVariable("id") String id, ModelMap map,HttpSession httpSession) {
+		boolean checkS=checkSecurity(httpSession);
+		if(checkS==true) {
+			int masanpham=Integer.parseInt(id);
+			SanPham sanphamRS=sanPhamService.getListSanPhamById(masanpham);
+			map.addAttribute("sanphamRS",sanphamRS);
+			return "MG_product_admin";
+		}else {
+			return "401";
+		}
+		
+	}
+	
+	
+	//admin -> tru  // other  -> false
+	public boolean checkSecurity(HttpSession httpSession) {
+		TaiKhoanLogin taiKhoanLogin=(TaiKhoanLogin) httpSession.getAttribute("taikhoan");
+		if(taiKhoanLogin!=null) {
+			if(taiKhoanLogin.getMachucvu()==1) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

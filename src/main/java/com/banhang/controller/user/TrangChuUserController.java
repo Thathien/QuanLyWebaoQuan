@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.banhang.commons.TaiKhoanLogin;
@@ -79,9 +80,9 @@ public class TrangChuUserController {
 	@Autowired
 	NhanVienService nhanVienService;
 	
-	
+	//@SessionAttribute("taikhoan") TaiKhoanLogin taikhoan
 	@GetMapping("/")
-	public String Default(ModelMap map, HttpSession htSession) {
+	public String Default(ModelMap map) {
 		//get list Danh muc San Pham
 		List<DanhMucSanPham> showListDanhMucSP= danhMucSanPhamService.getAllDanhMucSanPham();
 		
@@ -89,11 +90,12 @@ public class TrangChuUserController {
 		List<SanPham> showListSanPham=sanPhamService.getAllSanPham();
 		
 		//get acount
-		TaiKhoanLogin taiKhoan =(TaiKhoanLogin) htSession.getAttribute("taikhoan");
+//		TaiKhoanLogin taiKhoan =(TaiKhoanLogin) htSession.getAttribute("taikhoan");
+//		System.out.println("dbada" +taiKhoan.getHoten());
 		
 		map.addAttribute("showListDanhMucSP",showListDanhMucSP);
 		map.addAttribute("showListSanPham",showListSanPham);
-		map.addAttribute("taiKhoan",taiKhoan);
+//		map.addAttribute("taikhoan",taiKhoan);
 		
 		return "index_user";
 	}
@@ -104,6 +106,7 @@ public class TrangChuUserController {
 		List<DanhMucSanPham> showListDanhMucSP= danhMucSanPhamService.getAllDanhMucSanPham();
 		map.addAttribute("sanphamRS",sanphamRS);
 		map.addAttribute("showListDanhMucSP",showListDanhMucSP);
+		
 		
 		return "product-details_user";
 	}
@@ -173,10 +176,7 @@ public class TrangChuUserController {
 	public String loadGioHang(HttpSession httpSession,ModelMap map) {
 		if(httpSession.getAttribute("giohang")!=null) {
 			List<GioHang> gioHangs=(List<GioHang>) httpSession.getAttribute("giohang");
-//			GioHang gs= new GioHang(1, 1, 1, 1, "fgfhfh","25000","xanh", "xxl",1);
-//			gioHangs.add(gs);
 			boolean isEmpty=gioHangs.isEmpty();
-			System.out.println("giohang :"+ isEmpty + " size :" +gioHangs.size() + gioHangs.toString());
 			map.addAttribute("isEmpty",isEmpty);
 			map.addAttribute("soluonggiohang", gioHangs.size());
 			map.addAttribute("gioHangs", gioHangs);

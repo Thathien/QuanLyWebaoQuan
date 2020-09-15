@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.banhang.commons.TaiKhoanLogin;
 import com.banhang.entity.NhanVien;
@@ -18,6 +19,7 @@ import com.banhang.model.DangNhapModel;
 import com.banhang.service.NhanVienService;
 
 @Controller
+@SessionAttributes({"taikhoan"})
 public class TaiKhoanAminController {
 	
 	@Autowired
@@ -44,7 +46,8 @@ public class TaiKhoanAminController {
 				taikhoan.setManhanvien(tk.getmanhanvien());
 				taikhoan.setTendangnhap(tk.getEmail());
 				taikhoan.setMatkhau(tk.getMatkhau());
-				httpSession.setAttribute("taikhoan", taikhoan);
+//				httpSession.setAttribute("taikhoan", taikhoan);
+				map.addAttribute("taikhoan", taikhoan);
 				return "/banaoquan/admin/";
 			}else {
 				map.addAttribute("resultsAdmin", "Bạn không đủ quyền để truy cập");
