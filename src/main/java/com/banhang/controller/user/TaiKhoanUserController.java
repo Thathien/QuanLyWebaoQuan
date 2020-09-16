@@ -24,20 +24,27 @@ import com.banhang.model.DangNhapModel;
 import com.banhang.service.NhanVienService;
 
 @Controller
-@SessionAttributes("taikhoan")
+@SessionAttributes({"taikhoan", "giohang"})
 public class TaiKhoanUserController {
 	
 	@Autowired
 	NhanVienService nhanVienService;
 	
 	@GetMapping("dangnhap")
-	public String showdangnhap(Model m) {
-		m.addAttribute("dangnhapuser",new DangNhapModel());
-		return "login_user";
+	public String showdangnhap(Model m,HttpSession httpSession) {
+		int  temp=checkSecurityUser(httpSession);
+		if(temp==0) {
+			m.addAttribute("dangnhapuser",new DangNhapModel());
+			return "login_user";
+		}else if(temp==1) {
+			return "redirect:/admin";
+		}else {
+			return "redirect:/";
+		}
 	}
 	
 	@PostMapping("dangnhap")
-	public String dangnhapProcess(@Valid @ModelAttribute("dangnhapuser") DangNhapModel dangnhapuser,BindingResult br,ModelMap map,HttpSession httpSession) {
+	public String dangnhapProcess(@Valid @ModelAttribute("dangnhapuser") DangNhapModel dangnhapuser,BindingResult br,ModelMap map) {
 		if(br.hasErrors()) {
 			return "login_user";
 		}else {
@@ -51,10 +58,8 @@ public class TaiKhoanUserController {
 				taikhoan_session.setTendangnhap(tk.getTendangnhap());
 				taikhoan_session.setMatkhau(tk.getMatkhau());
 				taikhoan_session.setMachucvu(tk.getChucVu().getMachucvu());
-				System.out.println(taikhoan_session.getHoten()+"   aadadad"+ taikhoan_session.getTendangnhap());
-//				map.addAttribute("taikhoan",taikhoan_session);
-				httpSession.setAttribute("taikhoan", taikhoan_session);
-				TaiKhoanLogin tk1= (TaiKhoanLogin) httpSession.getAttribute("taikhoan");
+				map.addAttribute("taikhoan",taikhoan_session);
+//				httpSession.setAttribute("taikhoan", taikhoan_session););
 				return "redirect:/";
 			}else {
 				map.addAttribute("resultDangNhap","Tài khoản hoặc mật khẩu không hơp lệ");
@@ -147,5 +152,13 @@ public class TaiKhoanUserController {
 	public static boolean validate(String emailStr) {
 		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
 		return matcher.find();
+	}
+	//admin -> 1  // other  -> 0
+	public int checkSecurityUser(HttpSession httpSession) {
+		TaiKhoanLogin taiKhoanLogin=(TaiKhoanLogin) httpSession.getAttribute("taikhoan");
+			if(taiKhoanLogin!=null) {
+				return taiKhoanLogin.getMachucvu();
+			}
+		return 0;
 	}
 }

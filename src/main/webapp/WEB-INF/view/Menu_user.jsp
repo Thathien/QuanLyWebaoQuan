@@ -17,8 +17,8 @@
 					<div class="col-sm-6">
 						<div class="social-icons pull-right">
 							<ul class="nav navbar-nav">
-								<c:if test="${taiKhoan!=null}">
-									<li><c:out value="Xin chào "><i>${taiKhoan.getHoten()}</i></c:out></li>
+								<c:if test="${taikhoan!=null}">
+									<li><c:out value="Xin chào "><i>${taikhoan.getHoten()}</i></c:out></li>
 								</c:if>
 								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
 								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
@@ -40,29 +40,6 @@
 						<div class="logo pull-left">
 							<a href="/banaoquan/"><img src="<c:url value = "/resourcess/user/images/home/logo.png"></c:url>"/></a>
 						</div>
-<!-- 						<div class="btn-group pull-right clearfix">
-							<div class="btn-group">
-								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-									USA
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="">Canada</a></li>
-									<li><a href="">UK</a></li>
-								</ul>
-							</div>
-							
-							<div class="btn-group">
-								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-									DOLLAR
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="">Canadian Dollar</a></li>
-									<li><a href="">Pound</a></li>
-								</ul>
-							</div>
-						</div> -->
 					</div>
 					<div class="col-md-8 clearfix">
 						<div class="shop-menu clearfix pull-right">
@@ -71,8 +48,8 @@
 									<c:choose>
 										<c:when test="">
 											<a href="/banaoquan/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng: 
-										<c:if test="${soluonggiohang>0}">
-										<i style="color: red">${soluonggiohang}</i>
+										<c:if test="${giohang.size()!=0}">
+										<i style="color: red">${giohang.size()}</i>
 										</c:if>
 										</a>
 										</c:when>
@@ -82,13 +59,13 @@
 									</c:choose>
 								</li>
 								<c:choose>
-									<c:when test="${taiKhoan==null}">
-										<li><a href="/banaoquan/dangnhap"><i class="fa fa-lock"></i> Đăng nhập</a></li>
-										<li><a href="/banaoquan/dangky"><i class="fa fa-lock"></i> Đăng ký</a></li>
-									</c:when>
-									<c:otherwise>
+									<c:when test="${taikhoan!=null}">
 										<li><a href=""><i class="fa fa-user"></i> Tài khoản</a></li>
 										<li><a href="/banaoquan/logout"><i class="fa fa-crosshairs"></i> Đăng xuất</a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="/banaoquan/dangnhap"><i class="fa fa-lock"></i> Đăng nhập</a></li>
+										<li><a href="/banaoquan/dangky"><i class="fa fa-lock"></i> Đăng ký</a></li>
 									</c:otherwise>
 								</c:choose>
 							</ul>

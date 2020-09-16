@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %> 
   <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <a class="navbar-brand" href="index.html">Trang Chủ</a>
@@ -23,7 +24,7 @@
                         <a class="dropdown-item" href="#">Thông tin tài khoản</a>
                       <!--   <a class="dropdown-item" href="#">Activity Log</a>
                         <div class="dropdown-divider"></div> -->
-                        <a class="dropdown-item" href="login.html">Đănng xuất</a>
+                        <a class="dropdown-item" href="/banaoquan/admin/dangxuat">Đăng xuất</a>
                     </div>
                 </li>
             </ul>

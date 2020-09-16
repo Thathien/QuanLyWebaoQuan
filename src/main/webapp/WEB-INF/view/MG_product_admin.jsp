@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="Header_admin.jsp"></jsp:include>
 <jsp:include page="Menu_admin.jsp"></jsp:include>
 
@@ -23,10 +23,13 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                    <c:choose>
-                                   	<c:when test="${listSanPhams.size()!=0 }">
+                                   	<c:when test="${listSanPhamss.size()!=0 }">
                                    		 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                             	<th>
+                                                    <input type="checkbox" name="">
+                                                </th>
                                                 <th>Tên sản phẩm</th>
                                                 <th>Danh mục sản phẩm</th>
                                                 <th>giá tiền</th>
@@ -37,23 +40,31 @@
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>Tên sản phẩm</th>
+                                            	<th>
+                                                    <input type="checkbox" name="">
+                                                </th>
+                                                 <th>Tên sản phẩm</th>
                                                 <th>Danh mục sản phẩm</th>
                                                 <th>giá tiền</th>
+                                                <th>Mô tả</th>
                                                 <th>Ngày cập nhật</th>
                                                 <th>----</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                         <c:forEach var="listSanPhams" items="listSanPhams">
-	                                         <tr data-masanpham="${listSanPhams.getMasanpham()}">
+                                         <c:forEach var="listSanPhamss" items="${listSanPhamss}">
+	                                         <tr data-masanpham="${listSanPhamss.getMasanpham()}">
+	                                         	<th>
+                                                    <input type="checkbox" name="">
+                                                </th>
 	                                             <td >
-	                                             	${listSanPhams.getTensanpham()}
+	                                             	${listSanPhamss.getTensanpham()}
 	                                             </td>
 	                                             <td>
-	                                             	${listSanPhams.getDanhMucSanPham().getTendanhmuc()}
+	                                             	${listSanPhamss.getDanhMucSanPham().getTendanhmuc()}
 	                                             </td>
-	                                             <td>${listSanPhams.getGiatien()}</td>
+	                                             <td>${listSanPhamss.getGiatien()}</td>
+	                                             <td>2011/01/25</td>
 	                                             <td>2011/01/25</td>
 	                                             <td>
 	                                             	<a href="" class="btn btn-info " title="" id="chitietsanpham">Chi tiết</a>

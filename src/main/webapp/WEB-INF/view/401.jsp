@@ -24,9 +24,9 @@
                                     <h1 class="display-1">401</h1>
                                     <p class="lead">Unauthorized</p>
                                     <p>Access to this resource is denied.</p>
-                                    <a href="/">
+                                    <a href="/banaoquan/admin/dangnhap">
                                         <i class="fas fa-arrow-left mr-1"></i>
-                                        Return to trang chủ
+                                        Hãy đăng nhập
                                     </a>
                                 </div>
                             </div>

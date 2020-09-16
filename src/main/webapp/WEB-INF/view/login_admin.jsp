@@ -29,17 +29,18 @@
                                         <form:form  action="dangnhap" modelAttribute="dangnhapadmin" method ="post">
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
-                                                <form:input path="usernameadmin" class="form-control py-4" id="usernameadmin" type="email" placeholder="Email/tên đăng nhập" />
+                                                <form:input path="email" class="form-control py-4" id="usernameadmin" type="email" placeholder="Email/tên đăng nhập" />
                                                 <span class="text-danger"id="usernameadmin_error"></span>
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputPassword">Password</label>
-                                                <form:input path="passadmin" class="form-control py-4" id="passadmin" type="password" placeholder="Mật khẩu" />
+                                                <form:input path="matKhau" class="form-control py-4" id="passadmin" type="password" placeholder="Mật khẩu" />
                                                  <span class="text-danger"id="passadmin_error"></span>
                                             </div>
                                             <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <a class="small" href="">Forgot Password?</a>
-                                                <a class="btn btn-primary" href="">Login</a>
+                                               <!--   <a class="btn btn-primary" href="">Login</a>-->
+                                                <form:button type="submit" class="btn btn-primary">Đăng nhập</form:button>
                                             </div>
                                        <!--   </form>-->
                                          </form:form>
