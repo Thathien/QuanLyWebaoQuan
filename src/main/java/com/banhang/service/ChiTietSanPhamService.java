@@ -36,5 +36,12 @@ public class ChiTietSanPhamService implements ChiTietSanPhamImp{
 		// TODO Auto-generated method stub
 		return chiTietSanPhamDao.addCTSanPham(chiTietSanPham);
 	}
+
+	@Override
+	public boolean deleteCTSanPhamByIdSanPham(int id) {
+		// TODO Auto-generated method stub
+		return chiTietSanPhamDao.deleteCTSanPhamByIdSanPham(id);
+	}
+	
 	
 }

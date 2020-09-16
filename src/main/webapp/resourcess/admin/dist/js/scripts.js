@@ -27,4 +27,44 @@
  
           },30000);
     }
+    
+    //select all  -? delete
+	$("#checkAll").click(function () {
+		if(this.checked){
+			$(":checkbox").prop('checked', true);
+		}else{
+			$(":checkbox").prop('checked', false);
+		}
+	});	
+	$("#xoasanpham").click(function () {
+		var listIdSanPham=" ";
+		for(var i=0; i<$(":checkbox:checked").length;i++){
+			if($(":checkbox:checked").eq(i).attr('id') != "checkAll"){
+				listIdSanPham+=$(":checkbox:checked").eq(i).attr('id')+",";
+			}
+		}
+		alert(listIdSanPham);
+		if($(":checkbox:checked").length != 0){
+			var x = confirm("Bạn muốn xóa những sản phẩm này không?");
+			if(x){
+				$.ajax({
+					url:"/banaoquan/admin/product/delete",
+					type: "POST",
+					data:{
+						listIdSanPham:listIdSanPham
+					},
+					success: function(value){
+						if(value === 'true'){
+							alert("Xóa sản phẩm thành công")
+						}
+					}
+				});
+				
+			}else{
+				return false
+			}
+		}else{
+			alert("Bạn chưa chọn sản phẩm nào để xóa")
+		}
+	});
 })(jQuery);

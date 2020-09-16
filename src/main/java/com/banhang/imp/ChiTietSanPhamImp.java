@@ -9,4 +9,6 @@ public interface ChiTietSanPhamImp {
 	public boolean updateCTSanPham(ChiTietSanPham chiTietSanPham);
 	public boolean deleteCTSanPham(ChiTietSanPham chiTietSanPham);
 	public int addCTSanPham(ChiTietSanPham chiTietSanPham);
+	public boolean deleteCTSanPhamByIdSanPham(int id) ;
+		
 }

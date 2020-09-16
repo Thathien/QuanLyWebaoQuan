@@ -1,5 +1,6 @@
 package com.banhang.controller.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.banhang.commons.TaiKhoanLogin;
@@ -67,7 +70,7 @@ public class QuanLySanPhamAdminController {
 		}
 		return "redirect:/admin/dangnhap";
 	}
-	@GetMapping("admin/product/detal/{id}")
+	@GetMapping("/detal/{id}")
 	public String chitietsanpham(@PathVariable("id") String id, ModelMap map,HttpSession httpSession) {
 		boolean checkS=checkSecurity(httpSession);
 		if(checkS==true) {
@@ -80,7 +83,23 @@ public class QuanLySanPhamAdminController {
 		}
 		
 	}
-	
+	@PostMapping("/delete")
+	public String xoasanpham(@RequestParam String listIdSanPham,HttpSession httpSession) {
+		String[] maSanPham=listIdSanPham.trim().split(",");
+		List<SanPham> sanPham = new ArrayList<SanPham>();
+		for(int i=0;i<maSanPham.length;i++) {
+			if(isNumeric(maSanPham[i])==true) {
+				SanPham sp= sanPhamService.getListSanPhamById(Integer.parseInt(maSanPham[i]));
+				sanPham.add(sp);
+			}
+		}
+//		for(int i=0;i<sanPham.size();i++) {
+//			List<Integer> listChiTietSP=sanPham.get(i).getChiTietSanPham();
+//			
+//		}
+//		
+		return null;
+	}
 	
 	//admin -> tru  // other  -> false
 	public boolean checkSecurity(HttpSession httpSession) {
@@ -92,4 +111,16 @@ public class QuanLySanPhamAdminController {
 		}
 		return false;
 	}
+	public static boolean isNumeric(String strNum) {
+	    if (strNum == null) {
+	        return false;
+	    }
+	    try {
+	        double d = Double.parseDouble(strNum);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
+	
 }

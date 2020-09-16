@@ -16,9 +16,9 @@
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
                                Danh sách sản phẩm
-                               <a href="404.html" class="btn btn-secondary float-right" title="" id="ansanpham">Ẩn</a>
+                               <a href="" class="btn btn-secondary float-right" title="" id="ansanpham">Ẩn</a>
                                 <sub class=" btn float-right">---</sub>
-                                <a href="404.html" class="btn btn-danger float-right" title="" style="margin-left: 10px;" id= xoasanpham>Xóa</a>
+                                <a href="" class="btn btn-danger float-right" title="" style="margin-left: 10px;" id= xoasanpham>Xóa</a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -28,7 +28,7 @@
                                         <thead>
                                             <tr>
                                              	<th>
-                                                    <input type="checkbox" name="">
+                                                    <input id='checkAll' type="checkbox" value="">
                                                 </th>
                                                 <th>Tên sản phẩm</th>
                                                 <th>Danh mục sản phẩm</th>
@@ -55,7 +55,7 @@
                                          <c:forEach var="listSanPhamss" items="${listSanPhamss}">
 	                                         <tr data-masanpham="${listSanPhamss.getMasanpham()}">
 	                                         	<th>
-                                                    <input type="checkbox" name="">
+                                                    <input type="checkbox" name="" id="${listSanPhamss.getMasanpham()}">
                                                 </th>
 	                                             <td >
 	                                             	${listSanPhamss.getTensanpham()}

@@ -29,12 +29,12 @@
                                         <form:form  action="dangnhap" modelAttribute="dangnhapadmin" method ="post">
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
-                                                <form:input path="email" class="form-control py-4" id="usernameadmin" type="email" placeholder="Email/tên đăng nhập" />
+                                                <form:input path="email" class="form-control py-4" id="usernameadmin" type="email" placeholder="Email/tên đăng nhập" value="123@gmail.com"/>
                                                 <span class="text-danger"id="usernameadmin_error"></span>
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputPassword">Password</label>
-                                                <form:input path="matKhau" class="form-control py-4" id="passadmin" type="password" placeholder="Mật khẩu" />
+                                                <form:input path="matKhau" class="form-control py-4" id="passadmin" type="password" placeholder="Mật khẩu" value="123456"/>
                                                  <span class="text-danger"id="passadmin_error"></span>
                                             </div>
                                             <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">

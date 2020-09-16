@@ -8,15 +8,7 @@ import javax.persistence.Embeddable;
 public class ChiTietHoaDonId implements Serializable{
 	int mahoadon;
 	int machitietsanpham;
-//	public ChiTietHoaDonId() {
-//		super();
-//		// TODO Auto-generated constructor stub
-//	}
-//	public ChiTietHoaDonId(int mahoadon, int machitietsanpham) {
-//		super();
-//		this.mahoadon = mahoadon;
-//		this.machitietsanpham = machitietsanpham;
-//	}
+
 	public int getMahoadon() {
 		return mahoadon;
 	}
