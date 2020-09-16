@@ -21,6 +21,7 @@ public class ChucVuDao implements ChucVuImp{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	@Transactional
 	public List<ChucVu> getAllChucVu() {
 		Session session=sessionFactory.getCurrentSession();
@@ -28,24 +29,28 @@ public class ChucVuDao implements ChucVuImp{
 		List<ChucVu> listChucChu=session.createQuery(sql).getResultList();
 		return listChucChu;
 	}
+	@Override
 	@Transactional
 	public int addChucVu(ChucVu cv) {
 		Session session=sessionFactory.getCurrentSession();
 		int id=(Integer) session.save(cv);
 		return id;
 	}
+	@Override
 	@Transactional
 	public boolean updateChucVu(ChucVu cv) {
 		Session session=sessionFactory.getCurrentSession();
 		session.update(cv);
 		return true;
 	}
+	@Override
 	@Transactional
 	public boolean deleteChucVu(ChucVu cv) {
 		Session session=sessionFactory.getCurrentSession();
 		session.delete(cv);
 		return true;
 	}
+	@Override
 	@Transactional
 	public boolean checkNameChucVu(String name) {
 		Session session=sessionFactory.getCurrentSession();

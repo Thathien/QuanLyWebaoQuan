@@ -20,7 +20,7 @@ public class HoaDonDao implements HoaDonImp{
 
 	@Autowired
 	SessionFactory sessionFactory;
-	
+	@Override
 	@Transactional
 	public List<HoaDon> getListCanDuyetHoaDonAdmin() {
 		Session session=sessionFactory.getCurrentSession();
@@ -30,6 +30,7 @@ public class HoaDonDao implements HoaDonImp{
 		return listHoaDon;
 	}
 
+	@Override
 	@Transactional
 	public List<HoaDon> getListHoaDonUser(String hoten) {
 		Session session=sessionFactory.getCurrentSession();
@@ -38,6 +39,7 @@ public class HoaDonDao implements HoaDonImp{
 		return listHoaDon;
 	}
 
+	@Override
 	@Transactional
 	public List<HoaDon> getListHoaDonDaDuyet() {
 		Session session=sessionFactory.getCurrentSession();
@@ -47,6 +49,7 @@ public class HoaDonDao implements HoaDonImp{
 		return listHoaDon;
 	}
 
+	@Override
 	@Transactional
 	public int addNewHoaDonUser(HoaDon hoaDon) {
 		Session session=sessionFactory.getCurrentSession();
@@ -54,6 +57,7 @@ public class HoaDonDao implements HoaDonImp{
 		return id;
 	}
 
+	@Override
 	@Transactional
 	public boolean updateHoaDon(HoaDon hoaDon) {
 		Session session=sessionFactory.getCurrentSession();

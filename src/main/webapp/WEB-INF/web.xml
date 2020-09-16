@@ -35,8 +35,5 @@
         <param-value>true</param-value>
         </init-param>
     </filter>
-    <error-page> 
-    <exception-type>java.lang.Throwable</exception-type> 
-    <location>/WEB-INF/view/404</location> 
-</error-page> 
+
 </web-app>

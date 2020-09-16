@@ -21,6 +21,7 @@ public class DanhMucSanPhamDao implements DanhMucSanPhamImp{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	@Transactional
 	public List<DanhMucSanPham> getAllDanhMucSanPham() {
 		Session session=sessionFactory.getCurrentSession();
@@ -29,24 +30,32 @@ public class DanhMucSanPhamDao implements DanhMucSanPhamImp{
 		return listDanhMuc;
 	}
 	
+	@Override
+	@Transactional
 	public int addDanhMucSanPham(DanhMucSanPham dm) {
 		Session session=sessionFactory.getCurrentSession();
 		int id=(Integer) session.save(dm);
 		return id;
 	}
 
+	@Override
+	@Transactional
 	public boolean updateDanhMucSanPham(DanhMucSanPham dm) {
 		Session session=sessionFactory.getCurrentSession();
 		session.update(dm);
 		return true;
 	}
 
+	@Override
+	@Transactional
 	public boolean deleteDanhMucSanPham(DanhMucSanPham dm) {
 		Session session=sessionFactory.getCurrentSession();
 		session.delete(dm);
 		return true;
 	}
 
+	@Override
+	@Transactional
 	public boolean checkNameDanhMucBeforeAdd(String name) {
 		Session session=sessionFactory.getCurrentSession();
 		String sql = "from DANHMUCSANPHAM where tendanhmuc='"+name+"'";

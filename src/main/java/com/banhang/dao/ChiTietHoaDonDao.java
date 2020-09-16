@@ -21,6 +21,7 @@ public class ChiTietHoaDonDao implements ChiTietHoaDonImp{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	@Transactional
 	public List<ChiTietHoaDon> getListCTHoaDonByID(int mahoadon) {
 		Session session=sessionFactory.getCurrentSession();
@@ -29,6 +30,7 @@ public class ChiTietHoaDonDao implements ChiTietHoaDonImp{
 		return listChiTietHoaDon;
 	}
 
+	@Override
 	@Transactional
 	public boolean deleteChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
 		Session session=sessionFactory.getCurrentSession();
@@ -36,6 +38,7 @@ public class ChiTietHoaDonDao implements ChiTietHoaDonImp{
 		return false;
 	}
 	
+	@Override
 	@Transactional
 	public boolean updateChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
 		Session session=sessionFactory.getCurrentSession();
@@ -43,6 +46,7 @@ public class ChiTietHoaDonDao implements ChiTietHoaDonImp{
 		return false;
 	}
 
+	@Override
 	@Transactional
 	public int addChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
 		Session session=sessionFactory.getCurrentSession();
@@ -50,6 +54,7 @@ public class ChiTietHoaDonDao implements ChiTietHoaDonImp{
 		return id;
 	}
 
+	@Override
 	@Transactional
 	public ChiTietHoaDon getInforChiTietHoaDon(int mahoadon, int machitietsanpham) {
 		Session session=sessionFactory.getCurrentSession();
@@ -58,6 +63,7 @@ public class ChiTietHoaDonDao implements ChiTietHoaDonImp{
 		return ctHD;
 	}
 
+	@Override
 	@Transactional
 	public boolean checkExitsSanPham(int mahoadon, int machitietsanpham) {
 		Session session=sessionFactory.getCurrentSession();

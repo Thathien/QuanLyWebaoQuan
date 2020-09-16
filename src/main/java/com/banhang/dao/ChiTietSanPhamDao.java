@@ -25,6 +25,7 @@ public class ChiTietSanPhamDao implements ChiTietSanPhamImp{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	@Transactional
 	public List<ChiTietSanPham> getInforCTSanPhambyID(int masanpham) {
 		Session session=sessionFactory.getCurrentSession();
@@ -33,6 +34,7 @@ public class ChiTietSanPhamDao implements ChiTietSanPhamImp{
 		return ctSP;
 	}
 
+	@Override
 	@Transactional
 	public boolean updateCTSanPham(ChiTietSanPham chiTietSanPham) {
 		Session session=sessionFactory.getCurrentSession();
@@ -40,6 +42,7 @@ public class ChiTietSanPhamDao implements ChiTietSanPhamImp{
 		return true;
 	}
 
+	@Override
 	@Transactional
 	public boolean deleteCTSanPham(ChiTietSanPham chiTietSanPham) {
 		Session session=sessionFactory.getCurrentSession();
@@ -47,6 +50,7 @@ public class ChiTietSanPhamDao implements ChiTietSanPhamImp{
 		return true;
 	}
 
+	@Override
 	@Transactional
 	public int addCTSanPham(ChiTietSanPham chiTietSanPham) {
 		Session session=sessionFactory.getCurrentSession();
@@ -55,6 +59,7 @@ public class ChiTietSanPhamDao implements ChiTietSanPhamImp{
 	}
 
 	@Override
+	@Transactional
 	public boolean deleteCTSanPhamByIdSanPham(int id) {
 		Session session=sessionFactory.getCurrentSession();
 		SanPham sanPham=session.get(SanPham.class,id);
@@ -62,14 +67,12 @@ public class ChiTietSanPhamDao implements ChiTietSanPhamImp{
 		Set<ChiTietSanPham >chiTietSanPhamList=(Set) sanPham.getChiTietSanPham();
 		
 		for (ChiTietSanPham chiTietSanPham : chiTietSanPhamList ) {
-			ChiTietHoaDonId chiTietHoaDonId= new ChiTietHoaDonId();
-			chiTietHoaDonId.setMachitietsanpham(chiTietSanPham.getMachitietsanpham());
-			ChiTietHoaDon chiTietHoaDon= new ChiTietHoaDon();
-			chiTietHoaDon.setChiTietHoaDonId(chiTietHoaDonId);
-			session.delete(chiTietHoaDon);
+			session.createQuery("delete CHITIETHOADON WHERE machitietsanpham="+chiTietSanPham.getMachitietsanpham());
 		}
-		
-		return false;
+		session.createQuery("delete CHITIETKHUYENMAI WHERE masanpham="+id).executeUpdate();
+		session.createQuery("delete CHITIETSANPHAM WHERE masanpham="+id).executeUpdate();
+		session.createQuery("delete SANPHAM WHERE masanpham="+id).executeUpdate();
+		return true;
 	}
 
 }

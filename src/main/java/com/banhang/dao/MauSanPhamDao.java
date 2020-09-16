@@ -22,6 +22,7 @@ public class MauSanPhamDao implements MauSanPhamImp{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	@Transactional
 	public List<MauSanPham> getAllMauSanPham() {
 		Session session=sessionFactory.getCurrentSession();
@@ -30,6 +31,7 @@ public class MauSanPhamDao implements MauSanPhamImp{
 		return listMauSanPham;
 	}
 
+	@Override
 	@Transactional
 	public int addMauSanPham(MauSanPham ms) {
 		Session session=sessionFactory.getCurrentSession();
@@ -37,6 +39,7 @@ public class MauSanPhamDao implements MauSanPhamImp{
 		return id;
 	}
 
+	@Override
 	@Transactional
 	public boolean updateMauSanPham(MauSanPham ms) {
 		Session session=sessionFactory.getCurrentSession();
@@ -44,6 +47,7 @@ public class MauSanPhamDao implements MauSanPhamImp{
 		return true;
 	}
 
+	@Override
 	@Transactional
 	public boolean deleteMauSanPham(MauSanPham ms) {
 		Session session=sessionFactory.getCurrentSession();
@@ -51,6 +55,7 @@ public class MauSanPhamDao implements MauSanPhamImp{
 		return true;
 	}
 
+	@Override
 	@Transactional
 	public boolean checkMauSanPham(String s) {
 		Session session=sessionFactory.getCurrentSession();

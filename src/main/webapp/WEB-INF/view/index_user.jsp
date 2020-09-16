@@ -4,11 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="Header_user.jsp"></jsp:include>
 <jsp:include page="Menu_user.jsp"></jsp:include>
-	<section id="advertisement">
-		<div class="container">
-		<img src="<c:url value ="/resourcess/user/images/shop/advertisement.jpg"></c:url>" alt="" />
-		</div>
-	</section>
 	
 	<section>
 		<div class="container">

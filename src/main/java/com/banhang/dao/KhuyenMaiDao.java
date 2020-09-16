@@ -21,6 +21,7 @@ public class KhuyenMaiDao implements KhuyenMaiImp{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	@Transactional
 	public List<KhuyenMai> getAllKhuyenMai() {
 		Session session=sessionFactory.getCurrentSession();
@@ -29,6 +30,7 @@ public class KhuyenMaiDao implements KhuyenMaiImp{
 		return listKhuyenMai;
 	}
 	
+	@Override
 	@Transactional
 	public int addKhuyenMai(KhuyenMai km) {
 		Session session=sessionFactory.getCurrentSession();
@@ -36,6 +38,7 @@ public class KhuyenMaiDao implements KhuyenMaiImp{
 		return id;
 	}
 	
+	@Override
 	@Transactional
 	public boolean updateKhuyenMai(KhuyenMai km) {
 		Session session=sessionFactory.getCurrentSession();
@@ -43,6 +46,7 @@ public class KhuyenMaiDao implements KhuyenMaiImp{
 		return true;
 	}
 	
+	@Override
 	@Transactional
 	public boolean deleteKhuyenMai(KhuyenMai km) {
 		Session session=sessionFactory.getCurrentSession();
@@ -50,6 +54,7 @@ public class KhuyenMaiDao implements KhuyenMaiImp{
 		return true;
 	}
 	
+	@Override
 	@Transactional
 	public boolean checkNameKhuyenMai(String name) {
 		Session session=sessionFactory.getCurrentSession();

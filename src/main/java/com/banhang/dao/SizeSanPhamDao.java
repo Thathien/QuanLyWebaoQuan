@@ -21,6 +21,7 @@ public class SizeSanPhamDao implements SizeSanPhamImp{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	@Transactional
 	public List<SizeSanPham> getAllSizeSanPham() {
 		Session session=sessionFactory.getCurrentSession();
@@ -29,6 +30,7 @@ public class SizeSanPhamDao implements SizeSanPhamImp{
 		return listSizeSanPham;
 	}
 
+	@Override
 	@Transactional
 	public int addSizeSanPham(SizeSanPham ssp) {
 		Session session=sessionFactory.getCurrentSession();
@@ -36,6 +38,7 @@ public class SizeSanPhamDao implements SizeSanPhamImp{
 		return id;
 	}
 
+	@Override
 	@Transactional
 	public boolean updateSizeSanPham(SizeSanPham ssp) {
 		Session session=sessionFactory.getCurrentSession();
@@ -43,6 +46,7 @@ public class SizeSanPhamDao implements SizeSanPhamImp{
 		return true;
 	}
 
+	@Override
 	@Transactional
 	public boolean deleteSizeSanPham(SizeSanPham ssp) {
 		Session session=sessionFactory.getCurrentSession();

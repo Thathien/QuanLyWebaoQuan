@@ -23,6 +23,7 @@ public class SanPhamDao implements SanPhamImp{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	@Transactional
 	public List<SanPham> getAllSanPham() {
 		Session session=sessionFactory.getCurrentSession();
@@ -31,6 +32,7 @@ public class SanPhamDao implements SanPhamImp{
 		return listSanPham;
 	}
 	
+	@Override
 	@Transactional
 	public List<SanPham> getAllSanPhamByIdDanhMuc(int id) {
 		Session session=sessionFactory.getCurrentSession();
@@ -39,6 +41,7 @@ public class SanPhamDao implements SanPhamImp{
 		return listSanPhamByIdDM;
 	}
 	
+	@Override
 	@Transactional
 	public SanPham getListSanPhamById(int id) {
 		Session session=sessionFactory.getCurrentSession();
@@ -47,6 +50,7 @@ public class SanPhamDao implements SanPhamImp{
 		return sanPhamById;
 	}
 
+	@Override
 	@Transactional
 	public int addSanPham(SanPham sp) {
 		Session session=sessionFactory.getCurrentSession();
@@ -54,6 +58,7 @@ public class SanPhamDao implements SanPhamImp{
 		return id;
 	}
 	
+	@Override
 	@Transactional
 	public boolean updateSanPham(SanPham sp) {
 		Session session=sessionFactory.getCurrentSession();
@@ -61,6 +66,7 @@ public class SanPhamDao implements SanPhamImp{
 		return true;
 	}
 
+	@Override
 	@Transactional
 	public boolean deleteSanPham(SanPham sp) {
 		Session session=sessionFactory.getCurrentSession();
@@ -68,6 +74,7 @@ public class SanPhamDao implements SanPhamImp{
 		return true;
 	}
 	
+	@Override
 	@Transactional
 	public boolean checkNameSanPhamBeforeAdd(String tenSp) {
 		Session session=sessionFactory.getCurrentSession();

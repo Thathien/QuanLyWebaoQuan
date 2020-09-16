@@ -22,6 +22,7 @@ public class NhanVienDao implements NhanVienImp{
 	SessionFactory sessionFactory;
 
 	//kiểm tra user pass
+	@Override
 	@Transactional
 	public boolean login(String email, String matkhau) {
 		
@@ -36,6 +37,7 @@ public class NhanVienDao implements NhanVienImp{
 	}
 	
 	//Kiểm tra là người dùng(khách mã chức vụ = 3)
+	@Override
 	@Transactional
 	public boolean checkUser(String email, String matkhau) {
 		
@@ -49,6 +51,7 @@ public class NhanVienDao implements NhanVienImp{
 	}
 	
 	//lấy thông tin người dùng thông qua tên đăng nhập, mật khẩu
+	@Override
 	@Transactional
 	public NhanVien getInforby_User_Pass(String email, String matkhau) {
 		
@@ -62,6 +65,7 @@ public class NhanVienDao implements NhanVienImp{
 	}
 	
 	//kiểm tra email trùng,nếu trùng -> true
+	@Override
 	@Transactional
 	public boolean checkEmail(String email) {
 		
@@ -75,6 +79,7 @@ public class NhanVienDao implements NhanVienImp{
 	}
 
 	//kiểm tra tên đăng nhập trùng nếu trùng ->true
+	@Override
 	@Transactional
 	public boolean checkUserName(String TDN) {
 		Session session=sessionFactory.getCurrentSession();
@@ -87,6 +92,7 @@ public class NhanVienDao implements NhanVienImp{
 	}
 
 	//lấy thông tin tài khoản bằng ID (mã tài khoản)
+	@Override
 	@Transactional
 	public NhanVien getInforbyId(int id) {
 		
@@ -97,6 +103,7 @@ public class NhanVienDao implements NhanVienImp{
 	}
 
 	//thêm mới người dùng
+	@Override
 	@Transactional
 	public int register(NhanVien nv) {
 		

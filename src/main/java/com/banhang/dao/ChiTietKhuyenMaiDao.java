@@ -21,6 +21,7 @@ public class ChiTietKhuyenMaiDao implements ChiTietKhuyenMaiImp{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	@Transactional
 	public List<ChiTietKhuyenMai> getAllChiTietKhuyenMai() {
 		Session session=sessionFactory.getCurrentSession();
@@ -29,6 +30,7 @@ public class ChiTietKhuyenMaiDao implements ChiTietKhuyenMaiImp{
 		return listChiTietKM;
 	}
 
+	@Override
 	@Transactional
 	public int addNewKhuyenMaiChoSP(ChiTietKhuyenMai ctkm) {
 		Session session=sessionFactory.getCurrentSession();
@@ -36,6 +38,7 @@ public class ChiTietKhuyenMaiDao implements ChiTietKhuyenMaiImp{
 		return id;
 	}
 
+	@Override
 	@Transactional
 	public boolean deletKhuyenMaiSP(ChiTietKhuyenMai ctkm) {
 		Session session=sessionFactory.getCurrentSession();
