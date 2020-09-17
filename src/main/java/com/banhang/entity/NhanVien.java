@@ -2,6 +2,7 @@ package com.banhang.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ public class NhanVien {
 	String lydokhoa;
 	boolean xacthuc;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "machucvu")
 	ChucVu chucVu;
 	

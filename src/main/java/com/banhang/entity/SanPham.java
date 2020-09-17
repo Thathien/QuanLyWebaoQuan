@@ -35,7 +35,9 @@ public class SanPham {
 	@JoinColumn(name = "masanpham")
 	Set<ChiTietSanPham> chiTietSanPham;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	
+	// all , remove fetch = FetchType.EAGER,
+	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
 	@JoinTable(name = "CHITIETKHUYENMAI",
 	joinColumns ={@JoinColumn(name = "masanpham",referencedColumnName ="masanpham")},
 	inverseJoinColumns = {@JoinColumn(name = "makhuyenmai",referencedColumnName ="makhuyenmai")})

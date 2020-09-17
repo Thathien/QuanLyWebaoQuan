@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +19,8 @@ public class DanhMucSanPham {
 	String tendanhmuc;
 	String hinhdanhmuc;
 	boolean hiden;
-	@OneToMany(cascade = CascadeType.ALL)
+//	cascade = CascadeType.ALL
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "madanhmucsanpham")
 	Set<SanPham>danhsachsanpham;
 	public DanhMucSanPham() {
