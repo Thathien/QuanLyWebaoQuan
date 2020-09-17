@@ -21,5 +21,29 @@ public class ChiTietHoaDonId implements Serializable{
 	public void setMachitietsanpham(int machitietsanpham) {
 		this.machitietsanpham = machitietsanpham;
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + machitietsanpham;
+		result = prime * result + mahoadon;
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ChiTietHoaDonId other = (ChiTietHoaDonId) obj;
+		if (machitietsanpham != other.machitietsanpham)
+			return false;
+		if (mahoadon != other.mahoadon)
+			return false;
+		return true;
+	}
+	
 	
 }
