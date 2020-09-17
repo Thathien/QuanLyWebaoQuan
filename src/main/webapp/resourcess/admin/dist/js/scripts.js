@@ -25,7 +25,7 @@
         setInterval( function() {
                    window.location.reload();
  
-          },30000);
+          },60000);
     }
     
     //select all  -? delete
@@ -43,7 +43,6 @@
 				listIdSanPham+=$(":checkbox:checked").eq(i).attr('id')+",";
 			}
 		}
-		alert(listIdSanPham);
 		if($(":checkbox:checked").length != 0){
 			var x = confirm("Bạn muốn xóa những sản phẩm này không?");
 			if(x){
@@ -56,6 +55,7 @@
 					success: function(value){
 						if(value === 'true'){
 							alert("Xóa sản phẩm thành công")
+							location.reload();
 						}
 					}
 				});
@@ -67,4 +67,56 @@
 			alert("Bạn chưa chọn sản phẩm nào để xóa")
 		}
 	});
+	$("#chitietsanpham").click(function () {
+		var masanpham=$(this).attr("data-masanpham");
+		$.ajax({
+			url:"/banaoquan/admin/product/update",
+			type: "POST",
+			data:{
+				masanpham:masanpham
+			}
+		});
+	});
+	
+	$("#addnewsanpham").click(function () {
+		var tensanphamadd=$("#tensanphamadd").val();
+		var danhmucadd=$("#danhmucadd").children("option:selected").val();
+		var motaadd=$("#motaadd").val();
+		var giatienadd=$("#giatienadd").val();
+		var danhmucadd=$("#danhchoadd").children("option:selected").val();
+		
+	});
+	
+	var files = [];
+	$("#fileanhadd").change(function(event){
+		files = event.target.files;
+//		filename = event.target.files[0].name;
+		forms = new FormData();
+		forms.append("file", files[0]);
+		var urlcurrent = window.location.href;
+//		var id = urlcurrent.substring(urlcurrent.lastIndexOf('/') + 1);
+		$.ajax({
+			url: "/banaoquan/admin/addimage",
+			type : "POST",
+			data: forms,
+			contentType: false,
+			processData: false,
+			enctype: "multipath/form-data",
+			success: function(value){
+//				$.ajax({
+//					url : "/banaoquan/admin/addimagecsdl",
+//					type : "POST",
+//					data : {
+//						id : id,
+//						filename : filename
+//						
+//					},
+//					success : function(value){
+//						
+//					}
+//				})
+			}
+		})
+	});
+	
 })(jQuery);

@@ -16,11 +16,13 @@
 							<c:when test="${showListDanhMucSP.size()!=0}">
 								
 								 <c:forEach items="${showListDanhMucSP}" var="ListDanhMucSP"  >
-									<div class="panel panel-default">
+									<c:if test="${ListDanhMucSP.isHiden()==false}">
+										<div class="panel panel-default">
 										<div class="panel-heading">
 											<h4 class="panel-title"><a href="">${ListDanhMucSP.getTendanhmuc()}</a></h4>
 										</div>
 									</div>
+									</c:if>
 								</c:forEach>
 							</c:when>
 							<c:otherwise>
@@ -63,11 +65,11 @@
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Sản Phẩm</h2>
-						
 						<c:choose>
 							<c:when test="${showListSanPham.size()!=0}">
 								 <c:forEach items="${showListSanPham}" var="ListSanPham"  >
-									<div class="col-sm-4">
+									<c:if test="${ListSanPham.isHiden()==false}">
+												<div class="col-sm-4">
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
@@ -94,12 +96,10 @@
 														</div>
 													</a>
 													</div>
-												
 											</div>
 										</div>
 									</div>
-								
-							
+									</c:if>
 								</c:forEach>
 								</br>
 							<ul class="pagination">
@@ -114,8 +114,6 @@
 								 </br>
 							</c:otherwise>
 						</c:choose>
-						
-						
 					</div><!--features_items-->
 				</div>
 			</div>

@@ -2,8 +2,7 @@ package com.banhang.dao;
 
 import com.banhang.entity.SanPham;
 import com.banhang.imp.SanPhamImp;
-
-
+import com.mysql.cj.Query;
 
 import java.util.List;
 
@@ -70,7 +69,8 @@ public class SanPhamDao implements SanPhamImp{
 	@Transactional
 	public boolean deleteSanPham(SanPham sp) {
 		Session session=sessionFactory.getCurrentSession();
-		session.update(sp);
+//		session.delete(sp);
+		session.createQuery("delete SANPHAM where masanpham=" +sp.getMasanpham()).executeUpdate();
 		return true;
 	}
 	

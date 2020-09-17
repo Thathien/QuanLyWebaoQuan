@@ -28,6 +28,8 @@ public class SanPham {
 	String giatien;
 	String mota;
 	String hinhsanpham;
+	boolean hiden;
+	String doituong;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "masanpham")
@@ -44,8 +46,14 @@ public class SanPham {
 		// TODO Auto-generated constructor stub
 	}
 	
+
+
+	
+
+
 	public SanPham(int masanpham, DanhMucSanPham danhMucSanPham, String tensanpham, String giatien, String mota,
-			String hinhsanpham, Set<ChiTietSanPham> chiTietSanPham, Set<KhuyenMai> khuyenMai) {
+			String hinhsanpham, boolean hiden, String doituong, Set<ChiTietSanPham> chiTietSanPham,
+			Set<KhuyenMai> khuyenMai) {
 		super();
 		this.masanpham = masanpham;
 		this.danhMucSanPham = danhMucSanPham;
@@ -53,9 +61,16 @@ public class SanPham {
 		this.giatien = giatien;
 		this.mota = mota;
 		this.hinhsanpham = hinhsanpham;
+		this.hiden = hiden;
+		this.doituong = doituong;
 		this.chiTietSanPham = chiTietSanPham;
 		this.khuyenMai = khuyenMai;
 	}
+
+
+
+
+
 
 	public int getMasanpham() {
 		return masanpham;
@@ -105,5 +120,32 @@ public class SanPham {
 	public void setKhuyenMai(Set<KhuyenMai> khuyenMai) {
 		this.khuyenMai = khuyenMai;
 	}
+
+	public boolean isHiden() {
+		return hiden;
+	}
+
+	public void setHiden(boolean hiden) {
+		this.hiden = hiden;
+	}
+
+
+
+
+
+
+	public String getDoituong() {
+		return doituong;
+	}
+
+
+
+
+
+
+	public void setDoituong(String doituong) {
+		this.doituong = doituong;
+	}
+	
 	
 }

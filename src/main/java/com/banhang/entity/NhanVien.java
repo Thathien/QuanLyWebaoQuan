@@ -19,6 +19,9 @@ public class NhanVien {
 	String diachi;
 	boolean gioitinh;
 	String cmnd;
+	boolean lock;
+	String lydokhoa;
+	boolean xacthuc;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "machucvu")
@@ -33,19 +36,26 @@ public class NhanVien {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public NhanVien(int manhanvien, String hoten, String diachi, boolean gioitinh, String cmnd, ChucVu chucVu,
-			String email, String tendangnhap, String matkhau) {
+	
+
+	public NhanVien(int manhanvien, String hoten, String diachi, boolean gioitinh, String cmnd, boolean lock,
+			String lydokhoa, boolean xacthuc, ChucVu chucVu, String email, String tendangnhap, String matkhau) {
 		super();
 		this.manhanvien = manhanvien;
 		this.hoten = hoten;
 		this.diachi = diachi;
 		this.gioitinh = gioitinh;
 		this.cmnd = cmnd;
+		this.lock = lock;
+		this.lydokhoa = lydokhoa;
+		this.xacthuc = xacthuc;
 		this.chucVu = chucVu;
 		this.email = email;
 		this.tendangnhap = tendangnhap;
 		this.matkhau = matkhau;
 	}
+
+
 
 	public int getmanhanvien() {
 		return manhanvien;
@@ -107,5 +117,43 @@ public class NhanVien {
 	public void setManhanvien(int manhanvien) {
 		this.manhanvien = manhanvien;
 	}
+
+
+
+	public boolean isLock() {
+		return lock;
+	}
+	
+
+
+
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
+
+
+
+	public String getLydokhoa() {
+		return lydokhoa;
+	}
+
+
+
+	public void setLydokhoa(String lydokhoa) {
+		this.lydokhoa = lydokhoa;
+	}
+
+
+
+	public boolean isXacthuc() {
+		return xacthuc;
+	}
+
+
+
+	public void setXacthuc(boolean xacthuc) {
+		this.xacthuc = xacthuc;
+	}
+	
 	
 }

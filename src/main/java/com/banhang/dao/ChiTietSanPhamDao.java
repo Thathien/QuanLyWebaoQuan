@@ -62,16 +62,36 @@ public class ChiTietSanPhamDao implements ChiTietSanPhamImp{
 	@Transactional
 	public boolean deleteCTSanPhamByIdSanPham(int id) {
 		Session session=sessionFactory.getCurrentSession();
-		SanPham sanPham=session.get(SanPham.class,id);
+//		SanPham sanPham=session.get(SanPham.class,id);
+//		Set<ChiTietSanPham >chiTietSanPhamList=(Set) sanPham.getChiTietSanPham();
+//		
+//		for (ChiTietSanPham chiTietSanPham : chiTietSanPhamList ) {
+//			session.createQuery("delete CHITIETHOADON WHERE machitietsanpham="+chiTietSanPham.getMachitietsanpham());
+//		}
+////		session.createQuery("delete CHITIETKHUYENMAI WHERE masanpham="+id).executeUpdate();
+//		session.createQuery("delete CHITIETSANPHAM WHERE masanpham="+id).executeUpdate();
+//		session.createQuery("delete SANPHAM WHERE masanpham="+id).executeUpdate();
 		
-		Set<ChiTietSanPham >chiTietSanPhamList=(Set) sanPham.getChiTietSanPham();
-		
-		for (ChiTietSanPham chiTietSanPham : chiTietSanPhamList ) {
-			session.createQuery("delete CHITIETHOADON WHERE machitietsanpham="+chiTietSanPham.getMachitietsanpham());
+//		List<ChiTietKhuyenMai> chiTietKhuyenMais=session.createQuery("from CHITIETKHUYENMAI where masanpham=" +id).getResultList();
+//		if(!chiTietKhuyenMais.isEmpty()) {
+//			for(int i=0;i<chiTietKhuyenMais.size();i++) {
+//				session.delete(chiTietKhuyenMais.get(i));
+//			}
+//		}
+//		List<ChiTietHoaDon> chiTietHoaDons = session.createQuery("from CHITIETHOADON where masanpham=" +id).getResultList();
+//		if(!chiTietHoaDons.isEmpty()) {
+//			System.out.println(chiTietHoaDons.toString());
+//			for(int i=0;i<chiTietHoaDons.size();i++) {
+//				session.delete(chiTietHoaDons.get(i));
+//			}
+//		}
+		List<ChiTietSanPham> chiTietSanPhams=session.createQuery("from CHITIETSANPHAM where masanpham=" +id).getResultList();
+		if(!chiTietSanPhams.isEmpty()) {
+			System.out.println(chiTietSanPhams.toString());
+			for(int i=0;i<chiTietSanPhams.size();i++) {
+				session.delete(chiTietSanPhams.get(i));
+			}
 		}
-		session.createQuery("delete CHITIETKHUYENMAI WHERE masanpham="+id).executeUpdate();
-		session.createQuery("delete CHITIETSANPHAM WHERE masanpham="+id).executeUpdate();
-		session.createQuery("delete SANPHAM WHERE masanpham="+id).executeUpdate();
 		return true;
 	}
 

@@ -17,6 +17,7 @@ public class DanhMucSanPham {
 	int madanhmucsanpham;
 	String tendanhmuc;
 	String hinhdanhmuc;
+	boolean hiden;
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "madanhmucsanpham")
 	Set<SanPham>danhsachsanpham;
@@ -24,13 +25,17 @@ public class DanhMucSanPham {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public DanhMucSanPham(int madanhmucsanpham, String tendanhmuc, String hinhdanhmuc, Set<SanPham> danhsachsanpham) {
+	
+	public DanhMucSanPham(int madanhmucsanpham, String tendanhmuc, String hinhdanhmuc, boolean hiden,
+			Set<SanPham> danhsachsanpham) {
 		super();
 		this.madanhmucsanpham = madanhmucsanpham;
 		this.tendanhmuc = tendanhmuc;
 		this.hinhdanhmuc = hinhdanhmuc;
+		this.hiden = hiden;
 		this.danhsachsanpham = danhsachsanpham;
 	}
+
 	public int getMadanhmucsanpham() {
 		return madanhmucsanpham;
 	}
@@ -54,6 +59,14 @@ public class DanhMucSanPham {
 	}
 	public void setDanhsachsanpham(Set<SanPham> danhsachsanpham) {
 		this.danhsachsanpham = danhsachsanpham;
+	}
+
+	public boolean isHiden() {
+		return hiden;
+	}
+
+	public void setHiden(boolean hiden) {
+		this.hiden = hiden;
 	}
 	
 

@@ -71,8 +71,8 @@
 	                                             <td>2011/01/25</td>
 	                                             <td>2011/01/25</td>
 	                                             <td>
-	                                             	<a href="404.html" class="btn btn-info " title="" id="ansanpham" data-toggle="modal" data-target="#updatesanphammodel">Chi tiết</a>
-                                                <a href="404.html" class="btn btn-primary" title="" id="ansanpham">Chỉnh sửa</a>
+	                                             	<a href="" class="btn btn-info " title="" id="chitietsanpham" data-toggle="modal" data-target="#updatesanphammodel" data-masanpham="${listSanPhamss.getMasanpham()}">Chi tiết</a>
+                                                <a href="" class="btn btn-primary" title="" id="ansanpham">Chỉnh sửa</a>
 	                                             </td>
 	                                          </tr>
                                          </c:forEach>
@@ -92,8 +92,8 @@
 <jsp:include page="Footer_admin.jsp"></jsp:include>
 
             <!-- model addsanpham -->
-            <div class="modal fade bd-example-modal-lg" id="addsanphammodel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
+            <div class="modal fade bd-example-modal-lg overflow-auto" id="addsanphammodel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document" style="overflow-y: scroll; max-height:85%;  margin-top: 50px; margin-bottom:50px;">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Thêm mới sản phẩm</h5>
@@ -101,70 +101,92 @@
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body overflow-auto">
                  <form>
                   <div class="form-inline">
                     <div class="form-group ">
                         <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Tên sản phẩm</label>
-                        <input type="text" class="form-control form-control-sm" id="tensanpham">
-                        <span class="text-danger" id="tensanpham_error">*</span>
+                        <input type="text" class="form-control form-control-sm" id="tensanphamadd">
+                        <span class="text-danger" id="tensanphamadd_error">*</span>
                     </div>
                     <div class="form-group " style="margin-left: 20px;">  
                      <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Danh mục</label>
-                     <select class="form-control " id="danhmuc">
-                        <option>abafgyfsdgfhggfdghjaf</option>
-                        <option>adbajsdfghjkdb</option>
-                        <option>adbadasdfghjkljkjad</option>
-                        <option>4asfdgfhjk</option>
-                        <option>adsfdgfhg5</option>
+                     <select class="form-control " id="danhmucadd">
+                     <c:choose>
+                     	<c:when test="${danhMucSanPhams.size()!=0}">
+                     		<c:forEach var="danhMucSanPhams" items="${danhMucSanPhams}">
+                     			 <option value="${danhMucSanPhams.getMadanhmucsanpham()}">${danhMucSanPhams.getTendanhmuc()}</option>
+                     		</c:forEach>
+                     	</c:when>
+                     	<c:otherwise>
+                     		 <option disabled="disabled">Danh mục sản phẩm trống</option>
+                     	</c:otherwise>
+                     </c:choose>
+                       
                     </select>
-                    <span class="text-danger" id="danhmuc_error">*</span>
+                    <span class="text-danger" id="danhmucadd_error">*</span>
                 </div>
             </div>
             <div class="form-group">
                 <label for="message-text" class="col-form-label">Mô tả:</label>
-                <textarea class="form-control form-control-sm" id="mota" name="editor1"></textarea>
+                <textarea class="form-control form-control-sm" id="motaadd" name="editor1"></textarea>
                 <script>
                     CKEDITOR.replace( 'editor1' );
                 </script>
-                <span class="text-danger" id="mota_error">*</span>
+                <span class="text-danger" id="motaadd_error">*</span>
             </div>
             <div class="form-inline form-group">
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Giá tiền: (VNĐ)</label>
-                    <input type="text" class="form-control form-control-sm" id="">
-                    <span class="text-danger" id="giatien_error">*</span>
+                    <input type="number" class="form-control form-control-sm" id="giatienadd">
+                    <span class="text-danger" id="giatienadd_error">*</span>
                 </div>
                 <div class="form-group" style="margin-left: 20px;">
                     <label for="recipient-name" class="col-form-label" style="margin-left: 20px;margin-right: 20px;">Đối tượng</label>
-                    <select class="form-control form-control-sm" id="danhcho">
-                        <option>Nam </option>
-                        <option>Nữ</option>
-                        <option>Trẻ em</option>
+                    <select class="form-control form-control-sm" id="danhchoadd">
+                        <option value="nam">Nam </option>
+                        <option value="nu">Nữ</option>
+                        <option value="treem">Trẻ em</option>
                     </select>
-                    <span class="text-danger" id="danhcho_error">*</span>
+                    <span class="text-danger" id="danhchoadd_error">*</span>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="fileanh">Đường dẫn</label>
-                <input type="file" class="form-control-file" id="fileanh">
-                <span class="text-danger" id="danhcho_error">*</span>
+                <input type="file" class="form-control-file" id="fileanhadd">
+                <span class="text-danger" id="fileanhadd_error">*</span>
             </div>
             <div class="form-inline form-group">
                <div class="form-group" style="margin-left: 20px;">
                 <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Màu sắc</label>
-                <select class="form-control form-control-sm" id="mausac" >
-                    <option>Nam </option>
-                    <option>Nữ</option>
+                <select class="form-control form-control-sm" id="mausacadd" >
+                     <c:choose>
+                     	<c:when test="${mauSanPhams.size()!=0}">
+                     		<c:forEach var="mauSanPhams" items="${mauSanPhams}">
+                     			 <option value="${mauSanPhams.getMamau()}">${mauSanPhams.getTenmau()}</option>
+                     		</c:forEach>
+                     	</c:when>
+                     	<c:otherwise>
+                     		 <option disabled="disabled">Màu sản phẩm trống</option>
+                     	</c:otherwise>
+                     </c:choose>
                 </select>
-                <span class="text-danger" id="mausac_error">*</span>
+                <span class="text-danger" id="mausacadd_error">*</span>
             </div>
             <div class="form-group" >
                 <label for="recipient-name" class="col-form-label" style="margin-left: 20px;margin-right: 10px;">Size</label>
                 <select class="form-control form-control-sm" id="size">
-                    <option>Nam </option>
-                    <option>Nữ</option>
+                   <c:choose>
+                     	<c:when test="${sizeSanPhams.size()!=0}">
+                     		<c:forEach var="sizeSanPhams" items="${sizeSanPhams}">
+                     			 <option value="${sizeSanPhams.getMasize()}">${sizeSanPhams.getSize()}</option>
+                     		</c:forEach>
+                     	</c:when>
+                     	<c:otherwise>
+                     		 <option disabled="disabled">Size sản phẩm trống</option>
+                     	</c:otherwise>
+                     </c:choose>
                 </select>
                 <span class="text-danger" id="size_error">*</span>
             </div>
@@ -201,7 +223,7 @@
         </div>
 		<div class="modal-footer">
 		    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-		    <button type="button" class="btn btn-primary">Thêm mới</button>
+		    <button type="button" class="btn btn-primary" id="addnewsanpham">Thêm mới</button>
 		</div>
     </form>
 </div>
@@ -216,8 +238,8 @@
 
 
 <!-- modol updatéanpham -->
-<div class="modal fade bd-example-modal-lg" id="updatesanphammodel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade bd-example-modal-lg overflow-auto" id="updatesanphammodel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document" style="overflow-y: scroll; max-height:85%;  margin-top: 50px; margin-bottom:50px;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabels">Cập nhật sản phẩm</h5>
@@ -225,17 +247,17 @@
           <span aria-hidden="true">&times;</span>
       </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body overflow-auto">
      <form>
       <div class="form-inline">
         <div class="form-group ">
             <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Tên sản phẩm</label>
-            <input type="text" class="form-control form-control-sm" id="asdfgh">
+            <input type="text" class="form-control form-control-sm" id="tenspadd">
             <span class="text-danger" id="tensanpham_errors">*</span>
         </div>
         <div class="form-group " style="margin-left: 20px;">  
          <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Danh mục</label>
-         <select class="form-control form-control-sm" id="terytyj">
+         <select class="form-control form-control-sm" id="danhmucspadd">
             <option>abafgyfsdgfhggfdghjaf</option>
             <option>adbajsdfghjkdb</option>
             <option>adbadasdfghjkljkjad</option>
@@ -247,7 +269,7 @@
 </div>
 <div class="form-group">
     <label for="message-text" class="col-form-label">Mô tả:</label>
-    <textarea class="form-control form-control-sm" id="afafa" name="editor3"></textarea>
+    <textarea class="form-control form-control-sm" id="motaspadd" name="editor3"></textarea>
     <script>
         CKEDITOR.replace( 'editor3' );
     </script>
@@ -256,7 +278,7 @@
 <div class="form-inline form-group">
     <div class="form-group">
         <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Giá tiền: (VNĐ)</label>
-        <input type="text" class="form-control form-control-sm" id="dada">
+        <input type="text" class="form-control form-control-sm" id="giatadada">
         <span class="text-danger" id="giatien_errors">*</span>
     </div>
     <div class="form-group" style="margin-left: 20px;">
@@ -339,10 +361,6 @@
 </div>
 </div>
 <!-- modol updatéanpham -->
-
-
-
-
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>

@@ -28,6 +28,20 @@ public class ChiTietSanPham {
 	
 	int soluong;
 	String ngaynhap;
+	public ChiTietSanPham(int machitietsanpham, SanPham sanPham, SizeSanPham sizeSanPham, MauSanPham mauSanPham,
+			int soluong, String ngaynhap) {
+		super();
+		this.machitietsanpham = machitietsanpham;
+		this.sanPham = sanPham;
+		this.sizeSanPham = sizeSanPham;
+		this.mauSanPham = mauSanPham;
+		this.soluong = soluong;
+		this.ngaynhap = ngaynhap;
+	}
+	public ChiTietSanPham() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public int getMachitietsanpham() {
 		return machitietsanpham;
 	}
@@ -64,5 +78,8 @@ public class ChiTietSanPham {
 	public void setNgaynhap(String ngaynhap) {
 		this.ngaynhap = ngaynhap;
 	}
+	
+	
+	
 	
 }

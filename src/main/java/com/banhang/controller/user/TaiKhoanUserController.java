@@ -111,10 +111,11 @@ public class TaiKhoanUserController {
 											nv.setMatkhau(dangkyuser.getMatkhaudk().trim());
 											nv.setCmnd(null);
 											nv.setChucVu(new ChucVu(3,"nguoidung"));
-											
+											nv.setLock(false);
+											nv.setXacthuc(false);
 											int id=nhanVienService.register(nv);
 											if(id!=0) {
-												map.addAttribute("success_fail", "Đăng ký thành công");
+												map.addAttribute("success_fail", "Đăng ký thành công hãy truy cập email của bạn để xác thực");
 											}else {
 												map.addAttribute("success_fail", "Đăng ký không thành công");
 											}
