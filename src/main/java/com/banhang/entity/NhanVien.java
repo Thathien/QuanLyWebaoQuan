@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-
-
 @Entity(name = "NHANVIEN")
 public class NhanVien {
 	@Id
@@ -23,8 +21,8 @@ public class NhanVien {
 	boolean lock;
 	String lydokhoa;
 	boolean xacthuc;
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	fetch = FetchType.LAZY,
+	@OneToOne( cascade = CascadeType.ALL)
 	@JoinColumn(name = "machucvu")
 	ChucVu chucVu;
 	

@@ -19,7 +19,7 @@ public class SanPham {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int masanpham;
-	
+//	,fetch = FetchType.EAGER
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "madanhmucsanpham")
 	DanhMucSanPham danhMucSanPham;
@@ -30,14 +30,14 @@ public class SanPham {
 	String hinhsanpham;
 	boolean hiden;
 	String doituong;
-	
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+//	fetch = FetchType.EAGER,
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "masanpham")
 	Set<ChiTietSanPham> chiTietSanPham;
 	
 	
 	// all , remove fetch = FetchType.EAGER,
-	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "CHITIETKHUYENMAI",
 	joinColumns ={@JoinColumn(name = "masanpham",referencedColumnName ="masanpham")},
 	inverseJoinColumns = {@JoinColumn(name = "makhuyenmai",referencedColumnName ="makhuyenmai")})
@@ -47,11 +47,6 @@ public class SanPham {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-
-
-	
-
 
 	public SanPham(int masanpham, DanhMucSanPham danhMucSanPham, String tensanpham, String giatien, String mota,
 			String hinhsanpham, boolean hiden, String doituong, Set<ChiTietSanPham> chiTietSanPham,
@@ -68,11 +63,6 @@ public class SanPham {
 		this.chiTietSanPham = chiTietSanPham;
 		this.khuyenMai = khuyenMai;
 	}
-
-
-
-
-
 
 	public int getMasanpham() {
 		return masanpham;

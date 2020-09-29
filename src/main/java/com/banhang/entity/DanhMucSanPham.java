@@ -19,8 +19,8 @@ public class DanhMucSanPham {
 	String tendanhmuc;
 	String hinhdanhmuc;
 	boolean hiden;
-//	cascade = CascadeType.ALL
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+//	cascade = CascadeType.ALL MEGER
+	@OneToMany( cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "madanhmucsanpham")
 	Set<SanPham>danhsachsanpham;
 	public DanhMucSanPham() {

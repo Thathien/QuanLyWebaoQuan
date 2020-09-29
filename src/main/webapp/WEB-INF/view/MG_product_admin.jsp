@@ -72,7 +72,7 @@
 	                                             <td>2011/01/25</td>
 	                                             <td>
 	                                             	<a href="" class="btn btn-info " title="" id="chitietsanpham" data-toggle="modal" data-target="#updatesanphammodel" data-masanpham="${listSanPhamss.getMasanpham()}">Chi tiết</a>
-                                                <a href="" class="btn btn-primary" title="" id="ansanpham">Chỉnh sửa</a>
+                                              <!--   <a href="" class="btn btn-primary" title="" id="ansanpham">Chỉnh sửa</a> -->
 	                                             </td>
 	                                          </tr>
                                          </c:forEach>
@@ -138,7 +138,7 @@
             <div class="form-inline form-group">
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Giá tiền: (VNĐ)</label>
-                    <input type="number" class="form-control form-control-sm" id="giatienadd">
+                    <input type="number" class="form-control form-control-sm" id="giatienadd" min="10000">
                     <span class="text-danger" id="giatienadd_error">*</span>
                 </div>
                 <div class="form-group" style="margin-left: 20px;">
@@ -157,10 +157,10 @@
                 <input type="file" class="form-control-file" id="fileanhadd">
                 <span class="text-danger" id="fileanhadd_error">*</span>
             </div>
-            <div class="form-inline form-group">
+            <div class="form-inline form-group " id="contchitietsanpham">
                <div class="form-group" style="margin-left: 20px;">
-                <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Màu sắc</label>
-                <select class="form-control form-control-sm" id="mausacadd" >
+                <label for="recipient-name" class="col-form-label" style="margin-right: 5px;">Màu sắc</label>
+                <select class="form-control form-control-sm" id="mausacadd" class="required" >
                      <c:choose>
                      	<c:when test="${mauSanPhams.size()!=0}">
                      		<c:forEach var="mauSanPhams" items="${mauSanPhams}">
@@ -176,7 +176,7 @@
             </div>
             <div class="form-group" >
                 <label for="recipient-name" class="col-form-label" style="margin-left: 20px;margin-right: 10px;">Size</label>
-                <select class="form-control form-control-sm" id="size">
+                <select class="form-control form-control-sm" id="sizeadd" class="required">
                    <c:choose>
                      	<c:when test="${sizeSanPhams.size()!=0}">
                      		<c:forEach var="sizeSanPhams" items="${sizeSanPhams}">
@@ -188,20 +188,18 @@
                      	</c:otherwise>
                      </c:choose>
                 </select>
-                <span class="text-danger" id="size_error">*</span>
+                <span class="text-danger" id="sizeadd_error">*</span>
             </div>
             <div class="form-group">
                 <label for="recipient-name" class="col-form-label" style="margin-left: 20px;margin-right: 10px;">Số lượng:</label>
-                <input type="number" class="form-control form-control-sm" id="asdfghjk" style="margin-left: 10px;" min="1">
-                <span class="text-danger" id="giatien_error">*</span>
+                <input type="number" class="form-control form-control-sm" id="soluongadd" style="margin-left: 10px;" min="1">
+                <span class="text-danger" id="soluongadd_error">*</span>
             </div>
             <div class="form-group">
-                <a href="" class="btn btn-primary" title="" id="" style="margin-left: 20px;margin-right: 10px;">Thêm </a>
+                <input type="button" class="btn btn-primary" title="" id="themchitietsanpham" style="margin-left: 10px;margin-right: 10px;" value="Thêm">
             </div>
-
-        </div>
-        <div class="form-group">
-            <table class="table">
+			 <div class="form-group" id="chitietsanpham">
+            <table class="table" id="tableaddsp">
                 <caption>Thông tin chi tiết sản phẩm</caption>
                 <thead>
                     <tr>
@@ -212,15 +210,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Xanh</td>
-                        <td>XXL</td>
-                        <td>25</td>
-                        <td>17/09/2020</td>
+                   <!--   <tr>
+                        <td>Trống</td>
+                        <td>Trống</td>
+                        <td>Trống</td>
+                        <td>Trống</td>
                     </tr>
+                    -->
                 </tbody>
             </table>
         </div>
+        </div>
+       
 		<div class="modal-footer">
 		    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
 		    <button type="button" class="btn btn-primary" id="addnewsanpham">Thêm mới</button>
@@ -349,7 +350,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-    <button type="button" class="btn btn-primary">Thêm mới</button>
+    <button type="button" class="btn btn-primary">Cập nhật</button>
 </div>
 </form>
 </div>
