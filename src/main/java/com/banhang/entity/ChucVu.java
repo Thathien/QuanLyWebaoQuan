@@ -1,36 +1,46 @@
 package com.banhang.entity;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "CHUCVU")
-public class ChucVu {
+@Table(name = "CHUCVU")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class ChucVu implements Serializable{
 	@Id
 	@GeneratedValue(strategy =GenerationType.IDENTITY)
+	@Column(name = "machucvu")
 	int machucvu;
+	@Column(name = "tenchucvu")
 	String tenchucvu;
-	public ChucVu() {
+	
+	@OneToMany(mappedBy ="chucVu" )
+	private Set<NhanVien> nhanViens= new HashSet<NhanVien>();
+
+	public ChucVu(String tenchucvu) {
 		super();
-		// TODO Auto-generated constructor stub
-	}
-	public ChucVu(int machucvu, String tenchucvu) {
-		super();
-		this.machucvu = machucvu;
 		this.tenchucvu = tenchucvu;
 	}
-	public int getMachucvu() {
-		return machucvu;
-	}
-	public void setMachucvu(int machucvu) {
-		this.machucvu = machucvu;
-	}
-	public String getTenchucvu() {
-		return tenchucvu;
-	}
-	public void setTenchucvu(String tenchucvu) {
-		this.tenchucvu = tenchucvu;
-	}
+
+
+	
 	
 }

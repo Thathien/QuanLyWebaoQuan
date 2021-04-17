@@ -1,8 +1,11 @@
 package com.banhang.entity;
 
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,131 +16,57 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "SANPHAM")
-public class SanPham {
+@Table(name = "SANPHAM")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class SanPham implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "masanpham")
 	int masanpham;
 //	,fetch = FetchType.EAGER
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "madanhmucsanpham")
 	DanhMucSanPham danhMucSanPham;
 	
+	
+	@Column(name = "tensanpham" , columnDefinition = "nvarchar(40)")
 	String tensanpham;
+	
+	@Column(name = "giatien" , columnDefinition = "nvarchar(40)")
 	String giatien;
+	
+	@Column(name = "mota" , columnDefinition = "nvarchar(40)")
 	String mota;
+	
+	@Column(name = "hinhsanpham" , columnDefinition = "nvarchar(40)")
 	String hinhsanpham;
+	
+	@Column(name = "hiden", columnDefinition = "bit")
 	boolean hiden;
+	
+	@Column(name = "doituong" , columnDefinition = "nvarchar(40)")
 	String doituong;
-//	fetch = FetchType.EAGER,
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "masanpham")
-	Set<ChiTietSanPham> chiTietSanPham;
+	
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "sanPham")
+	Set<ChiTietSanPham> chiTietSanPham= new HashSet<ChiTietSanPham>();
 	
 	
-	// all , remove fetch = FetchType.EAGER,
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinTable(name = "CHITIETKHUYENMAI",
-	joinColumns ={@JoinColumn(name = "masanpham",referencedColumnName ="masanpham")},
-	inverseJoinColumns = {@JoinColumn(name = "makhuyenmai",referencedColumnName ="makhuyenmai")})
-	Set<KhuyenMai> khuyenMai;
+		joinColumns ={@JoinColumn(name = "masanpham",referencedColumnName ="masanpham")},
+		inverseJoinColumns = {@JoinColumn(name = "makhuyenmai",referencedColumnName ="makhuyenmai")})
+	Set<KhuyenMai> khuyenMai= new HashSet<KhuyenMai>();
 	
-	public SanPham() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
-	public SanPham(int masanpham, DanhMucSanPham danhMucSanPham, String tensanpham, String giatien, String mota,
-			String hinhsanpham, boolean hiden, String doituong, Set<ChiTietSanPham> chiTietSanPham,
-			Set<KhuyenMai> khuyenMai) {
-		super();
-		this.masanpham = masanpham;
-		this.danhMucSanPham = danhMucSanPham;
-		this.tensanpham = tensanpham;
-		this.giatien = giatien;
-		this.mota = mota;
-		this.hinhsanpham = hinhsanpham;
-		this.hiden = hiden;
-		this.doituong = doituong;
-		this.chiTietSanPham = chiTietSanPham;
-		this.khuyenMai = khuyenMai;
-	}
-
-	public int getMasanpham() {
-		return masanpham;
-	}
-	public void setMasanpham(int masanpham) {
-		this.masanpham = masanpham;
-	}
-	public DanhMucSanPham getDanhMucSanPham() {
-		return danhMucSanPham;
-	}
-	public void setDanhMucSanPham(DanhMucSanPham danhMucSanPham) {
-		this.danhMucSanPham = danhMucSanPham;
-	}
-	public String getTensanpham() {
-		return tensanpham;
-	}
-	public void setTensanpham(String tensanpham) {
-		this.tensanpham = tensanpham;
-	}
-	public String getGiatien() {
-		return giatien;
-	}
-	public void setGiatien(String giatien) {
-		this.giatien = giatien;
-	}
-	public String getMota() {
-		return mota;
-	}
-	public void setMota(String mota) {
-		this.mota = mota;
-	}
-	public String getHinhsanpham() {
-		return hinhsanpham;
-	}
-	public void setHinhsanpham(String hinhsanpham) {
-		this.hinhsanpham = hinhsanpham;
-	}
-	public Set<ChiTietSanPham> getChiTietSanPham() {
-		return chiTietSanPham;
-	}
-	public void setChiTietSanPham(Set<ChiTietSanPham> chiTietSanPham) {
-		this.chiTietSanPham = chiTietSanPham;
-	}
-	public Set<KhuyenMai> getKhuyenMai() {
-		return khuyenMai;
-	}
-	public void setKhuyenMai(Set<KhuyenMai> khuyenMai) {
-		this.khuyenMai = khuyenMai;
-	}
-
-	public boolean isHiden() {
-		return hiden;
-	}
-
-	public void setHiden(boolean hiden) {
-		this.hiden = hiden;
-	}
-
-
-
-
-
-
-	public String getDoituong() {
-		return doituong;
-	}
-
-
-
-
-
-
-	public void setDoituong(String doituong) {
-		this.doituong = doituong;
-	}
-	
-	
 }

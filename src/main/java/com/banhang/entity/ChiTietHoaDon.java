@@ -1,15 +1,28 @@
 package com.banhang.entity;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 
 @Entity(name = "CHITIETHOADON")
-public class ChiTietHoaDon {
+@Table(name = "CHITIETHOADON")
+public class ChiTietHoaDon implements Serializable{
 	@EmbeddedId
 	ChiTietHoaDonId chiTietHoaDonId;
-	int soluong;
-	String giatien;
+	@Column(name = "soluong",columnDefinition = "int")
+	private int soluong;
+	@Column(name = "giatien" ,columnDefinition = "nvarchar(50)")
+	private String giatien;
+	
+	@ManyToOne
+	@JoinColumn(name = "mahoadon",insertable = false,updatable = false)
+	private HoaDon hoaDon;
 //	public ChiTietHoaDon() {
 //		super();
 //		// TODO Auto-generated constructor stub

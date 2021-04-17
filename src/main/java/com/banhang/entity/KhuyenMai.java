@@ -1,8 +1,10 @@
 package com.banhang.entity;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,18 +12,27 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 
 @Entity(name = "KHUYENMAI")
-public class KhuyenMai {
+@Table(name = "KHUYENMAI")
+public class KhuyenMai implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "makhuyenmai")
 	int makhuyenmai;
+	@Column(name = "giagiam")
 	float giagiam;
+	@Column(name = "tenkhuyenmai",columnDefinition = "nvarchar(50)")
 	String tenkhuyenmai;
+	@Column(name = "thoigianbatdau",columnDefinition = "nvarchar(50)")
 	String thoigianbatdau;
+	@Column(name = "thoigianketthuc",columnDefinition = "nvarchar(50)")
 	String thoigianketthuc;
+	@Column(name = "mota",columnDefinition = "nvarchar(50)")
 	String mota;
+	@Column(name = "hinhkhuyenmai",columnDefinition = "nvarchar(50)")
 	String hinhkhuyenmai;
 	
 	@ManyToMany(cascade = CascadeType.ALL)

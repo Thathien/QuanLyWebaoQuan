@@ -25,24 +25,31 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
-		<context:component-scan base-package="com.banhang.controller.admin"></context:component-scan>
+	<mvc:annotation-driven/>
+	<context:component-scan base-package="com.banhang.controller.admin"></context:component-scan>
 	<context:component-scan base-package="com.banhang.controller.user"></context:component-scan>
 	<context:component-scan base-package="com.banhang.dao"></context:component-scan>
 	<context:component-scan base-package="com.banhang.service"></context:component-scan>
-		<bean id = "dataSource" class = "org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-			<property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
-		    <property name="url" value="jdbc:jtds:sqlserver://localhost:1433;databaseName=dbbanhang;" />
+	<context:component-scan base-package="com.banhang.entity"></context:component-scan>
+		<bean id = "dataSource" class = "org.springframework.jdbc.datasource.DriverManagerDataSource" >
+			<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		    <property name="url" value="jdbc:sqlserver://localhost:1433;databaseName=dbbanhang;" />
 		    <property name="username" value="sa" />
 		    <property name="password" value="123456" />
 		</bean>
 		
 		<bean id="mySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 	        <property name="dataSource" ref="dataSource"/>
+<!-- 			 <property name="configLocation" value="classpath:hibernate.cfg.xml" /> -->
 	        <property name="packagesToScan" value = "com.banhang.entity"></property>
 	        <property name="hibernateProperties">
 	            <props>
 	            	<prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
-	            	<prop key="hibernate.show_sql">true</prop>
+					<prop key="hibernate.show_sql">true</prop>
+					<prop key="hibernate.hbm2ddl.auto">update</prop>
+					<prop key="hibernate.enable_lazy_load_no_trans">false</prop>
+					<prop key="hibernate.generate_statistics">false</prop>
+					<prop key="hibernate.use_sql_comments">false</prop>
 	            </props>
 	        </property>
     	</bean>

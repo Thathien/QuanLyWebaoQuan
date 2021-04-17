@@ -1,36 +1,40 @@
 package com.banhang.entity;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "MAUSANPHAM")
-public class MauSanPham {
+@Table(name = "MAUSANPHAM")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class MauSanPham implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "mamau")
 	int mamau;
+	@Column(name = "tenmau", columnDefinition = "nvarchar(50)")
 	String tenmau;
-	public MauSanPham() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public MauSanPham(int mamau, String tenmau) {
-		super();
-		this.mamau = mamau;
-		this.tenmau = tenmau;
-	}
-	public int getMamau() {
-		return mamau;
-	}
-	public void setMamau(int mamau) {
-		this.mamau = mamau;
-	}
-	public String getTenmau() {
-		return tenmau;
-	}
-	public void setTenmau(String tenmau) {
-		this.tenmau = tenmau;
-	}
+	@OneToMany(mappedBy = "mauSanPham",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private Set<ChiTietSanPham> chiTietSanPhams= new HashSet<>();
+
 	
 }

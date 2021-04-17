@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<mapping class="com.banhang.MauSanPham" />
+		<mapping class="com.banhang.SizeSanPham" />
+		<mapping class="com.banhang.ChucVu" />
+		<mapping class="com.banhang.DanhMucSanPham" />
+		<mapping class="com.banhang.NhanVien" />
+		<mapping class="com.banhang.SanPham" />
+		<mapping class="com.banhang.KhuyenMai" />
+		<mapping class="com.banhang.ChiTietSanPham" />
+		<mapping class="com.banhang.HoaDon" />
+		<mapping class="com.banhang.ChiTietHoaDon" />
+		<mapping class="com.banhang.ChiTietHoaDonId" />
+	</session-factory>
+</hibernate-configuration>

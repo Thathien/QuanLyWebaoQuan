@@ -3,10 +3,14 @@ package com.banhang.controller.user;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -21,6 +25,7 @@ import com.banhang.entity.ChucVu;
 import com.banhang.entity.NhanVien;
 import com.banhang.model.DangKyModel;
 import com.banhang.model.DangNhapModel;
+import com.banhang.service.ChucVuService;
 import com.banhang.service.NhanVienService;
 
 @Controller
@@ -28,7 +33,13 @@ import com.banhang.service.NhanVienService;
 public class TaiKhoanUserController {
 	
 	@Autowired
+	private JavaMailSender mailsender;
+	
+	@Autowired
 	NhanVienService nhanVienService;
+	
+	@Autowired
+	ChucVuService chucVuService;
 	
 	@GetMapping("dangnhap")
 	public String showdangnhap(Model m,HttpSession httpSession) {
@@ -48,12 +59,37 @@ public class TaiKhoanUserController {
 		if(br.hasErrors()) {
 			return "login_user";
 		}else {
-			boolean temp=nhanVienService.checkUser(dangnhapuser.getEmail(),dangnhapuser.getMatKhau());
-			if(temp==true) {
+			
+//			boolean temp=nhanVienService.checkUser(dangnhapuser.getEmail(),dangnhapuser.getMatKhau());
+//			System.out.println("KQ: "+ temp);
+//			if(temp==true) {
+//				NhanVien tk= new NhanVien();
+//				tk=nhanVienService.getInforby_User_Pass(dangnhapuser.getEmail(), dangnhapuser.getMatKhau());
+//				TaiKhoanLogin taikhoan_session= new TaiKhoanLogin();
+//				taikhoan_session.setManhanvien(tk.getManhanvien());
+//				taikhoan_session.setHoten(tk.getHoten());
+//				taikhoan_session.setTendangnhap(tk.getTendangnhap());
+//				taikhoan_session.setMatkhau(tk.getMatkhau());
+//				taikhoan_session.setMachucvu(tk.getChucVu().getMachucvu());
+//				map.addAttribute("taikhoan",taikhoan_session);
+////				httpSession.setAttribute("taikhoan", taikhoan_session););
+//				return "redirect:/";
+//			}else {
+//				map.addAttribute("resultDangNhap","Tài khoản hoặc mật khẩu không hơp lệ");
+//				return "login_user";
+//			}
+//			
+			
+			
+			
+			NhanVien nhanVien=null;
+			nhanVien=nhanVienService.getInforby_User_Pass(dangnhapuser.getEmail(),dangnhapuser.getMatKhau());
+			System.out.println("KQ: "+ nhanVien.getHoten());
+			if(nhanVien!=null) {
 				NhanVien tk= new NhanVien();
 				tk=nhanVienService.getInforby_User_Pass(dangnhapuser.getEmail(), dangnhapuser.getMatKhau());
 				TaiKhoanLogin taikhoan_session= new TaiKhoanLogin();
-				taikhoan_session.setManhanvien(tk.getmanhanvien());
+				taikhoan_session.setManhanvien(tk.getManhanvien());
 				taikhoan_session.setHoten(tk.getHoten());
 				taikhoan_session.setTendangnhap(tk.getTendangnhap());
 				taikhoan_session.setMatkhau(tk.getMatkhau());
@@ -85,7 +121,7 @@ public class TaiKhoanUserController {
 		return "regester_user";
 	}
 	@PostMapping("dangky")
-	public String dangkyProcess(@Valid @ModelAttribute("dangkyuser") DangKyModel dangkyuser,BindingResult br,ModelMap map) {
+	public String dangkyProcess(@Valid @ModelAttribute("dangkyuser") DangKyModel dangkyuser,BindingResult br,ModelMap map) throws MessagingException {
 		if(br.hasErrors()) {
 			return "regester_user";
 		}else {
@@ -110,12 +146,26 @@ public class TaiKhoanUserController {
 											nv.setTendangnhap(dangkyuser.getEmaildk().trim());
 											nv.setMatkhau(dangkyuser.getMatkhaudk().trim());
 											nv.setCmnd(null);
-											nv.setChucVu(new ChucVu(3,"nguoidung"));
+											nv.setChucVu(chucVuService.getById(1));
 											nv.setLock(false);
 											nv.setXacthuc(false);
 											int id=nhanVienService.register(nv);
 											if(id!=0) {
 												map.addAttribute("success_fail", "Đăng ký thành công hãy truy cập email của bạn để xác thực");
+//												
+												//xác thực email
+												MimeMessage message= mailsender.createMimeMessage();
+												boolean multipart = true;
+												MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
+												
+												
+												String messinfor="Vui lòng nhấn vào link này để xác thực đăng ký ";
+												message.setContent(messinfor, "text/html");
+												helper.setSubject("Yêu cầu xác thực email bạn đã đăng ký");
+												helper.setTo(nv.getEmail());
+												
+												mailsender.send(message);
+												
 											}else {
 												map.addAttribute("success_fail", "Đăng ký không thành công");
 											}

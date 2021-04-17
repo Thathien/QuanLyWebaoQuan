@@ -40,7 +40,6 @@ public class NhanVienDao implements NhanVienImp{
 	@Override
 	@Transactional
 	public boolean checkUser(String email, String matkhau) {
-		
 		Session session=sessionFactory.getCurrentSession();
 		String  sql="from NHANVIEN where tendangnhap='"+email+"' and matkhau='"+matkhau+"' and machucvu=3";
 		List<NhanVien> listNhanVien=session.createQuery(sql).getResultList();

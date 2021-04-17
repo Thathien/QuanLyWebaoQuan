@@ -42,4 +42,19 @@ public class ChucVuService implements ChucVuImp{
 		return chucVuDao.checkNameChucVu(name);
 	}
 
+	@Override
+	public ChucVu getById(int id) {
+		List<ChucVu> chucVus=null;
+		chucVus=getAllChucVu();
+		
+		ChucVu cv=null;
+		for (ChucVu c : chucVus) {
+			if(c.getMachucvu()==id) {
+				cv=c;
+			}
+		}
+		// TODO Auto-generated method stub
+		return cv;
+	}
+
 }

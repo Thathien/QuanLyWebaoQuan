@@ -2,7 +2,6 @@ package com.banhang.dao;
 
 import com.banhang.entity.SanPham;
 import com.banhang.imp.SanPhamImp;
-import com.mysql.cj.Query;
 
 import java.util.List;
 

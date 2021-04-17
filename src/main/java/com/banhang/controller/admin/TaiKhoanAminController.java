@@ -54,7 +54,7 @@ public class TaiKhoanAminController {
 				TaiKhoanLogin taikhoan= new TaiKhoanLogin();
 				taikhoan.setHoten(tk.getHoten());
 				taikhoan.setMachucvu(tk.getChucVu().getMachucvu());
-				taikhoan.setManhanvien(tk.getmanhanvien());
+				taikhoan.setManhanvien(tk.getManhanvien());
 				taikhoan.setTendangnhap(tk.getEmail());
 				taikhoan.setMatkhau(tk.getMatkhau());
 //				httpSession.setAttribute("taikhoan", taikhoan);

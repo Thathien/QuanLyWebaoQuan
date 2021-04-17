@@ -2,12 +2,15 @@ package com.banhang.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class ChiTietHoaDonId implements Serializable{
-	int mahoadon;
-	int machitietsanpham;
+	@Column(name = "mahoadon")
+	private int mahoadon;
+	@Column(name = "machitietsanpham")
+	private int machitietsanpham;
 
 	public int getMahoadon() {
 		return mahoadon;

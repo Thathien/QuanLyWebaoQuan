@@ -61,5 +61,13 @@ public class ChucVuDao implements ChucVuImp{
 		}
 		return false;
 	}
+	@Override
+	public ChucVu getById(int id) {
+		ChucVu cv= null;
+		Session session=sessionFactory.getCurrentSession();
+		String sql=" from CHUCVU where machucvu='"+id+"'" ;
+		 cv= (ChucVu) session.createQuery(sql).getSingleResult();
+		 return cv;
+	}
 
 }

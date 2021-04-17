@@ -1,8 +1,10 @@
 package com.banhang.entity;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,14 +12,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity(name = "DANHMUCSANPHAM")
-public class DanhMucSanPham {
+@Table(name = "DANHMUCSANPHAM")
+public class DanhMucSanPham implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "madanhmucsanpham")
 	int madanhmucsanpham;
+	@Column(name = "tendanhmuc", columnDefinition = "nvarchar(50)")
 	String tendanhmuc;
+	@Column(name = "hinhdanhmuc", columnDefinition = "nvarchar(50)")
 	String hinhdanhmuc;
+	@Column(name = "hiden" , columnDefinition = "bit")
 	boolean hiden;
 //	cascade = CascadeType.ALL MEGER
 	@OneToMany( cascade = CascadeType.ALL,fetch = FetchType.EAGER)
