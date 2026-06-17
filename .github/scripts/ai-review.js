@@ -1,5 +1,3 @@
-const fs = require("fs");
-
 async function run({ github, context }) {
   const apiKey = process.env.GEMINI_API_KEY;
 
@@ -24,9 +22,10 @@ async function run({ github, context }) {
         console.log(`⏭️ Skip ${file.filename} (không có patch)`);
         continue;
       }
-      console.log(`🔍 Reviewing ${file.filename}`);
-      const prompt = `
 
+      console.log(`🔍 Reviewing ${file.filename}`);
+
+      const prompt = `
 Bạn là Principal Java Architect.
 
 Review file sau:
@@ -35,27 +34,30 @@ File:
 ${file.filename}
 
 Patch:
+
+\`\`\`diff
 ${file.patch}
+\`\`\`
 
 Chỉ tìm:
 
-* Bug
-* NPE
-* Security
-* Hibernate/JPA issue
-* SQL issue
-* Performance issue
+- Bug
+- NullPointerException
+- Security issue
+- Hibernate/JPA issue
+- SQL issue
+- Performance issue
 
 KHÔNG nhận xét coding style.
 
-Trả về JSON:
+Trả về JSON hợp lệ:
 
 [
-{
-"codeSnippet": "<đoạn code lỗi>",
-"severity": "LOW|MEDIUM|HIGH",
-"comment": "<comment>"
-}
+  {
+    "codeSnippet": "đoạn code lỗi",
+    "severity": "LOW",
+    "comment": "giải thích lỗi"
+  }
 ]
 
 Nếu không có lỗi:
@@ -63,7 +65,6 @@ Nếu không có lỗi:
 []
 `;
 
-      ````;
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
         {
@@ -98,80 +99,87 @@ Nếu không có lỗi:
         .replace(/```/g, "")
         .trim();
 
-      let reviews = [];
+      let reviews;
 
       try {
         reviews = JSON.parse(reviewText);
       } catch (e) {
-        console.log(`⚠️ Gemini trả JSON không hợp lệ cho ${file.filename}`);
+        console.log(`⚠️ JSON không hợp lệ từ Gemini: ${file.filename}`);
         continue;
       }
 
-      if (!reviews.length) {
+      if (!Array.isArray(reviews) || reviews.length === 0) {
         console.log(`✅ LGTM ${file.filename}`);
         continue;
       }
 
       const patchLines = file.patch.split("\n");
 
-      const comments = [];
-
       for (const review of reviews) {
-        const snippet = review.codeSnippet;
+        try {
+          const snippet = review.codeSnippet?.trim();
 
-        if (!snippet) continue;
+          if (!snippet) continue;
 
-        let patchIndex = patchLines.findIndex(
-          (l) =>
-            l.includes(snippet) && (l.startsWith("+") || l.startsWith(" ")),
-        );
+          const patchIndex = patchLines.findIndex(
+            (line) => line.includes(snippet) && line.startsWith("+"),
+          );
 
-        if (patchIndex === -1) {
-          continue;
-        }
-
-        let currentLine = 0;
-
-        for (let i = 0; i <= patchIndex; i++) {
-          const line = patchLines[i];
-
-          const hunkMatch = line.match(/^@@ -\d+(?:,\d+)? \+(\d+)/);
-
-          if (hunkMatch) {
-            currentLine = parseInt(hunkMatch[1], 10) - 1;
+          if (patchIndex === -1) {
+            console.log(`⚠️ Không tìm thấy snippet trong patch: ${snippet}`);
             continue;
           }
 
-          if (line.startsWith("+") || line.startsWith(" ")) {
-            currentLine++;
+          let currentLine = 0;
+
+          for (let i = 0; i <= patchIndex; i++) {
+            const line = patchLines[i];
+
+            const hunkMatch = line.match(/^@@ -\d+(?:,\d+)? \+(\d+)/);
+
+            if (hunkMatch) {
+              currentLine = parseInt(hunkMatch[1], 10) - 1;
+              continue;
+            }
+
+            if (line.startsWith("+") || line.startsWith(" ")) {
+              currentLine++;
+            }
           }
+
+          await github.rest.pulls.createReviewComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber,
+
+            commit_id: context.payload.pull_request.head.sha,
+
+            path: file.filename,
+
+            line: currentLine,
+
+            side: "RIGHT",
+
+            body: [
+              `🤖 **AI Review (${review.severity})**`,
+              "",
+              review.comment,
+            ].join("\n"),
+          });
+
+          console.log(`💬 Commented ${file.filename}:${currentLine}`);
+        } catch (commentError) {
+          console.error(
+            `❌ Không thể comment line cho ${file.filename}`,
+            commentError,
+          );
         }
-
-        comments.push({
-          path: file.filename,
-          line: currentLine,
-          side: "RIGHT",
-          body: `🤖 AI Review (${review.severity})\n\n` + review.comment,
-        });
       }
 
-      if (comments.length) {
-        await github.rest.pulls.createReview({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          pull_number: prNumber,
-          event: "COMMENT",
-          comments,
-        });
-
-        console.log(
-          `✅ Đã tạo ${comments.length} review comments cho ${file.filename}`,
-        );
-      }
+      console.log(`✅ Review hoàn tất ${file.filename}`);
     } catch (error) {
       console.error(`❌ Review lỗi file ${file.filename}`, error);
     }
-    ````;
   }
 
   console.log("🎉 Hoàn tất AI Review.");
