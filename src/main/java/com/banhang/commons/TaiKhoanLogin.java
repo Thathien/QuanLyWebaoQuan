@@ -1,69 +1,33 @@
 package com.banhang.commons;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * Lớp đại diện cho thông tin tài khoản đăng nhập của nhân viên. Chứa các thông tin cơ bản về nhân
+ * viên bao gồm mã nhân viên, tên đăng nhập, mật khẩu, họ tên và mã chức vụ.
+ *
+ * @author System
+ * @version 1.0
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaiKhoanLogin {
-	
-	private int manhanvien;
-	
-	private String tendangnhap;
-	
-	private String matkhau;
-	 
-	private String hoten;
-	
-	private int machucvu;
-	
-	public TaiKhoanLogin() {
-		super();
-	}
 
-	public TaiKhoanLogin(int manhanvien, String tendangnhap, String matkhau, String hoten, int machucvu) {
-		super();
-		this.manhanvien = manhanvien;
-		this.tendangnhap = tendangnhap;
-		this.matkhau = matkhau;
-		this.hoten = hoten;
-		this.machucvu = machucvu;
-	}
+  /** Mã nhân viên - định danh duy nhất cho mỗi nhân viên */
+  private int manhanvien;
 
-	public int getManhanvien() {
-		return manhanvien;
-	}
+  /** Tên đăng nhập - tên người dùng để đăng nhập vào hệ thống */
+  private String tendangnhap;
 
-	public void setManhanvien(int manhanvien) {
-		this.manhanvien = manhanvien;
-	}
+  /** Mật khẩu - được lưu trữ (nên được mã hóa khi lưu vào cơ sở dữ liệu) */
+  private String matkhau;
 
-	public String getTendangnhap() {
-		return tendangnhap;
-	}
+  /** Họ tên - tên đầy đủ của nhân viên */
+  private String hoten;
 
-	public void setTendangnhap(String tendangnhap) {
-		this.tendangnhap = tendangnhap;
-	}
-
-	public String getMatkhau() {
-		return matkhau;
-	}
-
-	public void setMatkhau(String matkhau) {
-		this.matkhau = matkhau;
-	}
-
-	public String getHoten() {
-		return hoten;
-	}
-
-	public void setHoten(String hoten) {
-		this.hoten = hoten;
-	}
-
-	public int getMachucvu() {
-		return machucvu;
-	}
-
-	public void setMachucvu(int machucvu) {
-		this.machucvu = machucvu;
-	}
-
-	
+  /** Mã chức vụ - định danh chức vụ của nhân viên trong tổ chức */
+  private int machucvu;
 }

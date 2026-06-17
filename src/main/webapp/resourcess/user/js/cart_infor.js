@@ -10,10 +10,6 @@ $(document).ready(function(){
 			var fomat=parseInt(tongtien).toFixed(3).replace(/(\d)(?=(\d{3})+\.)/g, "$1.").toString();
 			tongtiensp=tongtiensp+tongtien;
 			tongsosp=tongsosp+soluong;
-			alert("giatien"+ giatien);
-			alert("soluong"+ soluong);
-			alert("tongtien"+ tongtien);
-			alert("fomat"+ fomat);
 			if(!isEventChange){
 				$(this).html(fomat);
 			}
@@ -94,11 +90,6 @@ $(document).ready(function(){
 			$('#diachigiaohang_error').text("Địa chỉ hợp lệ ")
 			$('#diachigiaohang').focus();
 		}else{
-			alert("tenkhachhang" +tenkhachhang);
-			alert("emailkhachang" +emailkhachang);
-			alert("sodienthoai" +sodienthoai);
-			alert("hinhthuc" +hinhthuc);
-			alert("diachigiaohang" +diachigiaohang);
 			var x = confirm("Bạn muốn thanh toán tất cả sản phẩm trong giỏ ?");
 			if(x){
 				$.ajax({
@@ -135,10 +126,6 @@ $(document).ready(function(){
 		return (v.search(/[<]|[>]|[#]/ig) == -1) && (v.length>0) && (kt==1);
 	};
 	function isValidSDT(v){
-		var kt=0;
-		for(var i=0;i<v.length;i++){
-			if (v[i]!=" ") kt=1;
-		}
-		return (v.search(/((09|03|07|08|05)+([0-9]{8})\b)/g) == -1) && (v.length>0) && (kt==1);
+		return /^(09|03|07|08|05)\d{8}$/.test(v.trim());
 	};
 });

@@ -1,91 +1,31 @@
 package com.banhang.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * Model class đại diện cho thông tin đăng ký của người dùng.
+ *
+ * @author System
+ * @version 1.0
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DangKyModel {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
-	@Size(max = 40,min = 5,message = "Yêu cầu nhập lại họ tên")
-	private String hotendk;
-	
-	@Size(min = 10,message = "Email không hợp lệ")
-	private String emaildk;
-	
-	@Size(min = 6,message = "Mật khẩu không hợp lệ")
-	private String matkhaudk;
-	
-	private String nhaplaimkdk;
-	
-	private String gioitinhdk;
-	
-	@Size(min = 6,message = "Địa chỉ không hợp lệ")
-	private String diachidk;
+  private int id;
 
-	public DangKyModel() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+  @Size(max = 40, min = 5, message = "Yêu cầu nhập lại họ tên") private String hotendk;
 
-	public int getId() {
-		return id;
-	}
+  @Size(min = 10, message = "Email không hợp lệ") private String emaildk;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+  @Size(min = 6, message = "Mật khẩu không hợp lệ") private String matkhaudk;
 
-	public String getHotendk() {
-		return hotendk;
-	}
+  private String nhaplaimkdk;
 
-	public void setHotendk(String hotendk) {
-		this.hotendk = hotendk;
-	}
+  private String gioitinhdk;
 
-	public String getEmaildk() {
-		return emaildk;
-	}
-
-	public void setEmaildk(String emaildk) {
-		this.emaildk = emaildk;
-	}
-
-	public String getMatkhaudk() {
-		return matkhaudk;
-	}
-
-	public void setMatkhaudk(String matkhaudk) {
-		this.matkhaudk = matkhaudk;
-	}
-
-	public String getNhaplaimkdk() {
-		return nhaplaimkdk;
-	}
-
-	public void setNhaplaimkdk(String nhaplaimkdk) {
-		this.nhaplaimkdk = nhaplaimkdk;
-	}
-
-	public String getGioitinhdk() {
-		return gioitinhdk;
-	}
-
-	public void setGioitinhdk(String gioitinhdk) {
-		this.gioitinhdk = gioitinhdk;
-	}
-
-	public String getDiachidk() {
-		return diachidk;
-	}
-
-	public void setDiachidk(String diachidk) {
-		this.diachidk = diachidk;
-	}
-
-	
+  @Size(min = 6, message = "Địa chỉ không hợp lệ") private String diachidk;
 }

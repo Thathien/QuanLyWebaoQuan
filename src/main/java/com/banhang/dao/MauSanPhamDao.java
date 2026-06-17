@@ -1,70 +1,72 @@
 package com.banhang.dao;
 
+import com.banhang.entity.MauSanPham;
+import com.banhang.imp.MauSanPhamImp;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-
-import com.banhang.entity.MauSanPham;
-import com.banhang.imp.MauSanPhamImp;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class MauSanPhamDao implements MauSanPhamImp{
+@Transactional
+public class MauSanPhamDao implements MauSanPhamImp {
 
-	@Autowired
-	SessionFactory sessionFactory;
-	
-	@Override
-	@Transactional
-	public List<MauSanPham> getAllMauSanPham() {
-		Session session=sessionFactory.getCurrentSession();
-		String sql="from MAUSANPHAM";
-		List<MauSanPham> listMauSanPham=session.createQuery(sql).getResultList();
-		return listMauSanPham;
-	}
+  @PersistenceContext private EntityManager entityManager;
 
-	@Override
-	@Transactional
-	public int addMauSanPham(MauSanPham ms) {
-		Session session=sessionFactory.getCurrentSession();
-		int id=(Integer) session.save(ms);
-		return id;
-	}
+  @Override
+  @Transactional(readOnly = true)
+  public List<MauSanPham> getAllMauSanPham() {
 
-	@Override
-	@Transactional
-	public boolean updateMauSanPham(MauSanPham ms) {
-		Session session=sessionFactory.getCurrentSession();
-		session.update(ms);
-		return true;
-	}
+    TypedQuery<MauSanPham> query =
+        entityManager.createQuery("SELECT m FROM MauSanPham m", MauSanPham.class);
 
-	@Override
-	@Transactional
-	public boolean deleteMauSanPham(MauSanPham ms) {
-		Session session=sessionFactory.getCurrentSession();
-		session.delete(ms);
-		return true;
-	}
+    return query.getResultList();
+  }
 
-	@Override
-	@Transactional
-	public boolean checkMauSanPham(String s) {
-		Session session=sessionFactory.getCurrentSession();
-		String sql="from MAUSANPHAM where tenmau='"+s+"'";
-		MauSanPham ms= (MauSanPham) session.createQuery(sql).getSingleResult();
-		if(ms!=null) {
-			return true;
-		}
-		return false;
-	}
-	
+  @Override
+  public int addMauSanPham(MauSanPham ms) {
+
+    entityManager.persist(ms);
+
+    return ms.getMamau();
+  }
+
+  @Override
+  public boolean updateMauSanPham(MauSanPham ms) {
+
+    entityManager.merge(ms);
+
+    return true;
+  }
+
+  @Override
+  public boolean deleteMauSanPham(MauSanPham ms) {
+
+    entityManager.remove(entityManager.contains(ms) ? ms : entityManager.merge(ms));
+
+    return true;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean checkMauSanPham(String tenMau) {
+
+    TypedQuery<MauSanPham> query =
+        entityManager.createQuery(
+            """
+                        SELECT m
+                        FROM MauSanPham m
+                        WHERE m.tenmau = :tenmau
+                        """,
+            MauSanPham.class);
+
+    query.setParameter("tenmau", tenMau);
+
+    return !query.setMaxResults(1).getResultList().isEmpty();
+  }
 }

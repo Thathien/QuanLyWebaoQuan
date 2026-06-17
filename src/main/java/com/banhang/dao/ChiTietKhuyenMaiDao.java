@@ -1,49 +1,51 @@
 package com.banhang.dao;
 
+import com.banhang.entity.ChiTietKhuyenMai;
+import com.banhang.imp.ChiTietKhuyenMaiImp;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
-
-import com.banhang.entity.ChiTietKhuyenMai;
-import com.banhang.imp.ChiTietKhuyenMaiImp;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class ChiTietKhuyenMaiDao implements ChiTietKhuyenMaiImp{
+@Transactional
+public class ChiTietKhuyenMaiDao implements ChiTietKhuyenMaiImp {
 
-	@Autowired
-	SessionFactory sessionFactory;
-	
-	@Override
-	@Transactional
-	public List<ChiTietKhuyenMai> getAllChiTietKhuyenMai() {
-		Session session=sessionFactory.getCurrentSession();
-		String sql="from CHITIETKHUYENMAI";
-		List<ChiTietKhuyenMai> listChiTietKM=session.createQuery(sql).getResultList();
-		return listChiTietKM;
-	}
+  @PersistenceContext private EntityManager entityManager;
 
-	@Override
-	@Transactional
-	public int addNewKhuyenMaiChoSP(ChiTietKhuyenMai ctkm) {
-		Session session=sessionFactory.getCurrentSession();
-		int id=(Integer) session.save(ctkm);
-		return id;
-	}
+  @Override
+  @Transactional(readOnly = true)
+  public List<ChiTietKhuyenMai> getAllChiTietKhuyenMai() {
 
-	@Override
-	@Transactional
-	public boolean deletKhuyenMaiSP(ChiTietKhuyenMai ctkm) {
-		Session session=sessionFactory.getCurrentSession();
-		session.delete(ctkm);
-		return true;
-	}
-	
+    TypedQuery<ChiTietKhuyenMai> query =
+        entityManager.createQuery("SELECT c FROM ChiTietKhuyenMai c", ChiTietKhuyenMai.class);
+
+    return query.getResultList();
+  }
+
+  @Override
+  public int addNewKhuyenMaiChoSP(ChiTietKhuyenMai ctkm) {
+    try {
+      entityManager.persist(ctkm);
+      return 1;
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  @Override
+  public boolean deletKhuyenMaiSP(ChiTietKhuyenMai ctkm) {
+    try {
+      entityManager.remove(entityManager.contains(ctkm) ? ctkm : entityManager.merge(ctkm));
+
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
 }

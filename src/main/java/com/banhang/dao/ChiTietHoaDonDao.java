@@ -1,78 +1,94 @@
 package com.banhang.dao;
 
+import com.banhang.entity.ChiTietHoaDon;
+import com.banhang.imp.ChiTietHoaDonImp;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
-
-import com.banhang.entity.ChiTietHoaDon;
-import com.banhang.imp.ChiTietHoaDonImp;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class ChiTietHoaDonDao implements ChiTietHoaDonImp{
+@Transactional
+public class ChiTietHoaDonDao implements ChiTietHoaDonImp {
 
-	@Autowired
-	SessionFactory sessionFactory;
-	
-	@Override
-	@Transactional
-	public List<ChiTietHoaDon> getListCTHoaDonByID(int mahoadon) {
-		Session session=sessionFactory.getCurrentSession();
-		String sql="from CHITIETHOADON where mahoadon='"+mahoadon+"'";
-		List<ChiTietHoaDon> listChiTietHoaDon=session.createQuery(sql).getResultList();
-		return listChiTietHoaDon;
-	}
+  @PersistenceContext private EntityManager entityManager;
 
-	@Override
-	@Transactional
-	public boolean deleteChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
-		Session session=sessionFactory.getCurrentSession();
-		session.delete(chiTietHoaDon);
-		return false;
-	}
-	
-	@Override
-	@Transactional
-	public boolean updateChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
-		Session session=sessionFactory.getCurrentSession();
-		session.saveOrUpdate(chiTietHoaDon);
-		return false;
-	}
+  @Override
+  @Transactional(readOnly = true)
+  public List<ChiTietHoaDon> getListCTHoaDonByID(int mahoadon) {
 
-	@Override
-	@Transactional
-	public int addChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
-		Session session=sessionFactory.getCurrentSession();
-		int id=(Integer) session.save(chiTietHoaDon);
-		return id;
-	}
+    TypedQuery<ChiTietHoaDon> query =
+        entityManager.createQuery(
+            "SELECT c FROM ChiTietHoaDon c WHERE c.mahoadon = :mahoadon", ChiTietHoaDon.class);
 
-	@Override
-	@Transactional
-	public ChiTietHoaDon getInforChiTietHoaDon(int mahoadon, int machitietsanpham) {
-		Session session=sessionFactory.getCurrentSession();
-		String sql="from CHITIETHOADON where mahoadon='"+mahoadon+"' and machitietsanpham='"+machitietsanpham+"'";
-		ChiTietHoaDon ctHD=(ChiTietHoaDon) session.createQuery(sql).getSingleResult();
-		return ctHD;
-	}
+    query.setParameter("mahoadon", mahoadon);
 
-	@Override
-	@Transactional
-	public boolean checkExitsSanPham(int mahoadon, int machitietsanpham) {
-		Session session=sessionFactory.getCurrentSession();
-		String sql="from CHITIETHOADON where mahoadon='"+mahoadon+"' and machitietsanpham='"+machitietsanpham+"'";
-		ChiTietHoaDon ctHD=(ChiTietHoaDon) session.createQuery(sql).getSingleResult();
-		if(ctHD!=null) {
-			return true;
-		}
-		return false;
-	}
+    return query.getResultList();
+  }
 
+  @Override
+  public boolean deleteChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
+    try {
+      entityManager.remove(
+          entityManager.contains(chiTietHoaDon)
+              ? chiTietHoaDon
+              : entityManager.merge(chiTietHoaDon));
+
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  @Override
+  public boolean updateChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
+    try {
+      entityManager.merge(chiTietHoaDon);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  @Override
+  public int addChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
+    try {
+      entityManager.persist(chiTietHoaDon);
+      return 1;
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public ChiTietHoaDon getInforChiTietHoaDon(int mahoadon, int machitietsanpham) {
+
+    TypedQuery<ChiTietHoaDon> query =
+        entityManager.createQuery(
+            """
+                        SELECT c
+                        FROM ChiTietHoaDon c
+                        WHERE c.mahoadon = :mahoadon
+                          AND c.machitietsanpham = :machitietsanpham
+                        """,
+            ChiTietHoaDon.class);
+
+    query.setParameter("mahoadon", mahoadon);
+    query.setParameter("machitietsanpham", machitietsanpham);
+
+    return query.getResultStream().findFirst().orElse(null);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean checkExitsSanPham(int mahoadon, int machitietsanpham) {
+
+    return getInforChiTietHoaDon(mahoadon, machitietsanpham) != null;
+  }
 }

@@ -1,155 +1,148 @@
 package com.banhang.dao;
 
+import com.banhang.entity.NhanVien;
+import com.banhang.imp.NhanVienImp;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
-
-import com.banhang.entity.NhanVien;
-import com.banhang.imp.NhanVienImp;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class NhanVienDao implements NhanVienImp{
-	
-	@Autowired
-	SessionFactory sessionFactory;
+@Transactional
+public class NhanVienDao implements NhanVienImp {
 
-	//kiểm tra user pass
-	@Override
-	@Transactional
-	public boolean login(String email, String matkhau) {
-		
-		Session session=sessionFactory.getCurrentSession();
-		String  sql="from NHANVIEN where tendangnhap='"+email+"' and matkhau='"+matkhau+"'";
-		List<NhanVien> listNhanVien=session.createQuery(sql).getResultList();
-		if(!listNhanVien.isEmpty()) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	//Kiểm tra là người dùng(khách mã chức vụ = 3)
-	@Override
-	@Transactional
-	public boolean checkUser(String email, String matkhau) {
-		Session session=sessionFactory.getCurrentSession();
-		String  sql="from NHANVIEN where tendangnhap='"+email+"' and matkhau='"+matkhau+"' and machucvu=3";
-		List<NhanVien> listNhanVien=session.createQuery(sql).getResultList();
-		if(!listNhanVien.isEmpty()) {
-			return true;
-		}
-		return false;
-	}
-	
-	//lấy thông tin người dùng thông qua tên đăng nhập, mật khẩu
-	@Override
-	@Transactional
-	public NhanVien getInforby_User_Pass(String email, String matkhau) {
-		
-		Session session=sessionFactory.getCurrentSession();
-		String  sql="from NHANVIEN where tendangnhap='"+email+"' and matkhau='"+matkhau+"'";
-		NhanVien nv= (NhanVien) session.createQuery(sql).getSingleResult();
-		if(nv!=null) {
-			return nv;
-		}
-		return null;
-	}
-	
-	//kiểm tra email trùng,nếu trùng -> true
-	@Override
-	@Transactional
-	public boolean checkEmail(String email) {
-		
-		Session session=sessionFactory.getCurrentSession();
-		String  sql="from NHANVIEN where email='"+email+"'";
-		List<NhanVien> listNV=session.createQuery(sql).getResultList();
-		if(!listNV.isEmpty()) {
-			return true;
-		}
-		return false;
-	}
+  @PersistenceContext private EntityManager entityManager;
 
-	//kiểm tra tên đăng nhập trùng nếu trùng ->true
-	@Override
-	@Transactional
-	public boolean checkUserName(String TDN) {
-		Session session=sessionFactory.getCurrentSession();
-		String  sql="from NHANVIEN where tendangnhap='"+TDN+"'";
-		NhanVien nv= (NhanVien) session.createQuery(sql).getSingleResult();
-		if(nv!=null) {
-			return true;
-		}
-		return false;
-	}
+  private NhanVien findByUserAndPassword(String email, String matkhau, Integer machucvu) {
 
-	//lấy thông tin tài khoản bằng ID (mã tài khoản)
-	@Override
-	@Transactional
-	public NhanVien getInforbyId(int id) {
-		
-		Session session=sessionFactory.getCurrentSession();
-		String  sql="from NHANVIEN where manhanvien='"+id+"'";
-		NhanVien nv= (NhanVien) session.createQuery(sql).getSingleResult();
-		return nv;
-	}
+    String jpql =
+        """
+                SELECT n
+                FROM NhanVien n
+                WHERE n.tendangnhap = :email
+                  AND n.matkhau = :matkhau
+                """;
 
-	//thêm mới người dùng
-	@Override
-	@Transactional
-	public int register(NhanVien nv) {
-		
-		Session session=sessionFactory.getCurrentSession();
-		int id=(Integer) session.save(nv);
-		return id;
-	}
+    if (machucvu != null) {
+      jpql += " AND n.machucvu = :machucvu";
+    }
 
-	//Lấy toàn bộ thông tin tài khoản
-	@Transactional
-	public List<NhanVien> getallTaiKhoan() {
-		
-		Session session=sessionFactory.getCurrentSession();
-		String  sql="from NHANVIEN where machucvu=1 ";
-		List<NhanVien> listNhanVien=session.createQuery(sql).getResultList();
-		return listNhanVien;
-	}
+    TypedQuery<NhanVien> query = entityManager.createQuery(jpql, NhanVien.class);
 
-	//Kiểm tra là admin(khách mã chức vụ = 1)
-	@Transactional
-	public boolean checkAdmin(String email, String matkhau) {
-		Session session=sessionFactory.getCurrentSession();
-		String  sql="from NHANVIEN where tendangnhap='"+email+"' and matkhau='"+matkhau+"' and machucvu=1";
-		NhanVien nv= (NhanVien) session.createQuery(sql).getSingleResult();
-		if(nv!=null) {
-			return true;
-		}
-		return false;
-	}
-	
-	//Cập nhật thông tin người dùng
-	@Transactional
-	public boolean updateInfor(NhanVien nv) {
-		Session session=sessionFactory.getCurrentSession();
-		session.update(nv);
-		return true;
-	}
+    query.setParameter("email", email);
+    query.setParameter("matkhau", matkhau);
 
-	//Xóa người dùng
-	@Transactional
-	public boolean deleteNhanVien(NhanVien nv) {
-		Session session=sessionFactory.getCurrentSession();
-		session.delete(nv);
-		return true;
-	}
-	
-	
-	
+    if (machucvu != null) {
+      query.setParameter("machucvu", machucvu);
+    }
 
+    List<NhanVien> result = query.setMaxResults(1).getResultList();
+
+    return result.isEmpty() ? null : result.get(0);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean login(String email, String matkhau) {
+    return findByUserAndPassword(email, matkhau, null) != null;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean checkUser(String email, String matkhau) {
+    return findByUserAndPassword(email, matkhau, 3) != null;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public NhanVien getInforby_User_Pass(String email, String matkhau) {
+    return findByUserAndPassword(email, matkhau, null);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean checkEmail(String email) {
+
+    TypedQuery<NhanVien> query =
+        entityManager.createQuery(
+            "SELECT n FROM NhanVien n WHERE n.email = :email", NhanVien.class);
+
+    query.setParameter("email", email);
+
+    return !query.setMaxResults(1).getResultList().isEmpty();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean checkUserName(String username) {
+
+    TypedQuery<NhanVien> query =
+        entityManager.createQuery(
+            "SELECT n FROM NhanVien n WHERE n.tendangnhap = :username", NhanVien.class);
+
+    query.setParameter("username", username);
+
+    return !query.setMaxResults(1).getResultList().isEmpty();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public NhanVien getInforbyId(int id) {
+
+    TypedQuery<NhanVien> query =
+        entityManager.createQuery(
+            "SELECT n FROM NhanVien n WHERE n.manhanvien = :id", NhanVien.class);
+
+    query.setParameter("id", id);
+
+    List<NhanVien> result = query.setMaxResults(1).getResultList();
+
+    return result.isEmpty() ? null : result.get(0);
+  }
+
+  @Override
+  public int register(NhanVien nv) {
+
+    entityManager.persist(nv);
+
+    return nv.getManhanvien();
+  }
+
+  @Transactional(readOnly = true)
+  public List<NhanVien> getallTaiKhoan() {
+
+    TypedQuery<NhanVien> query =
+        entityManager.createQuery(
+            "SELECT n FROM NhanVien n WHERE n.machucvu = :machucvu", NhanVien.class);
+
+    query.setParameter("machucvu", 1);
+
+    return query.getResultList();
+  }
+
+  @Transactional(readOnly = true)
+  public boolean checkAdmin(String email, String matkhau) {
+    return findByUserAndPassword(email, matkhau, 1) != null;
+  }
+
+  @Transactional
+  public boolean updateInfor(NhanVien nv) {
+
+    entityManager.merge(nv);
+
+    return true;
+  }
+
+  @Transactional
+  public boolean deleteNhanVien(NhanVien nv) {
+
+    entityManager.remove(entityManager.contains(nv) ? nv : entityManager.merge(nv));
+
+    return true;
+  }
 }

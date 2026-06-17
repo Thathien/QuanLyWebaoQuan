@@ -24,7 +24,7 @@
                         <a class="dropdown-item" href="#">Thông tin tài khoản</a>
                       <!--   <a class="dropdown-item" href="#">Activity Log</a>
                         <div class="dropdown-divider"></div> -->
-                        <a class="dropdown-item" href="/banaoquan/admin/dangxuat">Đăng xuất</a>
+                        <a class="dropdown-item" href="/admin/dangxuat">Đăng xuất</a>
                     </div>
                 </li>
             </ul>

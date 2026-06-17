@@ -1,72 +1,88 @@
 package com.banhang.entity;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
-@Entity(name = "SANPHAM")
-@Table(name = "SANPHAM")
+/**
+ * Entity đại diện cho thông tin sản phẩm. Chứa các thông tin chi tiết về sản phẩm bán trong hệ
+ * thống.
+ *
+ * @author System
+ * @version 1.0
+ */
+@Entity(name = "SanPham")
+@Table(name = "SanPham")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class SanPham implements Serializable{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "masanpham")
-	int masanpham;
-//	,fetch = FetchType.EAGER
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "madanhmucsanpham")
-	DanhMucSanPham danhMucSanPham;
-	
-	
-	@Column(name = "tensanpham" , columnDefinition = "nvarchar(40)")
-	String tensanpham;
-	
-	@Column(name = "giatien" , columnDefinition = "nvarchar(40)")
-	String giatien;
-	
-	@Column(name = "mota" , columnDefinition = "nvarchar(40)")
-	String mota;
-	
-	@Column(name = "hinhsanpham" , columnDefinition = "nvarchar(40)")
-	String hinhsanpham;
-	
-	@Column(name = "hiden", columnDefinition = "bit")
-	boolean hiden;
-	
-	@Column(name = "doituong" , columnDefinition = "nvarchar(40)")
-	String doituong;
-	
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "sanPham")
-	Set<ChiTietSanPham> chiTietSanPham= new HashSet<ChiTietSanPham>();
-	
-	
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	@JoinTable(name = "CHITIETKHUYENMAI",
-		joinColumns ={@JoinColumn(name = "masanpham",referencedColumnName ="masanpham")},
-		inverseJoinColumns = {@JoinColumn(name = "makhuyenmai",referencedColumnName ="makhuyenmai")})
-	Set<KhuyenMai> khuyenMai= new HashSet<KhuyenMai>();
-	
+@ToString(exclude = {"chiTietSanPham", "khuyenMai", "danhMucSanPham"})
+@EqualsAndHashCode(exclude = {"chiTietSanPham", "khuyenMai", "danhMucSanPham"})
+public class SanPham implements Serializable {
+  /** Mã sản phẩm - định danh duy nhất */
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "masanpham")
+  private Integer masanpham;
 
+  /** Danh mục sản phẩm */
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "madanhmucsanpham")
+  private DanhMucSanPham danhMucSanPham;
+
+  /** Tên sản phẩm */
+  @Column(name = "tensanpham", columnDefinition = "nvarchar(100)")
+  private String tensanpham;
+
+  /** Giá tiền sản phẩm */
+  @Column(name = "giatien", columnDefinition = "nvarchar(20)")
+  private String giatien;
+
+  /** Mô tả sản phẩm */
+  @Column(name = "mota", columnDefinition = "nvarchar(500)")
+  private String mota;
+
+  /** Hình ảnh sản phẩm */
+  @Column(name = "hinhsanpham", columnDefinition = "nvarchar(200)")
+  private String hinhsanpham;
+
+  /** Trạng thái ẩn/hiện */
+  @Column(name = "hiden", columnDefinition = "bit")
+  private Boolean hiden;
+
+  /** Đối tượng sử dụng */
+  @Column(name = "doituong", columnDefinition = "nvarchar(100)")
+  private String doituong;
+
+  /** Chi tiết sản phẩm */
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "sanPham")
+  private Set<ChiTietSanPham> chiTietSanPham = new HashSet<>();
+
+  /** Danh sách khuyến mại áp dụng */
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "CHITIETKHUYENMAI",
+      joinColumns = {@JoinColumn(name = "masanpham", referencedColumnName = "masanpham")},
+      inverseJoinColumns = {
+        @JoinColumn(name = "makhuyenmai", referencedColumnName = "makhuyenmai")
+      })
+  private Set<KhuyenMai> khuyenMai = new HashSet<>();
 }

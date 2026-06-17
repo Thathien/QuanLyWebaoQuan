@@ -1,45 +1,34 @@
 package com.banhang.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import com.banhang.dao.MauSanPhamDao;
 import com.banhang.entity.MauSanPham;
 import com.banhang.imp.MauSanPhamImp;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
-public class MauSanPhamService implements MauSanPhamImp{
-	
-	@Autowired
-	@Qualifier("mauSanPhamDao")
-	MauSanPhamDao mauSanPhamDao;
-	
-	public List<MauSanPham> getAllMauSanPham() {
-		// TODO Auto-generated method stub
-		return mauSanPhamDao.getAllMauSanPham();
-	}
+@RequiredArgsConstructor
+public class MauSanPhamService implements MauSanPhamImp {
+  private final MauSanPhamDao mauSanPhamDao;
 
-	public int addMauSanPham(MauSanPham ms) {
-		// TODO Auto-generated method stub
-		return mauSanPhamDao.addMauSanPham(ms);
-	}
+  public List<MauSanPham> getAllMauSanPham() {
+    return mauSanPhamDao.getAllMauSanPham();
+  }
 
-	public boolean updateMauSanPham(MauSanPham ms) {
-		// TODO Auto-generated method stub
-		return mauSanPhamDao.updateMauSanPham(ms);
-	}
+  public int addMauSanPham(MauSanPham ms) {
+    return mauSanPhamDao.addMauSanPham(ms);
+  }
 
-	public boolean deleteMauSanPham(MauSanPham ms) {
-		// TODO Auto-generated method stub
-		return mauSanPhamDao.deleteMauSanPham(ms);
-	}
+  public boolean updateMauSanPham(MauSanPham ms) {
+    return mauSanPhamDao.updateMauSanPham(ms);
+  }
 
-	public boolean checkMauSanPham(String s) {
-		// TODO Auto-generated method stub
-		return mauSanPhamDao.checkMauSanPham(s);
-	}
-	
+  public boolean deleteMauSanPham(MauSanPham ms) {
+    return mauSanPhamDao.deleteMauSanPham(ms);
+  }
+
+  public boolean checkMauSanPham(String s) {
+    return mauSanPhamDao.checkMauSanPham(s);
+  }
 }
