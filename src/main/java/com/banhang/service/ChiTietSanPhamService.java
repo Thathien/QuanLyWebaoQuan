@@ -1,47 +1,35 @@
 package com.banhang.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import com.banhang.dao.ChiTietSanPhamDao;
 import com.banhang.entity.ChiTietSanPham;
 import com.banhang.imp.ChiTietSanPhamImp;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
-public class ChiTietSanPhamService implements ChiTietSanPhamImp{
+@RequiredArgsConstructor
+public class ChiTietSanPhamService implements ChiTietSanPhamImp {
+  private final ChiTietSanPhamDao chiTietSanPhamDao;
 
-	@Autowired
-	@Qualifier("chiTietSanPhamDao")
-	ChiTietSanPhamDao chiTietSanPhamDao;
-	
-	public List<ChiTietSanPham> getInforCTSanPhambyID(int masanpham) {
-		// TODO Auto-generated method stub
-		return chiTietSanPhamDao.getInforCTSanPhambyID(masanpham);
-	}
+  public List<ChiTietSanPham> getInforCTSanPhambyID(int masanpham) {
+    return chiTietSanPhamDao.getInforCTSanPhambyID(masanpham);
+  }
 
-	public boolean updateCTSanPham(ChiTietSanPham chiTietSanPham) {
-		// TODO Auto-generated method stub
-		return chiTietSanPhamDao.updateCTSanPham(chiTietSanPham);
-	}
+  public boolean updateCTSanPham(ChiTietSanPham chiTietSanPham) {
+    return chiTietSanPhamDao.updateCTSanPham(chiTietSanPham);
+  }
 
-	public boolean deleteCTSanPham(ChiTietSanPham chiTietSanPham) {
-		// TODO Auto-generated method stub
-		return chiTietSanPhamDao.deleteCTSanPham(chiTietSanPham);
-	}
+  public boolean deleteCTSanPham(ChiTietSanPham chiTietSanPham) {
+    return chiTietSanPhamDao.deleteCTSanPham(chiTietSanPham);
+  }
 
-	public int addCTSanPham(ChiTietSanPham chiTietSanPham) {
-		// TODO Auto-generated method stub
-		return chiTietSanPhamDao.addCTSanPham(chiTietSanPham);
-	}
+  public int addCTSanPham(ChiTietSanPham chiTietSanPham) {
+    return chiTietSanPhamDao.addCTSanPham(chiTietSanPham);
+  }
 
-	@Override
-	public boolean deleteCTSanPhamByIdSanPham(int id) {
-		// TODO Auto-generated method stub
-		return chiTietSanPhamDao.deleteCTSanPhamByIdSanPham(id);
-	}
-	
-	
+  @Override
+  public boolean deleteCTSanPhamByIdSanPham(int id) {
+    return chiTietSanPhamDao.deleteCTSanPhamByIdSanPham(id);
+  }
 }

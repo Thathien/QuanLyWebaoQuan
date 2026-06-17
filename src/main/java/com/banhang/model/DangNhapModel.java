@@ -1,36 +1,23 @@
 package com.banhang.model;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import org.apache.commons.io.FileUtils;
-
+/**
+ * Model class đại diện cho thông tin đăng nhập của người dùng.
+ *
+ * @author System
+ * @version 1.0
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DangNhapModel {
-	 
-	@Size(min = 8, message = "Yêu cầu nhập tài khoản")
-	@NotEmpty(message = "Không được để trống")
-	private String email;
-	
-	@Size(min = 2, message = "Mật khẩu ít nhất 6 ký tự")
-	@NotEmpty(message = "Không được để trống")
-	private String matKhau;
 
-	public String getEmail() {
-		return email;
-	}
+  @Size(min = 8, message = "Yêu cầu nhập tài khoản") @NotEmpty(message = "Không được để trống") private String email;
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getMatKhau() {
-		return matKhau;
-	}
-
-	public void setMatKhau(String matKhau) {
-		this.matKhau = matKhau;
-	}
-	
-	
-	
+  @Size(min = 2, message = "Mật khẩu ít nhất 6 ký tự") @NotEmpty(message = "Không được để trống") private String matKhau;
 }

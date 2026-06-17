@@ -1,14 +1,18 @@
 package com.banhang.controller.user;
 
+import com.banhang.commons.TaiKhoanLogin;
+import com.banhang.entity.NhanVien;
+import com.banhang.model.DangKyModel;
+import com.banhang.model.DangNhapModel;
+import com.banhang.service.ChucVuService;
+import com.banhang.service.NhanVienService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -20,196 +24,186 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.banhang.commons.TaiKhoanLogin;
-import com.banhang.entity.ChucVu;
-import com.banhang.entity.NhanVien;
-import com.banhang.model.DangKyModel;
-import com.banhang.model.DangNhapModel;
-import com.banhang.service.ChucVuService;
-import com.banhang.service.NhanVienService;
-
 @Controller
 @SessionAttributes({"taikhoan", "giohang"})
+@RequiredArgsConstructor
 public class TaiKhoanUserController {
-	
-	@Autowired
-	private JavaMailSender mailsender;
-	
-	@Autowired
-	NhanVienService nhanVienService;
-	
-	@Autowired
-	ChucVuService chucVuService;
-	
-	@GetMapping("dangnhap")
-	public String showdangnhap(Model m,HttpSession httpSession) {
-		int  temp=checkSecurityUser(httpSession);
-		if(temp==0) {
-			m.addAttribute("dangnhapuser",new DangNhapModel());
-			return "login_user";
-		}else if(temp==1) {
-			return "redirect:/admin";
-		}else {
-			return "redirect:/";
-		}
-	}
-	
-	@PostMapping("dangnhap")
-	public String dangnhapProcess(@Valid @ModelAttribute("dangnhapuser") DangNhapModel dangnhapuser,BindingResult br,ModelMap map) {
-		if(br.hasErrors()) {
-			return "login_user";
-		}else {
-			
-//			boolean temp=nhanVienService.checkUser(dangnhapuser.getEmail(),dangnhapuser.getMatKhau());
-//			System.out.println("KQ: "+ temp);
-//			if(temp==true) {
-//				NhanVien tk= new NhanVien();
-//				tk=nhanVienService.getInforby_User_Pass(dangnhapuser.getEmail(), dangnhapuser.getMatKhau());
-//				TaiKhoanLogin taikhoan_session= new TaiKhoanLogin();
-//				taikhoan_session.setManhanvien(tk.getManhanvien());
-//				taikhoan_session.setHoten(tk.getHoten());
-//				taikhoan_session.setTendangnhap(tk.getTendangnhap());
-//				taikhoan_session.setMatkhau(tk.getMatkhau());
-//				taikhoan_session.setMachucvu(tk.getChucVu().getMachucvu());
-//				map.addAttribute("taikhoan",taikhoan_session);
-////				httpSession.setAttribute("taikhoan", taikhoan_session););
-//				return "redirect:/";
-//			}else {
-//				map.addAttribute("resultDangNhap","Tài khoản hoặc mật khẩu không hơp lệ");
-//				return "login_user";
-//			}
-//			
-			
-			
-			
-			NhanVien nhanVien=null;
-			nhanVien=nhanVienService.getInforby_User_Pass(dangnhapuser.getEmail(),dangnhapuser.getMatKhau());
-			System.out.println("KQ: "+ nhanVien.getHoten());
-			if(nhanVien!=null) {
-				NhanVien tk= new NhanVien();
-				tk=nhanVienService.getInforby_User_Pass(dangnhapuser.getEmail(), dangnhapuser.getMatKhau());
-				TaiKhoanLogin taikhoan_session= new TaiKhoanLogin();
-				taikhoan_session.setManhanvien(tk.getManhanvien());
-				taikhoan_session.setHoten(tk.getHoten());
-				taikhoan_session.setTendangnhap(tk.getTendangnhap());
-				taikhoan_session.setMatkhau(tk.getMatkhau());
-				taikhoan_session.setMachucvu(tk.getChucVu().getMachucvu());
-				map.addAttribute("taikhoan",taikhoan_session);
-//				httpSession.setAttribute("taikhoan", taikhoan_session););
-				return "redirect:/";
-			}else {
-				map.addAttribute("resultDangNhap","Tài khoản hoặc mật khẩu không hơp lệ");
-				return "login_user";
-			}
-		}
-		
-	}
-	
-	@GetMapping("logout")
-	public String logout(HttpSession httpSession, Model model) {
-		httpSession.removeAttribute("taikhoan");
-		httpSession.invalidate();
-		if(model.containsAttribute("taikhoan")) {
-			model.asMap().remove("taikhoan");
-		}
-		return "redirect:/";
-	}
-	
-	@GetMapping("dangky")
-	public String showdangky(Model m) {
-		m.addAttribute("dangkyuser",new DangKyModel());
-		return "regester_user";
-	}
-	@PostMapping("dangky")
-	public String dangkyProcess(@Valid @ModelAttribute("dangkyuser") DangKyModel dangkyuser,BindingResult br,ModelMap map) throws MessagingException {
-		if(br.hasErrors()) {
-			return "regester_user";
-		}else {
-			if(dangkyuser.getHotendk().trim()!=null) {
-				if(dangkyuser.getEmaildk().trim()!=null){
-					if(dangkyuser.getDiachidk().trim()!=null) {
-						if(dangkyuser.getMatkhaudk().trim()!=null) {
-							if(!dangkyuser.getGioitinhdk().equals("null")) {
-								if(dangkyuser.getNhaplaimkdk().trim()!=null) {
-									if(dangkyuser.getMatkhaudk().trim().equals(dangkyuser.getNhaplaimkdk().trim())==true) {
-										if(nhanVienService.checkEmail(dangkyuser.getEmaildk())==false) {
-											NhanVien nv= new NhanVien();
-											nv.setHoten(dangkyuser.getHotendk().trim());
-											nv.setDiachi(dangkyuser.getDiachidk().trim());
-											// 0-> nữ;1-> nam
-											if(Integer.parseInt(dangkyuser.getGioitinhdk())==0){
-												nv.setGioitinh(false);
-											}else {
-												nv.setGioitinh(true);
-											}
-											nv.setEmail(dangkyuser.getEmaildk().trim());
-											nv.setTendangnhap(dangkyuser.getEmaildk().trim());
-											nv.setMatkhau(dangkyuser.getMatkhaudk().trim());
-											nv.setCmnd(null);
-											nv.setChucVu(chucVuService.getById(1));
-											nv.setLock(false);
-											nv.setXacthuc(false);
-											int id=nhanVienService.register(nv);
-											if(id!=0) {
-												map.addAttribute("success_fail", "Đăng ký thành công hãy truy cập email của bạn để xác thực");
-//												
-												//xác thực email
-												MimeMessage message= mailsender.createMimeMessage();
-												boolean multipart = true;
-												MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
-												
-												
-												String messinfor="Vui lòng nhấn vào link này để xác thực đăng ký ";
-												message.setContent(messinfor, "text/html");
-												helper.setSubject("Yêu cầu xác thực email bạn đã đăng ký");
-												helper.setTo(nv.getEmail());
-												
-												mailsender.send(message);
-												
-											}else {
-												map.addAttribute("success_fail", "Đăng ký không thành công");
-											}
-										}else {
-											map.addAttribute("error_emaildk", "Email trùng yêu cầu nhập email khác");
-										}
-									}else {
-										map.addAttribute("error_nhaplaimatkhaudk", "Nhập lại mật khẩu không đúng");
-									}
-								}else {
-									map.addAttribute("error_nhaplaimatkhaudk", "Nhập lại mật khẩu không hợp lệ");
-								}
-							}else {
-								map.addAttribute("error_gioitinhdk","Bạn chưa chọn giới tính");
-							}
-						}else {
-							map.addAttribute("error_matkhaudk", "Mật khẩu không hợp lệ");
-						}
-					}else {
-						map.addAttribute("error_diachidk", "Địa chỉ không hợp lệ");
-					}
-				}else {
-					map.addAttribute("error_emaildk","Nhập email không hợp lệ");
-				}
-			}else {
-				map.addAttribute("error_hotendk", "Họ tên nhập không hợp lệ");
-			}
-			return "regester_user";
-		}
-		
-	}
-	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
-			Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+  private final JavaMailSender mailsender;
+  private final NhanVienService nhanVienService;
+  private final ChucVuService chucVuService;
 
-	public static boolean validate(String emailStr) {
-		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
-		return matcher.find();
-	}
-	//admin -> 1  // other  -> 0
-	public int checkSecurityUser(HttpSession httpSession) {
-		TaiKhoanLogin taiKhoanLogin=(TaiKhoanLogin) httpSession.getAttribute("taikhoan");
-			if(taiKhoanLogin!=null) {
-				return taiKhoanLogin.getMachucvu();
-			}
-		return 0;
-	}
+  @GetMapping("dangnhap")
+  public String showdangnhap(Model m, HttpSession httpSession) {
+    int temp = checkSecurityUser(httpSession);
+    if (temp == 0) {
+      m.addAttribute("dangnhapuser", new DangNhapModel());
+      return "login_user";
+    } else if (temp == 1) {
+      return "redirect:/admin";
+    } else {
+      return "redirect:/";
+    }
+  }
+
+  @PostMapping("dangnhap")
+  public String dangnhapProcess(
+      @Valid @ModelAttribute("dangnhapuser") DangNhapModel dangnhapuser,
+      BindingResult br,
+      ModelMap map) {
+    if (br.hasErrors()) {
+      return "login_user";
+    } else {
+
+      //			boolean
+      // temp=nhanVienService.checkUser(dangnhapuser.getEmail(),dangnhapuser.getMatKhau());
+      //			System.out.println("KQ: "+ temp);
+      //			if(temp==true) {
+      //				NhanVien tk= new NhanVien();
+      //				tk=nhanVienService.getInforby_User_Pass(dangnhapuser.getEmail(),
+      // dangnhapuser.getMatKhau());
+      //				TaiKhoanLogin taikhoan_session= new TaiKhoanLogin();
+      //				taikhoan_session.setManhanvien(tk.getManhanvien());
+      //				taikhoan_session.setHoten(tk.getHoten());
+      //				taikhoan_session.setTendangnhap(tk.getTendangnhap());
+      //				taikhoan_session.setMatkhau(tk.getMatkhau());
+      //				taikhoan_session.setMachucvu(tk.getChucVu().getMachucvu());
+      //				map.addAttribute("taikhoan",taikhoan_session);
+      ////				httpSession.setAttribute("taikhoan", taikhoan_session););
+      //				return "redirect:/";
+      //			}else {
+      //				map.addAttribute("resultDangNhap","Tài khoản hoặc mật khẩu không hơp lệ");
+      //				return "login_user";
+      //			}
+      //
+
+      NhanVien nhanVien =
+          nhanVienService.getInforby_User_Pass(dangnhapuser.getEmail(), dangnhapuser.getMatKhau());
+      if (nhanVien != null) {
+        NhanVien tk = nhanVien;
+        TaiKhoanLogin taikhoan_session = new TaiKhoanLogin();
+        taikhoan_session.setManhanvien(tk.getManhanvien());
+        taikhoan_session.setHoten(tk.getHoten());
+        taikhoan_session.setTendangnhap(tk.getTendangnhap());
+        taikhoan_session.setMatkhau(tk.getMatkhau());
+        taikhoan_session.setMachucvu(tk.getChucVu().getMachucvu());
+        map.addAttribute("taikhoan", taikhoan_session);
+        //				httpSession.setAttribute("taikhoan", taikhoan_session););
+        return "redirect:/";
+      } else {
+        map.addAttribute("resultDangNhap", "Tài khoản hoặc mật khẩu không hơp lệ");
+        return "login_user";
+      }
+    }
+  }
+
+  @GetMapping("logout")
+  public String logout(HttpSession httpSession, Model model) {
+    httpSession.removeAttribute("taikhoan");
+    httpSession.invalidate();
+    if (model.containsAttribute("taikhoan")) {
+      model.asMap().remove("taikhoan");
+    }
+    return "redirect:/";
+  }
+
+  @GetMapping("dangky")
+  public String showdangky(Model m) {
+    m.addAttribute("dangkyuser", new DangKyModel());
+    return "regester_user";
+  }
+
+  @PostMapping("dangky")
+  public String dangkyProcess(
+      @Valid @ModelAttribute("dangkyuser") DangKyModel dangkyuser, BindingResult br, ModelMap map)
+      throws MessagingException {
+    if (br.hasErrors()) {
+      return "regester_user";
+    }
+
+    String hoten = dangkyuser.getHotendk() != null ? dangkyuser.getHotendk().trim() : "";
+    String email = dangkyuser.getEmaildk() != null ? dangkyuser.getEmaildk().trim() : "";
+    String diachi = dangkyuser.getDiachidk() != null ? dangkyuser.getDiachidk().trim() : "";
+    String matkhau = dangkyuser.getMatkhaudk() != null ? dangkyuser.getMatkhaudk().trim() : "";
+    String nhaplaiMk =
+        dangkyuser.getNhaplaimkdk() != null ? dangkyuser.getNhaplaimkdk().trim() : "";
+    String gioitinh = dangkyuser.getGioitinhdk();
+
+    if (hoten.isEmpty()) {
+      map.addAttribute("error_hotendk", "Họ tên nhập không hợp lệ");
+      return "regester_user";
+    }
+    if (email.isEmpty()) {
+      map.addAttribute("error_emaildk", "Nhập email không hợp lệ");
+      return "regester_user";
+    }
+    if (diachi.isEmpty()) {
+      map.addAttribute("error_diachidk", "Địa chỉ không hợp lệ");
+      return "regester_user";
+    }
+    if (matkhau.isEmpty()) {
+      map.addAttribute("error_matkhaudk", "Mật khẩu không hợp lệ");
+      return "regester_user";
+    }
+    if (gioitinh == null || "null".equals(gioitinh)) {
+      map.addAttribute("error_gioitinhdk", "Bạn chưa chọn giới tính");
+      return "regester_user";
+    }
+    if (nhaplaiMk.isEmpty()) {
+      map.addAttribute("error_nhaplaimatkhaudk", "Nhập lại mật khẩu không hợp lệ");
+      return "regester_user";
+    }
+    if (!matkhau.equals(nhaplaiMk)) {
+      map.addAttribute("error_nhaplaimatkhaudk", "Nhập lại mật khẩu không đúng");
+      return "regester_user";
+    }
+    if (nhanVienService.checkEmail(email)) {
+      map.addAttribute("error_emaildk", "Email trùng yêu cầu nhập email khác");
+      return "regester_user";
+    }
+
+    NhanVien nv = new NhanVien();
+    nv.setHoten(hoten);
+    nv.setDiachi(diachi);
+    nv.setGioitinh(!"0".equals(gioitinh));
+    nv.setEmail(email);
+    nv.setTendangnhap(email);
+    nv.setMatkhau(matkhau);
+    nv.setCmnd(null);
+    nv.setChucVu(chucVuService.getById(3)); // Role 3 is Customer (User)
+    nv.setLock(false);
+    nv.setXacthuc(false);
+
+    int id = nhanVienService.register(nv);
+    if (id != 0) {
+      map.addAttribute("success_fail", "Đăng ký thành công hãy truy cập email của bạn để xác thực");
+
+      MimeMessage message = mailsender.createMimeMessage();
+      MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+      String messinfor = "Vui lòng nhấn vào link này để xác thực đăng ký ";
+      message.setContent(messinfor, "text/html");
+      helper.setSubject("Yêu cầu xác thực email bạn đã đăng ký");
+      helper.setTo(email);
+      mailsender.send(message);
+    } else {
+      map.addAttribute("success_fail", "Đăng ký không thành công");
+    }
+    return "regester_user";
+  }
+
+  public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+      Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+  public static boolean validate(String emailStr) {
+    Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+    return matcher.find();
+  }
+
+  // admin -> 1  // other  -> 0
+  public int checkSecurityUser(HttpSession httpSession) {
+    TaiKhoanLogin taiKhoanLogin = (TaiKhoanLogin) httpSession.getAttribute("taikhoan");
+    if (taiKhoanLogin != null) {
+      return taiKhoanLogin.getMachucvu();
+    }
+    return 0;
+  }
 }

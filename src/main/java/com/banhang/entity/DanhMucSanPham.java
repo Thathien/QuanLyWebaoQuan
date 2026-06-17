@@ -1,84 +1,58 @@
 package com.banhang.entity;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+/**
+ * Entity đại diện cho danh mục sản phẩm. Dùng để phân loại các sản phẩm trong hệ thống.
+ *
+ * @author System
+ * @version 1.0
+ */
+@Entity(name = "DanhMucSanPham")
+@Table(name = "DanhMucSanPham")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString(exclude = {"danhsachsanpham"})
+@EqualsAndHashCode(exclude = {"danhsachsanpham"})
+public class DanhMucSanPham implements Serializable {
 
-@Entity(name = "DANHMUCSANPHAM")
-@Table(name = "DANHMUCSANPHAM")
-public class DanhMucSanPham implements Serializable{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "madanhmucsanpham")
-	int madanhmucsanpham;
-	@Column(name = "tendanhmuc", columnDefinition = "nvarchar(50)")
-	String tendanhmuc;
-	@Column(name = "hinhdanhmuc", columnDefinition = "nvarchar(50)")
-	String hinhdanhmuc;
-	@Column(name = "hiden" , columnDefinition = "bit")
-	boolean hiden;
-//	cascade = CascadeType.ALL MEGER
-	@OneToMany( cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	@JoinColumn(name = "madanhmucsanpham")
-	Set<SanPham>danhsachsanpham;
-	public DanhMucSanPham() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-	public DanhMucSanPham(int madanhmucsanpham, String tendanhmuc, String hinhdanhmuc, boolean hiden,
-			Set<SanPham> danhsachsanpham) {
-		super();
-		this.madanhmucsanpham = madanhmucsanpham;
-		this.tendanhmuc = tendanhmuc;
-		this.hinhdanhmuc = hinhdanhmuc;
-		this.hiden = hiden;
-		this.danhsachsanpham = danhsachsanpham;
-	}
+  /** Mã danh mục sản phẩm - định danh duy nhất */
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "madanhmucsanpham")
+  private Integer madanhmucsanpham;
 
-	public int getMadanhmucsanpham() {
-		return madanhmucsanpham;
-	}
-	public void setMadanhmucsanpham(int madanhmucsanpham) {
-		this.madanhmucsanpham = madanhmucsanpham;
-	}
-	public String getTendanhmuc() {
-		return tendanhmuc;
-	}
-	public void setTendanhmuc(String tendanhmuc) {
-		this.tendanhmuc = tendanhmuc;
-	}
-	public String getHinhdanhmuc() {
-		return hinhdanhmuc;
-	}
-	public void setHinhdanhmuc(String hinhdanhmuc) {
-		this.hinhdanhmuc = hinhdanhmuc;
-	}
-	public Set<SanPham> getDanhsachsanpham() {
-		return danhsachsanpham;
-	}
-	public void setDanhsachsanpham(Set<SanPham> danhsachsanpham) {
-		this.danhsachsanpham = danhsachsanpham;
-	}
+  /** Tên danh mục */
+  @Column(name = "tendanhmuc", columnDefinition = "nvarchar(100)")
+  private String tendanhmuc;
 
-	public boolean isHiden() {
-		return hiden;
-	}
+  /** Hình ảnh danh mục */
+  @Column(name = "hinhdanhmuc", columnDefinition = "nvarchar(200)")
+  private String hinhdanhmuc;
 
-	public void setHiden(boolean hiden) {
-		this.hiden = hiden;
-	}
-	
+  /** Trạng thái ẩn/hiện */
+  @Column(name = "hiden", columnDefinition = "bit")
+  private Boolean hiden;
 
-	
+  /** Danh sách sản phẩm trong danh mục */
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JoinColumn(name = "madanhmucsanpham")
+  private Set<SanPham> danhsachsanpham;
 }
