@@ -59,4 +59,8 @@ Dự án này là minh chứng rõ ràng cho các kỹ năng lập trình hướ
 *   **GitHub Actions Pipelines:** Tự thiết kế và cấu hình quy trình CI/CD tích hợp liên tục tự động ([ci-cd.yml](file:///D:/Developer/Data-VSCode/QuanLyWebaoQuan/.github/workflows/ci-cd.yml)) xử lý định dạng mã nguồn, build, kiểm thử tự động trên máy chủ Ubuntu.
 *   **Auto Formatting Commit Back:** Tích hợp công cụ tự động phát hiện mã nguồn chưa chuẩn format bằng Spotless, thực thi `spotless:apply` và tự động commit/push ngược về nhánh phát triển thông qua Git Auto Commit Action.
 *   **Tích hợp Trí Tuệ Nhân Tạo (Gemini AI Integration):** Xây dựng kịch bản Node.js tùy chỉnh ([ai-review.js](file:///D:/Developer/Data-VSCode/QuanLyWebaoQuan/.github/scripts/ai-review.js)) để thu thập thông tin thay đổi mã nguồn qua Git Diff, gửi yêu cầu đánh giá bảo mật, hiệu năng, kiến trúc sang Google Gemini API (model `gemini-2.5-flash`), và tự động đẩy đánh giá dưới dạng bình luận trên Pull Request của GitHub.
+*   **Tự động dọn dẹp mã nguồn (Branch Cleanup Automation):** Lập trình chức năng gọi API GitHub tự động phát hiện các Pull Request đã đóng ở trạng thái merge thành công để xóa các nhánh phụ (feature branch), đồng thời cấu hình bảo vệ các nhánh chính (`main`, `master`, `develop`, `release`).
+*   **Quản trị dự án & Bảo mật nhánh (Repository Governance & Branch Protection):** Thiết lập quy tắc chặn commit trực tiếp lên các nhánh chính (`main`, `develop`), yêu cầu các thay đổi phải thông qua Pull Request (PR) và buộc toàn bộ các bài kiểm thử tự động (CI status checks) phải vượt qua thành công trước khi merge.
+
+
 

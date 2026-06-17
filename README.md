@@ -155,7 +155,31 @@ Dự án được cấu hình quy trình tích hợp liên tục (CI/CD) tự đ
     *   Hệ thống sẽ lấy git diff giữa nhánh hiện tại và nhánh đích.
     *   Gọi API **Google Gemini 2.5 Flash** phân tích thay đổi và đưa ra các đánh giá về chất lượng mã nguồn, lỗi logic, bảo mật hay hiệu năng.
     *   Tự động đăng phản hồi trực tiếp thành bình luận (comment) trên Pull Request.
+4.  **Tự Động Xóa Nhánh Nguồn (Delete Source Branch):**
+    *   *Chỉ áp dụng sau khi một Pull Request được merge thành công.*
+    *   Hệ thống tự động thực thi script API xóa nhánh nguồn (feature/source branch) giúp dọn dẹp các nhánh cũ đã hoàn thành công việc. Các nhánh chính như `main`, `master`, `develop`, `release` được bảo vệ và tự động bỏ qua.
 
 > [!IMPORTANT]
 > Để chức năng AI Code Review hoạt động, bạn cần cấu hình secret **`GEMINI_API_KEY`** trong phần Settings của Github Repository của bạn.
+
+---
+
+## 🔒 Quy Tắc Bảo Vệ Nhánh (Branch Protection Rules)
+
+Để đảm bảo tính ổn định của mã nguồn trên hai nhánh chính là `main` và `develop`, dự án áp dụng quy tắc nghiêm ngặt: **Không cho phép commit trực tiếp, bắt buộc thực hiện thông qua Pull Request (PR).**
+
+### Các bước cấu hình trên GitHub (dành cho Repository Owner):
+1.  Truy cập vào Repository của dự án trên GitHub.
+2.  Chọn tab **Settings** ở thanh công cụ phía trên.
+3.  Tại menu bên trái, chọn mục **Branches** (nằm dưới mục *Code and automation*).
+4.  Tại mục **Branch protection rules**, nhấn nút **Add branch protection rule**.
+5.  Cấu hình cho nhánh **`main`**:
+    *   **Branch name pattern:** Nhập `main`
+    *   Tích chọn **Require a pull request before merging** (Yêu cầu Pull Request trước khi merge).
+    *   Tích chọn **Require status checks to pass before merging** (Yêu cầu kiểm thử thành công trước khi merge), sau đó tìm kiếm và tích chọn check `Build, Format and Test` để đảm bảo code compile và pass test mới được merge.
+    *   Nhấn **Create** để lưu lại.
+6.  Cấu hình cho nhánh **`develop`**:
+    *   Thực hiện tương tự các bước trên với **Branch name pattern** là `develop`.
+
+
 
