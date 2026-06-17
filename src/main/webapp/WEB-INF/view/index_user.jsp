@@ -87,12 +87,12 @@
 												</div>
 												
 													<div class="product-overlay">
-													<a href="/banaoquan/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product">
+													<a href="/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product">
 														<div class="overlay-content">
 															<h2 class="giatiensp">${ListSanPham.getGiatien()} VNĐ</h2>
-															<a href="/banaoquan/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product"><p>${ListSanPham.getTensanpham()}</p></a>
+															<a href="/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product"><p>${ListSanPham.getTensanpham()}</p></a>
 															
-															<a href="/banaoquan/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
+															<a href="/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
 														</div>
 													</a>
 													</div>

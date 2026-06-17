@@ -30,7 +30,7 @@ $(document).ready(function(){
 		$(this).closest("tr").find(".tongtien-sp").html(fomat);
 		updateTongTienGio(true);
 		$.ajax({
-			url:"/banaoquan/giohang/update/",
+			url:"/giohang/update/",
 			type: "GET",
 			data:{
 				masp: masp,
@@ -54,7 +54,7 @@ $(document).ready(function(){
 		var x = confirm("Bạn muốn xóa sản phẩm này khỏi giỏ hàng ?");
 		if(x){
 			$.ajax({
-				url:"/banaoquan/giohang/delete/",
+				url:"/giohang/delete/",
 				type: "GET",
 				data:{
 					masp: masp,
@@ -93,7 +93,7 @@ $(document).ready(function(){
 			var x = confirm("Bạn muốn thanh toán tất cả sản phẩm trong giỏ ?");
 			if(x){
 				$.ajax({
-					url:"/banaoquan/giohang/",
+					url:"/giohang/",
 					type: "POST",
 					data:{
 						tenkhachhang: tenkhachhang,
