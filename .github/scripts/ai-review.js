@@ -1,85 +1,194 @@
-const fs = require('fs');
+const fs = require("fs");
 
 async function run({ github, context }) {
   const apiKey = process.env.GEMINI_API_KEY;
+
   if (!apiKey) {
-    console.warn("⚠️ Không tìm thấy GEMINI_API_KEY. Vui lòng cấu hình Secret này trong GitHub Repository Settings.");
+    console.warn(
+      "⚠️ Không tìm thấy GEMINI_API_KEY. Vui lòng cấu hình GitHub Secret."
+    );
     return;
   }
 
-  const diffPath = 'diff.txt';
+  const diffPath = "diff.txt";
+
   if (!fs.existsSync(diffPath)) {
-    console.error("❌ Không tìm thấy file diff.txt.");
+    console.error("❌ Không tìm thấy file diff.txt");
     return;
   }
 
-  let diff = fs.readFileSync(diffPath, 'utf8').trim();
-  if (!diff) {
-    console.log("ℹ️ Không phát hiện thay đổi nào để review.");
+  const rawDiff = fs.readFileSync(diffPath, "utf8").trim();
+
+  if (!rawDiff) {
+    console.log("ℹ️ Không có thay đổi nào để review.");
     return;
   }
 
-  // Giới hạn kích thước diff (khoảng 30K ký tự ~ 8K tokens) để tránh vượt quá giới hạn API
-  const MAX_DIFF_LENGTH = 30000;
-  if (diff.length > MAX_DIFF_LENGTH) {
-    diff = diff.substring(0, MAX_DIFF_LENGTH) + "\n\n... [Diff bị rút ngắn do quá dài] ...";
+  /**
+   * Tách git diff theo từng file
+   */
+  function splitDiffByFile(diff) {
+    const files = [];
+
+    const parts = diff.split(/^diff --git /gm);
+
+    for (const part of parts) {
+      if (!part.trim()) continue;
+
+      const lines = part.split("\n");
+
+      const match = lines[0]?.match(/a\/(.+?) b\/(.+)/);
+
+      const fileName = match?.[2] || "unknown-file";
+
+      files.push({
+        fileName,
+        diff: "diff --git " + part
+      });
+    }
+
+    return files;
   }
 
-  console.log("🤖 Đang gửi diff lên Google Gemini API để thực hiện Code Review...");
+  const changedFiles = splitDiffByFile(rawDiff);
+
+  console.log(
+    `📂 Tìm thấy ${changedFiles.length} file thay đổi cần review`
+  );
+
+  const MAX_FILE_DIFF_LENGTH = 10000;
 
   try {
-    const prompt = `Bạn là một kỹ sư phần mềm cao cấp và chuyên gia duyệt code (AI Code Reviewer). 
-Hãy nhận xét thay đổi trong Git Diff dưới đây của một dự án Spring Boot 3.5 (Java 21, JPA/Hibernate, JSP).
-Tập trung vào:
-1. Lỗi logic hoặc bug tiềm ẩn.
-2. Các vấn đề kiến trúc (Controller, Service, DAO, Entity).
-3. Vấn đề bảo mật (SQL Injection, XSS, rò rỉ dữ liệu).
-4. Hiệu năng truy vấn JPA/SQL và cấu trúc dữ liệu.
-5. Code style và clean code.
+    for (const file of changedFiles) {
+      try {
+        console.log(`🔍 Reviewing: ${file.fileName}`);
 
-Viết đánh giá bằng tiếng Việt, súc tích, chuyên nghiệp. Sử dụng các emoji và định dạng Markdown (bảng biểu, code block) để làm nổi bật các điểm quan trọng.
-Nếu có code đề xuất sửa đổi, hãy viết khối code đề xuất rõ ràng.
+        if (file.diff.length > MAX_FILE_DIFF_LENGTH) {
+          console.log(
+            `⏭️ Skip ${file.fileName} vì diff quá lớn (${file.diff.length} chars)`
+          );
 
-Dưới đây là Git Diff:
+          await github.rest.issues.createReviewComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: `## 🤖 AI Review - \`${file.fileName}\`
+
+⚠️ File quá lớn nên AI bỏ qua review tự động.
+
+Kích thước diff: ${file.diff.length} ký tự.
+`
+          });
+
+          continue;
+        }
+
+        const prompt = `
+Bạn là Senior Software Engineer và AI Code Reviewer.
+
+Hãy review DUY NHẤT file dưới đây.
+
+Tên file:
+${file.fileName}
+
+Git Diff:
+
 \`\`\`diff
-${diff}
-\`\`\``;
+${file.diff}
+\`\`\`
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{ text: prompt }]
-        }]
-      })
-    });
+Yêu cầu:
 
-    if (!response.ok) {
-      throw new Error(`Gemini API trả về trạng thái lỗi: ${response.status} ${response.statusText}`);
+1. Chỉ review file này.
+2. Tìm bug tiềm ẩn.
+3. Kiểm tra logic nghiệp vụ.
+4. Kiểm tra JPA/Hibernate nếu có.
+5. Kiểm tra Security.
+6. Kiểm tra Performance.
+7. Kiểm tra Clean Code.
+
+Quy tắc trả lời:
+
+- Viết bằng tiếng Việt.
+- Ngắn gọn.
+- Tối đa 10 ý.
+- Nếu không có vấn đề gì đáng chú ý:
+  trả về đúng duy nhất:
+
+LGTM
+`;
+
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              contents: [
+                {
+                  parts: [
+                    {
+                      text: prompt
+                    }
+                  ]
+                }
+              ]
+            })
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Gemini API Error: ${response.status} ${response.statusText}`
+          );
+        }
+
+        const data = await response.json();
+
+        const reviewText =
+          data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+          "Không nhận được phản hồi từ Gemini.";
+
+        let body = `## 🤖 AI Review - \`${file.fileName}\`\n\n`;
+
+        if (reviewText.trim() === "LGTM") {
+          body += "✅ LGTM - Không phát hiện vấn đề đáng chú ý.";
+        } else {
+          body += reviewText;
+        }
+
+        body +=
+          "\n\n---\n*Review tự động bởi Gemini 2.5 Flash*";
+
+        // GitHub comment giới hạn 65536 ký tự
+        if (body.length > 60000) {
+          body = body.substring(0, 60000);
+          body += "\n\n...(review bị cắt ngắn)...";
+        }
+
+        await github.rest.issues.createComment({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.issue.number,
+          body
+        });
+
+        console.log(`✅ Đã review ${file.fileName}`);
+      } catch (fileError) {
+        console.error(
+          `❌ Lỗi khi review file ${file.fileName}`,
+          fileError
+        );
+      }
     }
 
-    const data = await response.json();
-    if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
-      throw new Error("Không nhận được kết quả hợp lệ từ Gemini API.");
-    }
-
-    const reviewText = data.candidates[0].content.parts[0].text;
-
-    // Đăng nhận xét lên Pull Request dưới dạng comment
-    await github.rest.issues.createComment({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      issue_number: context.issue.number,
-      body: `### 🤖 AI Code Review (Gemini 2.5 Flash)\n\n${reviewText}\n\n*Review thực hiện tự động bởi CI/CD pipeline.*`
-    });
-
-    console.log("✅ Đã gửi phản hồi Code Review lên Pull Request thành công!");
-
+    console.log(
+      "🎉 Hoàn tất AI Review cho tất cả file thay đổi."
+    );
   } catch (error) {
-    console.error("❌ Lỗi khi thực hiện AI Code Review:", error);
+    console.error("❌ AI Review thất bại:", error);
   }
 }
 
