@@ -38,7 +38,7 @@
 				<div class="row">
 					<div class="col-md-4 clearfix">
 						<div class="logo pull-left">
-							<a href="/banaoquan/"><img src="<c:url value = "/resourcess/user/images/home/logo.png"></c:url>"/></a>
+							<a href="/"><img src="<c:url value = "/resourcess/user/images/home/logo.png"></c:url>"/></a>
 						</div>
 					</div>
 					<div class="col-md-8 clearfix">
@@ -47,25 +47,25 @@
 								<li>
 									<c:choose>
 										<c:when test="">
-											<a href="/banaoquan/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng: 
+											<a href="/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng: 
 										<c:if test="${giohang.size()!=0}">
 										<i style="color: red">${giohang.size()}</i>
 										</c:if>
 										</a>
 										</c:when>
 										<c:otherwise>
-											<a href="/banaoquan/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng </a>
+											<a href="/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng </a>
 										</c:otherwise>
 									</c:choose>
 								</li>
 								<c:choose>
 									<c:when test="${taikhoan!=null}">
 										<li><a href=""><i class="fa fa-user"></i> Tài khoản</a></li>
-										<li><a href="/banaoquan/logout"><i class="fa fa-crosshairs"></i> Đăng xuất</a></li>
+										<li><a href="/logout"><i class="fa fa-crosshairs"></i> Đăng xuất</a></li>
 									</c:when>
 									<c:otherwise>
-										<li><a href="/banaoquan/dangnhap"><i class="fa fa-lock"></i> Đăng nhập</a></li>
-										<li><a href="/banaoquan/dangky"><i class="fa fa-lock"></i> Đăng ký</a></li>
+										<li><a href="/dangnhap"><i class="fa fa-lock"></i> Đăng nhập</a></li>
+										<li><a href="/dangky"><i class="fa fa-lock"></i> Đăng ký</a></li>
 									</c:otherwise>
 								</c:choose>
 							</ul>
@@ -89,7 +89,7 @@
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="/banaoquan/" class="active">Trang chủ</a></li>
+								<li><a href="/" class="active">Trang chủ</a></li>
 								<li class="dropdown"><a href="#">Sản phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="">Products</a></li>

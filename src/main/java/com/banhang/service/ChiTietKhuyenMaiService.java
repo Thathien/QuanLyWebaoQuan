@@ -1,35 +1,26 @@
 package com.banhang.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import com.banhang.dao.ChiTietKhuyenMaiDao;
 import com.banhang.entity.ChiTietKhuyenMai;
 import com.banhang.imp.ChiTietKhuyenMaiImp;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
-public class ChiTietKhuyenMaiService implements ChiTietKhuyenMaiImp{
+@RequiredArgsConstructor
+public class ChiTietKhuyenMaiService implements ChiTietKhuyenMaiImp {
+  private final ChiTietKhuyenMaiDao chiTietKhuyenMaiDao;
 
-	@Autowired
-	@Qualifier("chiTietKhuyenMaiDao")
-	ChiTietKhuyenMaiDao chiTietKhuyenMaiDao;
-	
-	public List<ChiTietKhuyenMai> getAllChiTietKhuyenMai() {
-		// TODO Auto-generated method stub
-		return chiTietKhuyenMaiDao.getAllChiTietKhuyenMai();
-	}
+  public List<ChiTietKhuyenMai> getAllChiTietKhuyenMai() {
+    return chiTietKhuyenMaiDao.getAllChiTietKhuyenMai();
+  }
 
-	public int addNewKhuyenMaiChoSP(ChiTietKhuyenMai ctkm) {
-		// TODO Auto-generated method stub
-		return chiTietKhuyenMaiDao.addNewKhuyenMaiChoSP(ctkm);
-	}
+  public int addNewKhuyenMaiChoSP(ChiTietKhuyenMai ctkm) {
+    return chiTietKhuyenMaiDao.addNewKhuyenMaiChoSP(ctkm);
+  }
 
-	public boolean deletKhuyenMaiSP(ChiTietKhuyenMai ctkm) {
-		// TODO Auto-generated method stub
-		return chiTietKhuyenMaiDao.deletKhuyenMaiSP(ctkm);
-	}
-
+  public boolean deletKhuyenMaiSP(ChiTietKhuyenMai ctkm) {
+    return chiTietKhuyenMaiDao.deletKhuyenMaiSP(ctkm);
+  }
 }

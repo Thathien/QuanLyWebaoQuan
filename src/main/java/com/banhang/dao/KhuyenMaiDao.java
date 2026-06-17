@@ -1,69 +1,72 @@
 package com.banhang.dao;
 
+import com.banhang.entity.KhuyenMai;
+import com.banhang.imp.KhuyenMaiImp;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
-
-import com.banhang.entity.KhuyenMai;
-import com.banhang.imp.KhuyenMaiImp;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class KhuyenMaiDao implements KhuyenMaiImp{
-	
-	@Autowired
-	SessionFactory sessionFactory;
-	
-	@Override
-	@Transactional
-	public List<KhuyenMai> getAllKhuyenMai() {
-		Session session=sessionFactory.getCurrentSession();
-		String sql=" from KHUYENMAI";
-		List<KhuyenMai> listKhuyenMai=session.createQuery(sql).getResultList();
-		return listKhuyenMai;
-	}
-	
-	@Override
-	@Transactional
-	public int addKhuyenMai(KhuyenMai km) {
-		Session session=sessionFactory.getCurrentSession();
-		int id=(Integer) session.save(km);
-		return id;
-	}
-	
-	@Override
-	@Transactional
-	public boolean updateKhuyenMai(KhuyenMai km) {
-		Session session=sessionFactory.getCurrentSession();
-		session.update(km);
-		return true;
-	}
-	
-	@Override
-	@Transactional
-	public boolean deleteKhuyenMai(KhuyenMai km) {
-		Session session=sessionFactory.getCurrentSession();
-		session.delete(km);
-		return true;
-	}
-	
-	@Override
-	@Transactional
-	public boolean checkNameKhuyenMai(String name) {
-		Session session=sessionFactory.getCurrentSession();
-		String sql="from KHUYENMAI where tenkhuyenmai='"+name+"'";
-		KhuyenMai km=(KhuyenMai) session.createQuery(sql).getSingleResult();
-		if(km!=null) {
-			return true;
-		}
-		return false;
-	}
-	
+@Transactional
+public class KhuyenMaiDao implements KhuyenMaiImp {
+
+  @PersistenceContext private EntityManager entityManager;
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<KhuyenMai> getAllKhuyenMai() {
+
+    TypedQuery<KhuyenMai> query =
+        entityManager.createQuery("SELECT k FROM KhuyenMai k", KhuyenMai.class);
+
+    return query.getResultList();
+  }
+
+  @Override
+  public int addKhuyenMai(KhuyenMai km) {
+
+    entityManager.persist(km);
+
+    return km.getMakhuyenmai();
+  }
+
+  @Override
+  public boolean updateKhuyenMai(KhuyenMai km) {
+
+    entityManager.merge(km);
+
+    return true;
+  }
+
+  @Override
+  public boolean deleteKhuyenMai(KhuyenMai km) {
+
+    entityManager.remove(entityManager.contains(km) ? km : entityManager.merge(km));
+
+    return true;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean checkNameKhuyenMai(String name) {
+
+    TypedQuery<KhuyenMai> query =
+        entityManager.createQuery(
+            """
+                        SELECT k
+                        FROM KhuyenMai k
+                        WHERE k.tenkhuyenmai = :name
+                        """,
+            KhuyenMai.class);
+
+    query.setParameter("name", name);
+
+    return !query.setMaxResults(1).getResultList().isEmpty();
+  }
 }

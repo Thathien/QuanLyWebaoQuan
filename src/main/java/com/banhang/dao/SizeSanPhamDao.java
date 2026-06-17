@@ -1,57 +1,54 @@
 package com.banhang.dao;
 
+import com.banhang.entity.SizeSanPham;
+import com.banhang.imp.SizeSanPhamImp;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
-
-import com.banhang.entity.SizeSanPham;
-import com.banhang.imp.SizeSanPhamImp;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class SizeSanPhamDao implements SizeSanPhamImp{
+@Transactional
+public class SizeSanPhamDao implements SizeSanPhamImp {
 
-	@Autowired
-	SessionFactory sessionFactory;
-	
-	@Override
-	@Transactional
-	public List<SizeSanPham> getAllSizeSanPham() {
-		Session session=sessionFactory.getCurrentSession();
-		String sql="from SIZESANPHAM";
-		List<SizeSanPham> listSizeSanPham=session.createQuery(sql).getResultList();
-		return listSizeSanPham;
-	}
+  @PersistenceContext private EntityManager entityManager;
 
-	@Override
-	@Transactional
-	public int addSizeSanPham(SizeSanPham ssp) {
-		Session session=sessionFactory.getCurrentSession();
-		int id=(Integer) session.save(ssp);
-		return id;
-	}
+  @Override
+  @Transactional(readOnly = true)
+  public List<SizeSanPham> getAllSizeSanPham() {
 
-	@Override
-	@Transactional
-	public boolean updateSizeSanPham(SizeSanPham ssp) {
-		Session session=sessionFactory.getCurrentSession();
-		session.update(ssp);
-		return true;
-	}
+    TypedQuery<SizeSanPham> query =
+        entityManager.createQuery("SELECT s FROM SizeSanPham s", SizeSanPham.class);
 
-	@Override
-	@Transactional
-	public boolean deleteSizeSanPham(SizeSanPham ssp) {
-		Session session=sessionFactory.getCurrentSession();
-		session.delete(ssp);
-		return true;
-	}
-	
+    return query.getResultList();
+  }
+
+  @Override
+  public int addSizeSanPham(SizeSanPham ssp) {
+
+    entityManager.persist(ssp);
+
+    return ssp.getMasize();
+  }
+
+  @Override
+  public boolean updateSizeSanPham(SizeSanPham ssp) {
+
+    entityManager.merge(ssp);
+
+    return true;
+  }
+
+  @Override
+  public boolean deleteSizeSanPham(SizeSanPham ssp) {
+
+    entityManager.remove(entityManager.contains(ssp) ? ssp : entityManager.merge(ssp));
+
+    return true;
+  }
 }
