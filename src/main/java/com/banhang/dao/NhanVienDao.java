@@ -19,21 +19,20 @@ public class NhanVienDao implements NhanVienImp {
   @PersistenceContext private EntityManager entityManager;
 
   private NhanVien findByUserAndPassword(String email, String matkhau, Integer maChucVu) {
-
-    String jpql =
-        """
-        SELECT n
-        FROM NhanVien n
-        WHERE n.tendangnhap = :email
-          AND n.matkhau = :matkhau
-        """;
+    StringBuilder jpqlBuilder =
+        new StringBuilder(
+            """
+            SELECT n
+            FROM NhanVien n
+            WHERE n.tendangnhap = :email
+              AND n.matkhau = :matkhau
+            """);
 
     if (maChucVu != null) {
-      jpql += " AND n.chucVu.machucvu = :maChucVu";
+      jpqlBuilder.append(" AND n.chucVu.machucvu = :maChucVu");
     }
 
-    TypedQuery<NhanVien> query = entityManager.createQuery(jpql, NhanVien.class);
-
+    TypedQuery<NhanVien> query = entityManager.createQuery(jpqlBuilder.toString(), NhanVien.class);
     query.setParameter("email", email);
     query.setParameter("matkhau", matkhau);
 
@@ -41,9 +40,7 @@ public class NhanVienDao implements NhanVienImp {
       query.setParameter("maChucVu", maChucVu);
     }
 
-    List<NhanVien> result = query.setMaxResults(1).getResultList();
-
-    return result.isEmpty() ? null : result.get(0);
+    return query.setMaxResults(1).getResultList().stream().findFirst().orElse(null);
   }
 
   @Override
