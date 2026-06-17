@@ -18,32 +18,29 @@ public class NhanVienDao implements NhanVienImp {
 
   @PersistenceContext private EntityManager entityManager;
 
-  private NhanVien findByUserAndPassword(String email, String matkhau, Integer machucvu) {
+  private NhanVien findByUserAndPassword(String email, String matkhau, Integer maChucVu) {
+    StringBuilder jpqlBuilder =
+        new StringBuilder(
+            """
+            SELECT n
+            FROM NhanVien n
+            WHERE n.tendangnhap = :email
+              AND n.matkhau = :matkhau
+            """);
 
-    String jpql =
-        """
-                SELECT n
-                FROM NhanVien n
-                WHERE n.tendangnhap = :email
-                  AND n.matkhau = :matkhau
-                """;
-
-    if (machucvu != null) {
-      jpql += " AND n.machucvu = :machucvu";
+    if (maChucVu != null) {
+      jpqlBuilder.append(" AND n.chucVu.machucvu = :maChucVu");
     }
 
-    TypedQuery<NhanVien> query = entityManager.createQuery(jpql, NhanVien.class);
-
+    TypedQuery<NhanVien> query = entityManager.createQuery(jpqlBuilder.toString(), NhanVien.class);
     query.setParameter("email", email);
     query.setParameter("matkhau", matkhau);
 
-    if (machucvu != null) {
-      query.setParameter("machucvu", machucvu);
+    if (maChucVu != null) {
+      query.setParameter("maChucVu", maChucVu);
     }
 
-    List<NhanVien> result = query.setMaxResults(1).getResultList();
-
-    return result.isEmpty() ? null : result.get(0);
+    return query.setMaxResults(1).getResultList().stream().findFirst().orElse(null);
   }
 
   @Override
@@ -61,6 +58,7 @@ public class NhanVienDao implements NhanVienImp {
   @Override
   @Transactional(readOnly = true)
   public NhanVien getInforby_User_Pass(String email, String matkhau) {
+
     return findByUserAndPassword(email, matkhau, null);
   }
 
@@ -70,7 +68,12 @@ public class NhanVienDao implements NhanVienImp {
 
     TypedQuery<NhanVien> query =
         entityManager.createQuery(
-            "SELECT n FROM NhanVien n WHERE n.email = :email", NhanVien.class);
+            """
+            SELECT n
+            FROM NhanVien n
+            WHERE n.email = :email
+            """,
+            NhanVien.class);
 
     query.setParameter("email", email);
 
@@ -83,7 +86,12 @@ public class NhanVienDao implements NhanVienImp {
 
     TypedQuery<NhanVien> query =
         entityManager.createQuery(
-            "SELECT n FROM NhanVien n WHERE n.tendangnhap = :username", NhanVien.class);
+            """
+            SELECT n
+            FROM NhanVien n
+            WHERE n.tendangnhap = :username
+            """,
+            NhanVien.class);
 
     query.setParameter("username", username);
 
@@ -94,15 +102,7 @@ public class NhanVienDao implements NhanVienImp {
   @Transactional(readOnly = true)
   public NhanVien getInforbyId(int id) {
 
-    TypedQuery<NhanVien> query =
-        entityManager.createQuery(
-            "SELECT n FROM NhanVien n WHERE n.manhanvien = :id", NhanVien.class);
-
-    query.setParameter("id", id);
-
-    List<NhanVien> result = query.setMaxResults(1).getResultList();
-
-    return result.isEmpty() ? null : result.get(0);
+    return entityManager.find(NhanVien.class, id);
   }
 
   @Override
@@ -118,15 +118,21 @@ public class NhanVienDao implements NhanVienImp {
 
     TypedQuery<NhanVien> query =
         entityManager.createQuery(
-            "SELECT n FROM NhanVien n WHERE n.machucvu = :machucvu", NhanVien.class);
+            """
+            SELECT n
+            FROM NhanVien n
+            WHERE n.chucVu.machucvu = :maChucVu
+            """,
+            NhanVien.class);
 
-    query.setParameter("machucvu", 1);
+    query.setParameter("maChucVu", 1);
 
     return query.getResultList();
   }
 
   @Transactional(readOnly = true)
   public boolean checkAdmin(String email, String matkhau) {
+
     return findByUserAndPassword(email, matkhau, 1) != null;
   }
 

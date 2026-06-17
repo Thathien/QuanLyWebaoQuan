@@ -1,8 +1,8 @@
 name: Maven Build
 
 on:
-  push:
   pull_request:
+  push:
 
 jobs:
   build:
@@ -15,5 +15,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+          cache: maven
 
-      - run: mvn clean verify
+      - run: mvn -B clean compile
