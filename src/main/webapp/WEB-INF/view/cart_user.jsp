@@ -38,7 +38,7 @@
 									</td>
 									</td>
 									<td class="cart_description">
-										<h4><a href="/banaoquan/chi-tiet-san-pham/${gioHangs.getMasp()}" class="ten-sp" data-value="${gioHangs.getMasp()}">${gioHangs.getTensp()}</a></h4>
+										<h4><a href="/chi-tiet-san-pham/${gioHangs.getMasp()}" class="ten-sp" data-value="${gioHangs.getMasp()}">${gioHangs.getTensp()}</a></h4>
 										<p class="masp">Mã sản phẩm: ${gioHangs.getMasp()}</p>
 									</td>
 									<td class="cart_price">
@@ -69,7 +69,7 @@
 					</table>
 					</c:when>
 					<c:otherwise>
-						<h3 style="text-align: center;">Giỏ hàng của bạn trống hãy quay lại <a href="/banaoquan/">trang chủ</a> để mua sắm</h3>
+						<h3 style="text-align: center;">Giỏ hàng của bạn trống hãy quay lại <a href="/">trang chủ</a> để mua sắm</h3>
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -124,7 +124,7 @@
 								<input type="Submit" class="btn btn-default check_out" value="Thanh toán" id="thanhtoan"/>
 							<!-- 	<a class="btn btn-default check_out" href="" id="thanhtoan">Thanh toán</a> -->
 						</div>
-						<a class="btn btn-default " href="/banaoquan/">Tiếp tục mua sắm</a>
+						<a class="btn btn-default " href="/">Tiếp tục mua sắm</a>
 					</div>
 						<div class="col-sm-6">
 							<div class="total_area">
