@@ -36,7 +36,6 @@
 									<td class="cart_price">
 										<input type="checkbox">
 									</td>
-									</td>
 									<td class="cart_description">
 										<h4><a href="/chi-tiet-san-pham/${gioHangs.getMasp()}" class="ten-sp" data-value="${gioHangs.getMasp()}">${gioHangs.getTensp()}</a></h4>
 										<p class="masp">Mã sản phẩm: ${gioHangs.getMasp()}</p>
