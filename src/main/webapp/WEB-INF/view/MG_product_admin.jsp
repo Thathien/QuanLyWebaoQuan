@@ -20,9 +20,9 @@
                               
                                <a href="" class="btn btn-secondary float-right" title="" id="ansanpham">Ẩn</a>
                                 <sub class=" btn float-right">---</sub>
-                                <a href="" class="btn btn-danger float-right" title="" style="margin-left: 10px;" id= xoasanpham>Xóa</a>
+                                <a href="" class="btn btn-danger float-right" title="" style="margin-left: 10px;" id="xoasanpham">Xóa</a>
                                  <sub class=" btn float-right">---</sub>
-                                  <a href="" class="btn btn-primary float-right" title="" style="margin-left: 10px;" id= "xoasanpham" data-toggle="modal" data-target="#addsanphammodel"> Thêm mới</a>
+                                  <a href="" class="btn btn-primary float-right" title="" style="margin-left: 10px;" id="themsanpham" data-toggle="modal" data-target="#addsanphammodel"> Thêm mới</a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -71,7 +71,7 @@
 	                                             <td>2011/01/25</td>
 	                                             <td>2011/01/25</td>
 	                                             <td>
-	                                             	<a href="" class="btn btn-info " title="" id="chitietsanpham" data-toggle="modal" data-target="#updatesanphammodel" data-masanpham="${listSanPhamss.getMasanpham()}">Chi tiết</a>
+	                                             	<a href="" class="btn btn-info chitietsanpham-btn" title="" id="chitietsanpham-${listSanPhamss.getMasanpham()}" data-toggle="modal" data-target="#updatesanphammodel" data-masanpham="${listSanPhamss.getMasanpham()}">Chi tiết</a>
                                               <!--   <a href="" class="btn btn-primary" title="" id="ansanpham">Chỉnh sửa</a> -->
 	                                             </td>
 	                                          </tr>

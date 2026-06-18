@@ -56,7 +56,7 @@
 			var x = confirm("Bạn muốn xóa những sản phẩm này không?");
 			if(x){
 				$.ajax({
-					url:"/banaoquan/admin/product/delete",
+					url:"admin/product/delete",
 					type: "POST",
 					data:{
 						listIdSanPham:listIdSanPham
@@ -76,10 +76,10 @@
 			alert("Bạn chưa chọn sản phẩm nào để xóa")
 		}
 	});
-	$("#chitietsanpham").click(function () {
+	$(".chitietsanpham-btn").click(function () {
 		var masanpham=$(this).attr("data-masanpham");
 		$.ajax({
-			url:"/banaoquan/admin/product/update",
+			url:"admin/product/update",
 			type: "POST",
 			data:{
 				masanpham:masanpham
@@ -126,7 +126,7 @@
 		var urlcurrent = window.location.href;
 //		var id = urlcurrent.substring(urlcurrent.lastIndexOf('/') + 1);
 		$.ajax({
-			url: "/banaoquan//admin/product/addimage",
+			url: "/admin/product/addimage",
 			type : "POST",
 			data: forms,
 			contentType: false,
@@ -134,7 +134,7 @@
 			enctype: "multipath/form-data",
 			success: function(value){
 //				$.ajax({
-//					url : "/banaoquan/admin/addimagecsdl",
+//					url : "admin/addimagecsdl",
 //					type : "POST",
 //					data : {
 //						id : id,

@@ -46,7 +46,7 @@
 							<ul class="nav navbar-nav">
 								<li>
 									<c:choose>
-										<c:when test="">
+										<c:when test="${not empty giohang}">
 											<a href="/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng: 
 										<c:if test="${giohang.size()!=0}">
 										<i style="color: red">${giohang.size()}</i>
