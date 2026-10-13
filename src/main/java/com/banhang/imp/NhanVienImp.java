@@ -1,6 +1,7 @@
 package com.banhang.imp;
 
 import com.banhang.entity.NhanVien;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface NhanVienImp {
@@ -10,6 +11,10 @@ public interface NhanVienImp {
   public boolean checkUser(String email, String matkhau);
 
   public NhanVien getInforby_User_Pass(String email, String matkhau);
+
+  public NhanVien getCustomerByCredentials(String identifier, String matkhau);
+
+  public NhanVien getAdminByCredentials(String identifier, String matkhau);
 
   public boolean checkEmail(String email);
 
@@ -26,4 +31,6 @@ public interface NhanVienImp {
   public List<NhanVien> getallTaiKhoan();
 
   public boolean checkAdmin(String email, String matkhau);
+
+  public boolean verifyEmailToken(String token, LocalDateTime currentTime);
 }

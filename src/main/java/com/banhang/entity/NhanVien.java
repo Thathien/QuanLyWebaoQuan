@@ -3,6 +3,7 @@ package com.banhang.entity;
 import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.*;
 
 @Entity
@@ -52,6 +53,12 @@ public class NhanVien implements Serializable {
   /** Xác thực */
   @Column(name = "xacthuc")
   private Boolean xacthuc;
+
+  @Column(name = "token_xacthuc", length = 64, unique = true)
+  private String tokenXacThuc;
+
+  @Column(name = "thoihan_xacthuc")
+  private LocalDateTime thoiHanXacThuc;
 
   /** Chức vụ */
   @ManyToOne(fetch = FetchType.LAZY)

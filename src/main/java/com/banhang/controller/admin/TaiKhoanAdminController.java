@@ -54,22 +54,16 @@ public class TaiKhoanAdminController {
       return "login_admin";
     }
 
-    boolean isAdmin =
-        nhanVienService.checkAdmin(dangnhapadmin.getEmail(), dangnhapadmin.getMatKhau());
-    if (isAdmin) {
-      NhanVien tk =
-          nhanVienService.getInforby_User_Pass(
-              dangnhapadmin.getEmail(), dangnhapadmin.getMatKhau());
-      if (tk != null) {
-        TaiKhoanLogin taikhoan = new TaiKhoanLogin();
-        taikhoan.setHoten(tk.getHoten());
-        taikhoan.setMachucvu(tk.getChucVu().getMachucvu());
-        taikhoan.setManhanvien(tk.getManhanvien());
-        taikhoan.setTendangnhap(tk.getEmail());
-        taikhoan.setMatkhau(tk.getMatkhau());
-        map.addAttribute("taikhoan", taikhoan);
-        return "redirect:/admin";
-      }
+    NhanVien tk =
+        nhanVienService.getAdminByCredentials(dangnhapadmin.getEmail(), dangnhapadmin.getMatKhau());
+    if (tk != null && tk.getChucVu() != null) {
+      TaiKhoanLogin taikhoan = new TaiKhoanLogin();
+      taikhoan.setHoten(tk.getHoten());
+      taikhoan.setMachucvu(tk.getChucVu().getMachucvu());
+      taikhoan.setManhanvien(tk.getManhanvien());
+      taikhoan.setTendangnhap(tk.getTendangnhap());
+      map.addAttribute("taikhoan", taikhoan);
+      return "redirect:/admin";
     }
     map.addAttribute(
         "resultsAdmin", "Bạn không đủ quyền để truy cập hoặc thông tin đăng nhập không đúng");

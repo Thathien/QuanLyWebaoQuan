@@ -46,7 +46,7 @@
 							<ul class="nav navbar-nav">
 								<li>
 									<c:choose>
-										<c:when test="">
+										<c:when test="${not empty giohang}">
 											<a href="/giohang"><i class="fa fa-shopping-cart"></i> Giỏ hàng: 
 										<c:if test="${giohang.size()!=0}">
 										<i style="color: red">${giohang.size()}</i>
@@ -60,7 +60,8 @@
 								</li>
 								<c:choose>
 									<c:when test="${taikhoan!=null}">
-										<li><a href=""><i class="fa fa-user"></i> Tài khoản</a></li>
+										<li><a href="/tai-khoan"><i class="fa fa-user"></i> Tài khoản</a></li>
+										<li><a href="/don-hang"><i class="fa fa-list"></i> Đơn hàng</a></li>
 										<li><a href="/logout"><i class="fa fa-crosshairs"></i> Đăng xuất</a></li>
 									</c:when>
 									<c:otherwise>
@@ -75,7 +76,7 @@
 			</div>
 		</div><!--/header-middle-->
 		
-				<div class="header-bottom"><!--header-bottom-->
+		<div class="header-bottom"><!--header-bottom-->
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-8">
@@ -90,30 +91,22 @@
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="/" class="active">Trang chủ</a></li>
-								<li class="dropdown"><a href="#">Sản phẩm<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="">Products</a></li>
-										<li><a href="">Product Details</a></li> 
-										<li><a href="">Checkout</a></li> 
-										<li><a href="">Cart</a></li> 
-										<li><a href="">Login</a></li> 
-                                    </ul>
-                                </li> 
+								<li><a href="/giohang">Giỏ hàng</a></li>
 								<li class="dropdown"><a href="#">Tin tức<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="">Blog List</a></li>
 										<li><a href="">Blog Single</a></li>
                                     </ul>
                                 </li> 
-								<li><a href="">404</a></li>
-								<li><a href="">Liên hệ</a></li>
+								<li><a href="/">Tất cả sản phẩm</a></li>
 							</ul>
 						</div>
 					</div>
 					<div class="col-sm-4">
-						<div class="search_box pull-right">
-							<input type="text" placeholder="Tìm kiếm"/>
-						</div>
+						<form class="search_box pull-right" method="get" action="/">
+							<input type="search" name="q" placeholder="Tìm kiếm sản phẩm" value="<c:out value='${searchQuery}' />"/>
+							<button type="submit" aria-label="Tìm kiếm"><i class="fa fa-search"></i></button>
+						</form>
 					</div>
 				</div>
 			</div>

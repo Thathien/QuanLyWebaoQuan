@@ -24,6 +24,18 @@ public class HoaDonService implements HoaDonImp {
     return hoaDonDao.getListHoaDonDaDuyet();
   }
 
+  public List<HoaDon> getAllHoaDon() {
+    return hoaDonDao.getAllHoaDon();
+  }
+
+  public HoaDon getHoaDonById(int mahoadon) {
+    return hoaDonDao.getHoaDonById(mahoadon);
+  }
+
+  public List<HoaDon> getListHoaDonByEmail(String email) {
+    return hoaDonDao.getListHoaDonByEmail(email);
+  }
+
   public int addNewHoaDonUser(HoaDon hoaDon) {
     return hoaDonDao.addNewHoaDonUser(hoaDon);
   }

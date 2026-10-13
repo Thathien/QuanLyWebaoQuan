@@ -1,13 +1,11 @@
 package com.banhang.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
@@ -52,7 +50,6 @@ public class DanhMucSanPham implements Serializable {
   private Boolean hiden;
 
   /** Danh sách sản phẩm trong danh mục */
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  @JoinColumn(name = "madanhmucsanpham")
+  @OneToMany(mappedBy = "danhMucSanPham", fetch = FetchType.EAGER)
   private Set<SanPham> danhsachsanpham;
 }

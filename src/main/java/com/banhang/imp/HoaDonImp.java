@@ -10,6 +10,12 @@ public interface HoaDonImp {
 
   public List<HoaDon> getListHoaDonDaDuyet();
 
+  public List<HoaDon> getAllHoaDon();
+
+  public HoaDon getHoaDonById(int mahoadon);
+
+  public List<HoaDon> getListHoaDonByEmail(String email);
+
   public int addNewHoaDonUser(HoaDon hoaDon);
 
   public boolean updateHoaDon(HoaDon hoaDon);

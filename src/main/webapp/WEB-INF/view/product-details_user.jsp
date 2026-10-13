@@ -13,13 +13,18 @@
 						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
 						<c:choose>
 							<c:when test="${showListDanhMucSP.size()!=0}">
-								
-								 <c:forEach items="${showListDanhMucSP}" var="ListDanhMucSP"  >
-									<div class="panel panel-default">
+								<c:forEach items="${showListDanhMucSP}" var="ListDanhMucSP">
+									<c:if test="${ListDanhMucSP.hiden == false}">
+										<div class="panel panel-default">
 										<div class="panel-heading">
-											<h4 class="panel-title"><a href="#">${ListDanhMucSP.getTendanhmuc()}</a></h4>
+											<h4 class="panel-title">
+												<a href="<c:url value='/'><c:param name='category' value='${ListDanhMucSP.madanhmucsanpham}' /></c:url>">
+													<c:out value="${ListDanhMucSP.tendanhmuc}" />
+												</a>
+											</h4>
 										</div>
 									</div>
+									</c:if>
 								</c:forEach>
 							</c:when>
 							<c:otherwise>
@@ -29,28 +34,41 @@
 							
 						</div><!--/category-productsr-->
 					
-						<div class="brands_products"><!--brands_products-->
-							<h2>Thương hiệu</h2>
-							<div class="brands-name">
-								<ul class="nav nav-pills nav-stacked">
-									<li><a href=""> <span class="pull-right">(50)</span>Acne</a></li>
-									<li><a href=""> <span class="pull-right">(56)</span>Grüne Erde</a></li>
-									<li><a href=""> <span class="pull-right">(27)</span>Albiro</a></li>
-									<li><a href=""> <span class="pull-right">(32)</span>Ronhill</a></li>
-									<li><a href=""> <span class="pull-right">(5)</span>Oddmolly</a></li>
-									<li><a href=""> <span class="pull-right">(9)</span>Boudestijn</a></li>
-									<li><a href=""> <span class="pull-right">(4)</span>Rösch creative culture</a></li>
-								</ul>
-							</div>
-						</div><!--/brands_products-->
-						
-						<div class="price-range"><!--price-range-->
-							<h2>Giá</h2>
-							<div class="well">
-								 <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
-								 <b>$ 0</b> <b class="pull-right">$ 600</b>
-							</div>
-						</div><!--/price-range-->
+						<div class="filter-products">
+							<h2>Lọc sản phẩm</h2>
+							<form method="get" action="<c:url value='/' />">
+								<div class="form-group">
+									<label for="detail-filter-category">Danh mục</label>
+									<select class="form-control" id="detail-filter-category" name="category">
+										<option value="">Tất cả danh mục</option>
+										<c:forEach items="${showListDanhMucSP}" var="categoryItem">
+											<c:if test="${categoryItem.hiden == false}">
+												<option value="<c:out value='${categoryItem.madanhmucsanpham}' />">
+													<c:out value="${categoryItem.tendanhmuc}" />
+												</option>
+											</c:if>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="detail-filter-name">Tên sản phẩm</label>
+									<input class="form-control" id="detail-filter-name" name="q" type="search"
+										placeholder="Nhập tên sản phẩm">
+								</div>
+								<div class="form-group">
+									<label for="detail-filter-min-price">Giá từ (VNĐ)</label>
+									<input class="form-control" id="detail-filter-min-price" name="minPrice" type="number"
+										min="0" step="1000">
+								</div>
+								<div class="form-group">
+									<label for="detail-filter-max-price">Giá đến (VNĐ)</label>
+									<input class="form-control" id="detail-filter-max-price" name="maxPrice" type="number"
+										min="0" step="1000">
+								</div>
+								<button class="btn btn-primary btn-block" type="submit">Áp dụng bộ lọc</button>
+								<a class="btn btn-default btn-block" href="<c:url value='/' />">Xóa bộ lọc</a>
+							</form>
+						</div>
 						
 						<div class="shipping text-center"><!--shipping-->
 						<img src="<c:url value ="/resourcess/user/images/home/shipping.jpg"></c:url>" alt="" />
@@ -63,8 +81,11 @@
 					<div class="product-details"><!--product-details-->
 						<div class="col-sm-5">
 							<div class="view-product">
-								<img src="<c:url value ="/resourcess/user/images/product-details/1.jpg"></c:url>" alt="" />
-								<h3>ZOOM</h3>
+								<img
+									src="<c:url value='/resourcess/user/images/shop/${productImageName}' />"
+									data-fallback="<c:url value='/resourcess/user/images/shop/product12.jpg' />"
+									alt="<c:out value='${sanphamRS.tensanpham}' />"
+									onerror="this.onerror=null;this.src=this.dataset.fallback;" />
 							</div>
 							<div id="similar-product" class="carousel slide" data-ride="carousel">
 								
@@ -100,7 +121,7 @@
 						</div>
 						<div class="col-sm-7">
 							<div class="product-information"><!--/product-information-->
-								<img src="<c:url value ="/resourcess/user/images/product-details/new.jpg"></c:url>" alt=""  class="newarrival"/>
+								<img src="<c:url value='/resourcess/user/images/product-details/new.jpg' />" alt="" class="newarrival"/>
 
 								<h2 id="tensp">${sanphamRS.getTensanpham()}</h2>
 								<p>Mã sản phẩm : <i id="masp" data-value="${sanphamRS.getMasanpham()}">${sanphamRS.getMasanpham()}</i></p>
@@ -111,12 +132,12 @@
 								<c:forEach items="${sanphamRS.getChiTietSanPham()}" var="chitietsanpham" >
 									<span>
 										<label>Màu sản phẩm :</label><i >${chitietsanpham.getMauSanPham().getTenmau()}</i> <label>- -Size : </label>
-										<i>${chitietsanpham.getSizeSanPham().getSize()}</i></br>
+										<i>${chitietsanpham.getSizeSanPham().getSize()}</i><br/>
 										<i class="mau" style="display: none;" data-value="${chitietsanpham.getMauSanPham().getMamau()}">${chitietsanpham.getMauSanPham().getTenmau()}</i>
 										<i class="size" style="display: none;"data-value="${chitietsanpham.getSizeSanPham().getMasize()}">${chitietsanpham.getSizeSanPham().getSize()}</i>
 										<label>Số lượng mua:</label>
 										<input type="number" value="1" id="soluong" min="1" max="100" />
-										<button type="button" class="btn btn-fefault cart add-tocart" " data-machitietsanpham="${chitietsanpham.getMachitietsanpham()}">
+										<button type="button" class="btn btn-default cart add-tocart" data-machitietsanpham="${chitietsanpham.getMachitietsanpham()}">
 											<i class="fa fa-shopping-cart"></i>
 											Thêm vào giỏ
 										</button>
