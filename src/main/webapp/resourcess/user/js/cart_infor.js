@@ -3,13 +3,13 @@ $(document).ready(function(){
 	function updateTongTienGio(isEventChange){
 		var tongtiensp=0;
 		var tongsosp=0;
-		$('.giatien-s').each(function(){
-			var giatien=$(this).attr("data-value");
-			var soluong=$(this).closest("tr").find(".soluong-sp").val();
-			var tongtien=parseFloat(giatien)*soluong;
+		$('.giatien-sp').each(function(){
+			var giatien=parseInt($(this).attr("data-value"), 10) || 0;
+			var soluong=parseInt($(this).closest("tr").find(".soluong-sp").val(), 10) || 0;
+			var tongtien=giatien*soluong;
 			var fomat=parseInt(tongtien).toFixed(3).replace(/(\d)(?=(\d{3})+\.)/g, "$1.").toString();
 			tongtiensp=tongtiensp+tongtien;
-			tongsosp=tongsosp+soluong;
+			tongsosp+=soluong;
 			if(!isEventChange){
 				$(this).html(fomat);
 			}
@@ -23,9 +23,14 @@ $(document).ready(function(){
 		var masp=$(this).closest("tr").find(".ten-sp").attr("data-value");
 		var mamau=$(this).closest("tr").find(".mamau-sp").attr("data-value");
 		var masize=$(this).closest("tr").find(".size-sp").attr("data-value");
-		var soluong=$(this).val();
-		var giatien=$(this).closest("tr").find(".giatien-sp").attr("data-value").replace(",",".");
-		var tongtien=soluong * parseInt(giatien);
+		var soluong=parseInt($(this).val(), 10);
+		if (!Number.isInteger(soluong) || soluong < 1 || soluong > 99) {
+			alert("Số lượng phải từ 1 đến 99.");
+			$(this).val(1);
+			return;
+		}
+		var giatien=parseInt($(this).closest("tr").find(".giatien-sp").attr("data-value"), 10);
+		var tongtien=soluong * giatien;
 		var fomat=tongtien.toFixed(3).replace(/(\d)(?=(\d{3})+\.)/g, "$1.").toString();
 		$(this).closest("tr").find(".tongtien-sp").html(fomat);
 		updateTongTienGio(true);
@@ -42,6 +47,8 @@ $(document).ready(function(){
 			success: function(value){
 				if(value === 'true'){
 					alert("Cập nhật giỏ hàng thành công")
+				} else {
+					alert("Số lượng vượt tồn kho hoặc sản phẩm không còn khả dụng.");
 				}
 			}
 		});
@@ -65,6 +72,9 @@ $(document).ready(function(){
 					if(value === 'true'){
 						self.closest("tr").remove();
 						updateTongTienGio(true);
+						if ($(".soluong-sp").length === 0) {
+							window.location.reload();
+						}
 					}
 				}
 			});
@@ -80,8 +90,8 @@ $(document).ready(function(){
 		if(!isValidTen(tenkhachhang)){
 			$('#tenkhachhang_error').text("Tên không hợp lệ ")
 			$('#tenkhachhang').focus();
-		}else if(emailkhachang==""){
-			$('#emailkhachang_error').text("Email hợp lệ ")
+		}else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailkhachang)){
+			$('#emailkhachang_error').text("Email không hợp lệ")
 			$('#emailkhachang').focus();
 		}else if(!isValidSDT(sodienthoai)){
 			$('#sodienthoai_error').text("Số điện thoại hợp lệ ")
@@ -93,7 +103,7 @@ $(document).ready(function(){
 			var x = confirm("Bạn muốn thanh toán tất cả sản phẩm trong giỏ ?");
 			if(x){
 				$.ajax({
-					url:"/giohang/",
+					url:"/giohang",
 					type: "POST",
 					data:{
 						tenkhachhang: tenkhachhang,
@@ -104,7 +114,18 @@ $(document).ready(function(){
 						ghichu: ghichu
 					},
 					success: function(value){
-						
+						if (value === "true") {
+							alert("Đặt hàng thành công.");
+							window.location.href = "/";
+						} else if (value === "email-failed") {
+							alert("Đơn hàng đã được tạo nhưng email xác nhận chưa gửi được.");
+							window.location.href = "/";
+						} else {
+							alert("Không thể đặt hàng. Vui lòng kiểm tra thông tin và tồn kho.");
+						}
+					},
+					error: function(){
+						alert("Không nhận được kết quả đặt hàng. Vui lòng kiểm tra lịch sử đơn hàng trước khi gửi lại.");
 					}
 				});
 			}

@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
  	<head>
-        <meta charset="utf-8" />
+        <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -26,16 +26,19 @@
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Đăng nhập</h3></div>
                                     <div class="card-body">
                                        <!--   <form>-->
-                                        <form:form  action="dangnhap" modelAttribute="dangnhapadmin" method ="post">
+                                        <form:form action="dangnhap" modelAttribute="dangnhapadmin" method="post">
+                                            <c:if test="${not empty resultsAdmin}">
+                                                <p class="text-danger" role="alert"><c:out value="${resultsAdmin}" /></p>
+                                            </c:if>
                                             <div class="form-group">
-                                                <label class="small mb-1" for="inputEmailAddress">Email</label>
-                                                <form:input path="email" class="form-control py-4" id="usernameadmin" type="email" placeholder="Email/tên đăng nhập" value="123@gmail.com"/>
-                                                <span class="text-danger"id="usernameadmin_error"></span>
+                                                <label class="small mb-1" for="usernameadmin">Email hoặc tên đăng nhập</label>
+                                                <form:input path="email" class="form-control py-4" id="usernameadmin" type="text" autocomplete="username" placeholder="Email hoặc tên đăng nhập"/>
+                                                <form:errors path="email" cssClass="text-danger" />
                                             </div>
                                             <div class="form-group">
-                                                <label class="small mb-1" for="inputPassword">Password</label>
-                                                <form:input path="matKhau" class="form-control py-4" id="passadmin" type="password" placeholder="Mật khẩu" value="123456"/>
-                                                 <span class="text-danger"id="passadmin_error"></span>
+                                                <label class="small mb-1" for="passadmin">Mật khẩu</label>
+                                                <form:password path="matKhau" class="form-control py-4" id="passadmin" autocomplete="current-password" placeholder="Mật khẩu"/>
+                                                <form:errors path="matKhau" cssClass="text-danger" />
                                             </div>
                                             <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <a class="small" href="">Forgot Password?</a>

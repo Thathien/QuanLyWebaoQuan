@@ -10,8 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -44,7 +44,7 @@ public class SanPham implements Serializable {
   private Integer masanpham;
 
   /** Danh mục sản phẩm */
-  @OneToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "madanhmucsanpham")
   private DanhMucSanPham danhMucSanPham;
 
@@ -77,7 +77,9 @@ public class SanPham implements Serializable {
   private Set<ChiTietSanPham> chiTietSanPham = new HashSet<>();
 
   /** Danh sách khuyến mại áp dụng */
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @ManyToMany(
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+      fetch = FetchType.EAGER)
   @JoinTable(
       name = "CHITIETKHUYENMAI",
       joinColumns = {@JoinColumn(name = "masanpham", referencedColumnName = "masanpham")},

@@ -10,10 +10,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity(name = "HoaDon")
-@Table(name = "HoaDon")
+@Table(
+    name = "HoaDon",
+    indexes = {
+      @jakarta.persistence.Index(
+          name = "IX_HoaDon_Status_CompletedAt",
+          columnList = "tinhtrang, completed_at")
+    })
 public class HoaDon implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +30,15 @@ public class HoaDon implements Serializable {
   @Column(name = "tenkhachhang", columnDefinition = "nvarchar(50)")
   String tenkhachhang;
 
+  @Column(name = "emailkhachhang", columnDefinition = "nvarchar(255)")
+  String emailkhachhang;
+
   @Column(name = "sdt", columnDefinition = "nvarchar(50)")
   String sdt;
 
   String diachigiaohang;
 
-  @Column(name = "tinhtrang", columnDefinition = "bit")
+  @Column(name = "tinhtrang")
   int tinhtrang;
 
   @Column(name = "ghichu", columnDefinition = "nvarchar(50)")
@@ -36,6 +46,12 @@ public class HoaDon implements Serializable {
 
   @Column(name = "ngaylap", columnDefinition = "nvarchar(50)")
   String ngaylap;
+
+  @Column(name = "created_at")
+  LocalDateTime createdAt;
+
+  @Column(name = "completed_at")
+  LocalDateTime completedAt;
 
   @Column(name = "hinhthucgiaohang", columnDefinition = "nvarchar(50)")
   String hinhthucgiaohang;
@@ -86,6 +102,14 @@ public class HoaDon implements Serializable {
     this.tenkhachhang = tenkhachhang;
   }
 
+  public String getEmailkhachhang() {
+    return emailkhachhang;
+  }
+
+  public void setEmailkhachhang(String emailkhachhang) {
+    this.emailkhachhang = emailkhachhang;
+  }
+
   public String getSdt() {
     return sdt;
   }
@@ -116,6 +140,22 @@ public class HoaDon implements Serializable {
 
   public void setNgaylap(String ngaylap) {
     this.ngaylap = ngaylap;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getCompletedAt() {
+    return completedAt;
+  }
+
+  public void setCompletedAt(LocalDateTime completedAt) {
+    this.completedAt = completedAt;
   }
 
   public Set<ChiTietHoaDon> getChiTietHoaDon() {

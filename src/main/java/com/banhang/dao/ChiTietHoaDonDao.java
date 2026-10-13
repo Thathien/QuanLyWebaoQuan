@@ -24,7 +24,12 @@ public class ChiTietHoaDonDao implements ChiTietHoaDonImp {
 
     TypedQuery<ChiTietHoaDon> query =
         entityManager.createQuery(
-            "SELECT c FROM ChiTietHoaDon c WHERE c.mahoadon = :mahoadon", ChiTietHoaDon.class);
+            """
+            SELECT c
+            FROM ChiTietHoaDon c
+            WHERE c.chiTietHoaDonId.mahoadon = :mahoadon
+            """,
+            ChiTietHoaDon.class);
 
     query.setParameter("mahoadon", mahoadon);
 
@@ -74,8 +79,8 @@ public class ChiTietHoaDonDao implements ChiTietHoaDonImp {
             """
                         SELECT c
                         FROM ChiTietHoaDon c
-                        WHERE c.mahoadon = :mahoadon
-                          AND c.machitietsanpham = :machitietsanpham
+                        WHERE c.chiTietHoaDonId.mahoadon = :mahoadon
+                          AND c.chiTietHoaDonId.machitietsanpham = :machitietsanpham
                         """,
             ChiTietHoaDon.class);
 
