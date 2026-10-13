@@ -90,6 +90,35 @@ public class HoaDonDao implements HoaDonImp {
     }
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public List<HoaDon> getAllHoaDon() {
+    return entityManager
+        .createQuery("SELECT h FROM HoaDon h ORDER BY h.mahoadon DESC", HoaDon.class)
+        .getResultList();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public HoaDon getHoaDonById(int mahoadon) {
+    return entityManager.find(HoaDon.class, mahoadon);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<HoaDon> getListHoaDonByEmail(String email) {
+    if (email == null || email.isBlank()) {
+      return List.of();
+    }
+    return entityManager
+        .createQuery(
+            "SELECT h FROM HoaDon h WHERE LOWER(h.emailkhachhang) = LOWER(:email) "
+                + "ORDER BY h.mahoadon DESC",
+            HoaDon.class)
+        .setParameter("email", email.trim())
+        .getResultList();
+  }
+
   /** Thêm hóa đơn mới. */
   @Override
   public int addNewHoaDonUser(HoaDon hoaDon) {

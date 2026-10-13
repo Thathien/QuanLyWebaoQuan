@@ -85,6 +85,22 @@ public class SanPhamServiceTest {
   }
 
   @Test
+  void deleteProductIfUnreferencedDeletesOnlyProductsWithoutHistory() {
+    when(sanPhamDao.getListSanPhamById(1)).thenReturn(sampleProduct1);
+    when(sanPhamDao.hasProductHistory(1)).thenReturn(false);
+    when(sanPhamDao.deleteSanPham(sampleProduct1)).thenReturn(true);
+    when(sanPhamDao.getListSanPhamById(2)).thenReturn(sampleProduct2);
+    when(sanPhamDao.hasProductHistory(2)).thenReturn(true);
+
+    assertEquals(
+        SanPhamService.ProductDeleteStatus.DELETED, sanPhamService.deleteProductIfUnreferenced(1));
+    assertEquals(
+        SanPhamService.ProductDeleteStatus.HAS_HISTORY,
+        sanPhamService.deleteProductIfUnreferenced(2));
+    verify(sanPhamDao, never()).deleteSanPham(sampleProduct2);
+  }
+
+  @Test
   public void testAddSanPham() {
     // Cấu hình mock
     when(sanPhamDao.addSanPham(sampleProduct1)).thenReturn(1);

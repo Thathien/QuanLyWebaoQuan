@@ -3,9 +3,13 @@ package com.banhang.service;
 import com.banhang.dao.SanPhamDao;
 import com.banhang.entity.SanPham;
 import com.banhang.imp.SanPhamImp;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class cho entity SanPham. Cung cấp các phương thức business logic cho quản lý sản phẩm.
@@ -26,6 +30,16 @@ public class SanPhamService implements SanPhamImp {
   @Override
   public List<SanPham> getAllSanPham() {
     return sanPhamDao.getAllSanPham();
+  }
+
+  @Override
+  public Page<SanPham> getStorefrontProducts(
+      Integer categoryId,
+      String name,
+      BigDecimal minPrice,
+      BigDecimal maxPrice,
+      Pageable pageable) {
+    return sanPhamDao.getStorefrontProducts(categoryId, name, minPrice, maxPrice, pageable);
   }
 
   /**
@@ -83,6 +97,20 @@ public class SanPhamService implements SanPhamImp {
     return sanPhamDao.deleteSanPham(sp);
   }
 
+  @Transactional
+  public ProductDeleteStatus deleteProductIfUnreferenced(int productId) {
+    SanPham product = sanPhamDao.getListSanPhamById(productId);
+    if (product == null) {
+      return ProductDeleteStatus.NOT_FOUND;
+    }
+    if (sanPhamDao.hasProductHistory(productId)) {
+      return ProductDeleteStatus.HAS_HISTORY;
+    }
+    return sanPhamDao.deleteSanPham(product)
+        ? ProductDeleteStatus.DELETED
+        : ProductDeleteStatus.DELETE_FAILED;
+  }
+
   /**
    * Kiểm tra tên sản phẩm trước khi thêm mới.
    *
@@ -92,5 +120,12 @@ public class SanPhamService implements SanPhamImp {
   @Override
   public boolean checkNameSanPhamBeforeAdd(String tenSp) {
     return sanPhamDao.checkNameSanPhamBeforeAdd(tenSp);
+  }
+
+  public enum ProductDeleteStatus {
+    DELETED,
+    NOT_FOUND,
+    HAS_HISTORY,
+    DELETE_FAILED
   }
 }

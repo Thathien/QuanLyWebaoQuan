@@ -7,6 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,9 @@ public class ChiTietHoaDon implements Serializable {
 
   @Column(name = "giatien", columnDefinition = "nvarchar(50)")
   private String giatien;
+
+  @Column(name = "gia_von", precision = 19, scale = 2)
+  private BigDecimal giaVon;
 
   @ManyToOne
   @JoinColumn(name = "mahoadon", insertable = false, updatable = false)

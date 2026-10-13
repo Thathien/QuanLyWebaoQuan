@@ -12,10 +12,12 @@
 					<div class="login-form" id="frmdangnhap"><!--login form-->
 						<h2 class="text-center">Đăng nhập</h2>
 						<form:form  action="dangnhap" modelAttribute="dangnhapuser" method ="post">
-							<form:input path="email" type="email" name="emaildn" id="emaildn" placeholder="Địa chỉ Email" />
+							<form:errors path="email" cssClass="text-danger" />
+							<form:input path="email" type="text" name="emaildn" id="emaildn" autocomplete="username" placeholder="Email hoặc tên đăng nhập" />
 							<span class="text-danger" id="email-error"></span>
-							 <form:input path="matKhau" type="Password" placeholder="Mật khẩu" name="passworddn" id="passworddn" />
-							<span class="text-danger" id="password-error">${resultDangNhap}</span>
+							<form:errors path="matKhau" cssClass="text-danger" />
+							<form:password path="matKhau" placeholder="Mật khẩu" name="passworddn" id="passworddn" autocomplete="current-password" />
+							<span class="text-danger" id="password-error" role="alert"><c:out value="${resultDangNhap}" /></span>
 							<br/>
 							<span id="taomoitaikhoan" class="text-center">Tạo mới tài khoản</span>
 							<form:button type="submit" class="btn btn-default">Đăng nhập</form:button>

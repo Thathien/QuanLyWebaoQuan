@@ -5,12 +5,18 @@ import com.banhang.entity.NhanVien;
 import com.banhang.model.DangKyModel;
 import com.banhang.model.DangNhapModel;
 import com.banhang.service.ChucVuService;
+import com.banhang.service.HoaDonService;
 import com.banhang.service.NhanVienService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.HexFormat;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -20,7 +26,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
 @SessionAttributes({"taikhoan", "giohang"})
@@ -36,10 +44,17 @@ public class TaiKhoanUserController {
   private static final int NO_ROLE = 0;
   private static final int ADMIN_ROLE = 1;
   private static final int CUSTOMER_ROLE = 3;
+  private static final int VERIFICATION_TOKEN_BYTES = 32;
+  private static final int VERIFICATION_EXPIRY_HOURS = 24;
+  private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
   private final JavaMailSender mailsender;
   private final NhanVienService nhanVienService;
   private final ChucVuService chucVuService;
+  private final HoaDonService hoaDonService;
+
+  @Value("${app.base-url:http://localhost:8080}")
+  private String baseUrl;
 
   @GetMapping("dangnhap")
   public String showDangNhap(Model model, HttpSession httpSession) {
@@ -64,8 +79,11 @@ public class TaiKhoanUserController {
     }
 
     NhanVien nhanVien =
-        nhanVienService.getInforby_User_Pass(dangNhapUser.getEmail(), dangNhapUser.getMatKhau());
-    if (nhanVien == null) {
+        nhanVienService.getCustomerByCredentials(
+            dangNhapUser.getEmail(), dangNhapUser.getMatKhau());
+    if (nhanVien == null
+        || nhanVien.getChucVu() == null
+        || nhanVien.getChucVu().getMachucvu() != CUSTOMER_ROLE) {
       modelMap.addAttribute("resultDangNhap", "Tài khoản hoặc mật khẩu không hợp lệ");
       return LOGIN_VIEW;
     }
@@ -100,17 +118,105 @@ public class TaiKhoanUserController {
       return REGISTER_VIEW;
     }
 
-    String email = trimToEmpty(dangKyUser.getEmaildk());
-    int id = nhanVienService.register(buildCustomer(dangKyUser));
+    NhanVien customer = buildCustomer(dangKyUser);
+    customer.setTokenXacThuc(generateVerificationToken());
+    customer.setThoiHanXacThuc(LocalDateTime.now().plusHours(VERIFICATION_EXPIRY_HOURS));
+    int id = nhanVienService.register(customer);
     if (id == 0) {
       modelMap.addAttribute("success_fail", "Đăng ký không thành công");
       return REGISTER_VIEW;
     }
 
-    modelMap.addAttribute(
-        "success_fail", "Đăng ký thành công hãy truy cập email của bạn để xác thực");
-    // sendVerificationEmail(email);
+    try {
+      sendVerificationEmail(customer.getEmail(), customer.getTokenXacThuc());
+      modelMap.addAttribute(
+          "success_fail", "Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.");
+    } catch (MessagingException | MailException exception) {
+      modelMap.addAttribute(
+          "success_fail",
+          "Tài khoản đã được tạo nhưng không gửi được email xác thực. Vui lòng liên hệ quản trị viên.");
+    }
     return REGISTER_VIEW;
+  }
+
+  @GetMapping("xac-thuc-email")
+  public String verifyEmail(@RequestParam(required = false) String token, Model model) {
+    boolean verified =
+        token != null
+            && !token.isBlank()
+            && nhanVienService.verifyEmailToken(token, LocalDateTime.now());
+    model.addAttribute(
+        "verificationResult",
+        verified
+            ? "Xác thực email thành công. Bạn có thể đăng nhập."
+            : "Liên kết xác thực không hợp lệ hoặc đã hết hạn.");
+    return "xac_thuc_email_user";
+  }
+
+  @GetMapping("tai-khoan")
+  public String accountPage(HttpSession session, Model model) {
+    TaiKhoanLogin account = getCustomerAccount(session);
+    if (account == null) {
+      return session.getAttribute(ACCOUNT_ATTRIBUTE) == null ? "redirect:/dangnhap" : "redirect:/";
+    }
+    NhanVien customer = nhanVienService.getInforbyId(account.getManhanvien());
+    if (customer == null) {
+      session.removeAttribute(ACCOUNT_ATTRIBUTE);
+      return "redirect:/dangnhap";
+    }
+    model.addAttribute("customer", customer);
+    return "account_user";
+  }
+
+  @PostMapping("tai-khoan")
+  public String updateAccount(
+      @RequestParam String hoten, @RequestParam String diachi, HttpSession session, Model model) {
+    TaiKhoanLogin account = getCustomerAccount(session);
+    if (account == null) {
+      return session.getAttribute(ACCOUNT_ATTRIBUTE) == null ? "redirect:/dangnhap" : "redirect:/";
+    }
+
+    NhanVien customer = nhanVienService.getInforbyId(account.getManhanvien());
+    String normalizedName = trimToEmpty(hoten);
+    String normalizedAddress = trimToEmpty(diachi);
+    if (customer == null
+        || normalizedName.isEmpty()
+        || normalizedName.length() > 50
+        || normalizedAddress.isEmpty()
+        || normalizedAddress.length() > 255) {
+      model.addAttribute("accountError", "Vui lòng nhập họ tên và địa chỉ hợp lệ.");
+      model.addAttribute("customer", customer);
+      return "account_user";
+    }
+
+    customer.setHoten(normalizedName);
+    customer.setDiachi(normalizedAddress);
+    if (!nhanVienService.updateInfor(customer)) {
+      model.addAttribute("accountError", "Không thể cập nhật thông tin tài khoản.");
+    } else {
+      account.setHoten(normalizedName);
+      model.addAttribute("accountResult", "Đã cập nhật thông tin tài khoản.");
+    }
+    model.addAttribute("customer", customer);
+    return "account_user";
+  }
+
+  @GetMapping("don-hang")
+  public String orderHistory(HttpSession session, Model model) {
+    TaiKhoanLogin account = getCustomerAccount(session);
+    if (account == null) {
+      return session.getAttribute(ACCOUNT_ATTRIBUTE) == null ? "redirect:/dangnhap" : "redirect:/";
+    }
+    model.addAttribute("orders", hoaDonService.getListHoaDonByEmail(account.getTendangnhap()));
+    return "orders_user";
+  }
+
+  private TaiKhoanLogin getCustomerAccount(HttpSession session) {
+    Object value = session.getAttribute(ACCOUNT_ATTRIBUTE);
+    if (value instanceof TaiKhoanLogin account && account.getMachucvu() == CUSTOMER_ROLE) {
+      return account;
+    }
+    return null;
   }
 
   private boolean validateRegistration(DangKyModel dangKyUser, ModelMap modelMap) {
@@ -178,18 +284,33 @@ public class TaiKhoanUserController {
     taiKhoanLogin.setManhanvien(nhanVien.getManhanvien());
     taiKhoanLogin.setHoten(nhanVien.getHoten());
     taiKhoanLogin.setTendangnhap(nhanVien.getTendangnhap());
-    taiKhoanLogin.setMatkhau(nhanVien.getMatkhau());
     taiKhoanLogin.setMachucvu(nhanVien.getChucVu().getMachucvu());
     return taiKhoanLogin;
   }
 
-  private void sendVerificationEmail(String email) throws MessagingException {
+  private void sendVerificationEmail(String email, String token) throws MessagingException {
     MimeMessage message = mailsender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
     helper.setTo(email);
     helper.setSubject("Yêu cầu xác thực email bạn đã đăng ký");
-    helper.setText("Vui lòng nhấn vào link này để xác thực đăng ký", true);
+    String verificationUrl =
+        UriComponentsBuilder.fromUriString(baseUrl)
+            .path("/xac-thuc-email")
+            .queryParam("token", token)
+            .build()
+            .toUriString();
+    helper.setText(
+        "Vui lòng nhấn vào liên kết sau để xác thực tài khoản: <a href=\""
+            + verificationUrl
+            + "\">Xác thực email</a>. Liên kết có hiệu lực trong 24 giờ.",
+        true);
     mailsender.send(message);
+  }
+
+  private String generateVerificationToken() {
+    byte[] tokenBytes = new byte[VERIFICATION_TOKEN_BYTES];
+    SECURE_RANDOM.nextBytes(tokenBytes);
+    return HexFormat.of().formatHex(tokenBytes);
   }
 
   private String trimToEmpty(String value) {

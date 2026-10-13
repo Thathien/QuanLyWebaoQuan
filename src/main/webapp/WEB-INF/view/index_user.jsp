@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="Header_user.jsp"></jsp:include>
@@ -19,7 +18,7 @@
 									<c:if test="${ListDanhMucSP.hiden == false}">
 										<div class="panel panel-default">
 										<div class="panel-heading">
-											<h4 class="panel-title"><a href="">${ListDanhMucSP.getTendanhmuc()}</a></h4>
+											<h4 class="panel-title"><a href="<c:url value='/'><c:param name='category' value='${ListDanhMucSP.madanhmucsanpham}' /></c:url>"><c:out value="${ListDanhMucSP.tendanhmuc}" /></a></h4>
 										</div>
 									</div>
 									</c:if>
@@ -32,28 +31,42 @@
 							
 						</div><!--/category-productsr-->
 					
-						<div class="brands_products"><!--brands_products-->
-							<h2>Thương hiệu</h2>
-							<div class="brands-name">
-								<ul class="nav nav-pills nav-stacked">
-									<li><a href=""> <span class="pull-right">(50)</span>Acne</a></li>
-									<li><a href=""> <span class="pull-right">(56)</span>Grüne Erde</a></li>
-									<li><a href=""> <span class="pull-right">(27)</span>Albiro</a></li>
-									<li><a href=""> <span class="pull-right">(32)</span>Ronhill</a></li>
-									<li><a href=""> <span class="pull-right">(5)</span>Oddmolly</a></li>
-									<li><a href=""> <span class="pull-right">(9)</span>Boudestijn</a></li>
-									<li><a href=""> <span class="pull-right">(4)</span>Rösch creative culture</a></li>
-								</ul>
-							</div>
-						</div><!--/brands_products-->
-						
-						<div class="price-range"><!--price-range-->
-							<h2>Giá</h2>
-							<div class="well">
-								 <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
-								 <b>$ 0</b> <b class="pull-right">$ 600</b>
-							</div>
-						</div><!--/price-range-->
+						<div class="filter-products">
+							<h2>Lọc sản phẩm</h2>
+							<form method="get" action="<c:url value='/' />">
+								<div class="form-group">
+									<label for="filter-category">Danh mục</label>
+									<select class="form-control" id="filter-category" name="category">
+										<option value="">Tất cả danh mục</option>
+										<c:forEach items="${showListDanhMucSP}" var="categoryItem">
+											<c:if test="${categoryItem.hiden == false}">
+												<option value="<c:out value='${categoryItem.madanhmucsanpham}' />"
+													<c:if test="${selectedCategory == categoryItem.madanhmucsanpham}">selected</c:if>>
+													<c:out value="${categoryItem.tendanhmuc}" />
+												</option>
+											</c:if>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="filter-name">Tên sản phẩm</label>
+									<input class="form-control" id="filter-name" name="q" type="search"
+										value="<c:out value='${searchQuery}' />" placeholder="Nhập tên sản phẩm">
+								</div>
+								<div class="form-group">
+									<label for="filter-min-price">Giá từ (VNĐ)</label>
+									<input class="form-control" id="filter-min-price" name="minPrice" type="number"
+										min="0" step="1000" value="<c:out value='${minPrice}' />">
+								</div>
+								<div class="form-group">
+									<label for="filter-max-price">Giá đến (VNĐ)</label>
+									<input class="form-control" id="filter-max-price" name="maxPrice" type="number"
+										min="0" step="1000" value="<c:out value='${maxPrice}' />">
+								</div>
+								<button class="btn btn-primary btn-block" type="submit">Áp dụng bộ lọc</button>
+								<a class="btn btn-default btn-block" href="<c:url value='/' />">Xóa bộ lọc</a>
+							</form>
+						</div>
 						
 						<div class="shipping text-center"><!--shipping-->
 						<img src="<c:url value ="/resourcess/user/images/home/shipping.jpg"></c:url>" alt="" />
@@ -64,57 +77,92 @@
 				
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
-						<h2 class="title text-center">Sản Phẩm</h2>
+						<h2 class="title text-center">Sản Phẩm (${productPage.totalElements})</h2>
 						<c:choose>
-							<c:when test="${showListSanPham.size()!=0}">
+							<c:when test="${not empty showListSanPham}">
 								 <c:forEach items="${showListSanPham}" var="ListSanPham"  >
-									<c:if test="${ListSanPham.hiden == false}">
 												<div class="col-sm-4">
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
 												<c:choose>
-													<c:when test="${ListSanPham.getHinhsanpham()==null}">
-														<img src="<c:url value ="/resourcess/user/images/shop/product12.jpg"></c:url>" alt="" />
+													<c:when test="${empty ListSanPham.hinhsanpham}">
+														<img src="<c:url value='/resourcess/user/images/shop/product12.jpg' />" alt="" />
 													</c:when>
 													<c:otherwise>
-														<img src="<c:url value ="/resourcess/user/images/shop/${ListSanPham.getHinhsanpham()}"></c:url>" alt="" />
+														<img src="<c:url value='/resourcess/user/images/shop/${ListSanPham.hinhsanpham}' />" data-fallback="<c:url value='/resourcess/user/images/shop/product12.jpg' />" alt="<c:out value='${ListSanPham.tensanpham}' />" onerror="this.onerror=null;this.src=this.dataset.fallback;" />
 													</c:otherwise>
 												</c:choose>
-													<h2 class="giatiensp" >${ListSanPham.getGiatien()} VNĐ</h2>
-													<p>${ListSanPham.getTensanpham()}</p>
-													<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
+													<h2 class="giatiensp" ><c:out value="${ListSanPham.giatien}" /> VNĐ</h2>
+													<p><c:out value="${ListSanPham.tensanpham}" /></p>
+													<a href="<c:url value='/chi-tiet-san-pham/${ListSanPham.masanpham}' />" class="btn btn-default"><i class="fa fa-search"></i>Xem chi tiết</a>
 												</div>
 												
 													<div class="product-overlay">
-													<a href="/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product">
+													<a href="<c:url value='/chi-tiet-san-pham/${ListSanPham.masanpham}' />" id="infor_product">
 														<div class="overlay-content">
-															<h2 class="giatiensp">${ListSanPham.getGiatien()} VNĐ</h2>
-															<a href="/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" id="infor_product"><p>${ListSanPham.getTensanpham()}</p></a>
+															<h2 class="giatiensp"><c:out value="${ListSanPham.giatien}" /> VNĐ</h2>
+															<a href="<c:url value='/chi-tiet-san-pham/${ListSanPham.masanpham}' />" id="infor_product"><p><c:out value="${ListSanPham.tensanpham}" /></p></a>
 															
-															<a href="/chi-tiet-san-pham/${ListSanPham.getMasanpham()}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>
+															<a href="<c:url value='/chi-tiet-san-pham/${ListSanPham.masanpham}' />" class="btn btn-default"><i class="fa fa-search"></i>Xem chi tiết</a>
 														</div>
 													</a>
 													</div>
 											</div>
 										</div>
 									</div>
-									</c:if>
 								</c:forEach>
-								</br>
-							<ul class="pagination">
-								<li class="active"><a href="">1</a></li>
-								<li><a href="">2</a></li>
-								<li><a href="">3</a></li>
-								<li><a href="">&raquo;</a></li>
-							</ul>
 							</c:when>
 							<c:otherwise>
-								 <c:out value="Dữ liệu trống"></c:out>
+								 <c:out value="Không tìm thấy sản phẩm phù hợp"></c:out>
 								 </br>
 							</c:otherwise>
 						</c:choose>
 					</div><!--features_items-->
+					<c:if test="${productPage.totalPages > 1}">
+						<nav aria-label="Phân trang sản phẩm">
+							<ul class="pagination">
+								<c:if test="${productPage.hasPrevious()}">
+									<li>
+										<c:url var="previousPageUrl" value="/">
+											<c:if test="${not empty selectedCategory}"><c:param name="category" value="${selectedCategory}" /></c:if>
+											<c:if test="${not empty searchQuery}"><c:param name="q" value="${searchQuery}" /></c:if>
+											<c:if test="${not empty minPrice}"><c:param name="minPrice" value="${minPrice}" /></c:if>
+											<c:if test="${not empty maxPrice}"><c:param name="maxPrice" value="${maxPrice}" /></c:if>
+											<c:param name="page" value="${productPage.number - 1}" />
+										</c:url>
+										<a href="${previousPageUrl}" aria-label="Trang trước">&laquo;</a>
+									</li>
+								</c:if>
+								<c:forEach var="pageNumber" begin="0" end="${productPage.totalPages - 1}">
+									<c:if test="${pageNumber >= productPage.number - 2 && pageNumber <= productPage.number + 2}">
+										<li class="${pageNumber == productPage.number ? 'active' : ''}">
+											<c:url var="numberedPageUrl" value="/">
+												<c:if test="${not empty selectedCategory}"><c:param name="category" value="${selectedCategory}" /></c:if>
+												<c:if test="${not empty searchQuery}"><c:param name="q" value="${searchQuery}" /></c:if>
+												<c:if test="${not empty minPrice}"><c:param name="minPrice" value="${minPrice}" /></c:if>
+												<c:if test="${not empty maxPrice}"><c:param name="maxPrice" value="${maxPrice}" /></c:if>
+												<c:param name="page" value="${pageNumber}" />
+											</c:url>
+											<a href="${numberedPageUrl}">${pageNumber + 1}</a>
+										</li>
+									</c:if>
+								</c:forEach>
+								<c:if test="${productPage.hasNext()}">
+									<li>
+										<c:url var="nextPageUrl" value="/">
+											<c:if test="${not empty selectedCategory}"><c:param name="category" value="${selectedCategory}" /></c:if>
+											<c:if test="${not empty searchQuery}"><c:param name="q" value="${searchQuery}" /></c:if>
+											<c:if test="${not empty minPrice}"><c:param name="minPrice" value="${minPrice}" /></c:if>
+											<c:if test="${not empty maxPrice}"><c:param name="maxPrice" value="${maxPrice}" /></c:if>
+											<c:param name="page" value="${productPage.number + 1}" />
+										</c:url>
+										<a href="${nextPageUrl}" aria-label="Trang sau">&raquo;</a>
+									</li>
+								</c:if>
+							</ul>
+						</nav>
+					</c:if>
 				</div>
 			</div>
 		</div>
