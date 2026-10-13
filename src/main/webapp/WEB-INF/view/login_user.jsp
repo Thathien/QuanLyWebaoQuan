@@ -13,10 +13,10 @@
 						<h2 class="text-center">Đăng nhập</h2>
 						<form:form  action="dangnhap" modelAttribute="dangnhapuser" method ="post">
 							<form:input path="email" type="email" name="emaildn" id="emaildn" placeholder="Địa chỉ Email" />
-							<span class="text-danger" id="email-eror"></span>
+							<span class="text-danger" id="email-error"></span>
 							 <form:input path="matKhau" type="Password" placeholder="Mật khẩu" name="passworddn" id="passworddn" />
-							<span class="text-danger" id="password-eror">${resultDangNhap}</span>
-							</br>
+							<span class="text-danger" id="password-error">${resultDangNhap}</span>
+							<br/>
 							<span id="taomoitaikhoan" class="text-center">Tạo mới tài khoản</span>
 							<form:button type="submit" class="btn btn-default">Đăng nhập</form:button>
 						 </form:form>

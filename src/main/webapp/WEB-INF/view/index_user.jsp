@@ -16,7 +16,7 @@
 							<c:when test="${showListDanhMucSP.size()!=0}">
 								
 								 <c:forEach items="${showListDanhMucSP}" var="ListDanhMucSP"  >
-									<c:if test="${ListDanhMucSP.isHiden()==false}">
+									<c:if test="${ListDanhMucSP.hiden == false}">
 										<div class="panel panel-default">
 										<div class="panel-heading">
 											<h4 class="panel-title"><a href="">${ListDanhMucSP.getTendanhmuc()}</a></h4>
@@ -68,7 +68,7 @@
 						<c:choose>
 							<c:when test="${showListSanPham.size()!=0}">
 								 <c:forEach items="${showListSanPham}" var="ListSanPham"  >
-									<c:if test="${ListSanPham.isHiden()==false}">
+									<c:if test="${ListSanPham.hiden == false}">
 												<div class="col-sm-4">
 										<div class="product-image-wrapper">
 											<div class="single-products">
