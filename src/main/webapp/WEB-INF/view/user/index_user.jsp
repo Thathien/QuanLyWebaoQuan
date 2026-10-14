@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:include page="Header_user.jsp"></jsp:include>
-<jsp:include page="Menu_user.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/user/Header_user.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/user/Menu_user.jsp"></jsp:include>
 	
 	<section>
 		<div class="container">
@@ -167,4 +167,4 @@
 			</div>
 		</div>
 	</section>
-<jsp:include page="Footer_user.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/user/Footer_user.jsp"></jsp:include>

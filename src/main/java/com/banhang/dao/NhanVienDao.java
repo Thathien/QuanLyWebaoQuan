@@ -187,6 +187,33 @@ public class NhanVienDao implements NhanVienImp {
   }
 
   @Transactional
+  public boolean changeCustomerPassword(int id, String currentPassword, String newPassword) {
+    if (currentPassword == null
+        || currentPassword.isEmpty()
+        || newPassword == null
+        || newPassword.isEmpty()) {
+      return false;
+    }
+    int updated =
+        entityManager
+            .createQuery(
+                """
+                UPDATE NhanVien n
+                SET n.matkhau = :newPassword
+                WHERE n.manhanvien = :id
+                  AND n.matkhau = :currentPassword
+                  AND n.chucVu.machucvu = 3
+                  AND n.xacthuc = true
+                  AND COALESCE(n.lock, false) = false
+                """)
+            .setParameter("id", id)
+            .setParameter("currentPassword", currentPassword)
+            .setParameter("newPassword", newPassword)
+            .executeUpdate();
+    return updated == 1;
+  }
+
+  @Transactional
   public boolean deleteNhanVien(NhanVien nv) {
 
     entityManager.remove(entityManager.contains(nv) ? nv : entityManager.merge(nv));

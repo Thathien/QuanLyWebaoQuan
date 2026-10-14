@@ -96,6 +96,8 @@ WHERE i.object_id = OBJECT_ID(N''dbo.san_pham'')
 IF @dropSql IS NOT NULL EXEC sys.sp_executesql @dropSql;
 ');
 
+DELETE FROM [chi_tiet_yeu_cau_doi_tra];
+DELETE FROM [yeu_cau_doi_tra];
 DELETE FROM [chi_tiet_hoan_tien];
 DELETE FROM [hoan_tien];
 DELETE FROM [chi_tiet_tra_hang];
@@ -117,6 +119,8 @@ DELETE FROM [chuc_vu];
 DELETE FROM [khuyen_mai];
 
 DBCC CHECKIDENT ('chi_tiet_san_pham', RESEED, 0);
+DBCC CHECKIDENT ('chi_tiet_yeu_cau_doi_tra', RESEED, 0);
+DBCC CHECKIDENT ('yeu_cau_doi_tra', RESEED, 0);
 DBCC CHECKIDENT ('chi_tiet_hoan_tien', RESEED, 0);
 DBCC CHECKIDENT ('hoan_tien', RESEED, 0);
 DBCC CHECKIDENT ('chi_tiet_tra_hang', RESEED, 0);
@@ -335,7 +339,9 @@ INSERT INTO [hoa_don] (
 (5, N'Võ Ngọc Lan', N'ngoclan@example.com', N'0901000005', N'06 Nguyễn Huệ, TP. Huế', 3, N'Khách đã nhận hàng', N'10/10/2026 08:45:00', '2026-10-10T08:45:00', '2026-10-12T13:00:00', N'Nhận tại cửa hàng'),
 (6, N'Đặng Tuấn Kiệt', N'tuankiet@example.com', N'0901000006', N'31 Lạch Tray, Hải Phòng', 4, N'Khách đổi ý trước khi gửi', N'10/10/2026 15:00:00', '2026-10-10T15:00:00', NULL, N'Giao hàng tận nơi'),
 (7, N'Bùi Thanh Tâm', N'thanhtam@example.com', N'0901000007', N'09 Phan Đình Phùng, Đà Lạt', 3, N'Đã nhận hàng', N'11/10/2026 12:10:00', '2026-10-11T12:10:00', '2026-10-13T10:30:00', N'Giao hàng tận nơi'),
-(8, N'Ngô Hải Yến', N'haiyen@example.com', N'0901000008', N'73 Điện Biên Phủ, Bình Thạnh, TP. Hồ Chí Minh', 3, N'Hoàn tiền một phần', N'12/10/2026 16:40:00', '2026-10-12T16:40:00', '2026-10-13T09:00:00', N'Giao hàng tận nơi');
+(8, N'Ngô Hải Yến', N'haiyen@example.com', N'0901000008', N'73 Điện Biên Phủ, Bình Thạnh, TP. Hồ Chí Minh', 3, N'Hoàn tiền một phần', N'12/10/2026 16:40:00', '2026-10-12T16:40:00', '2026-10-13T09:00:00', N'Giao hàng tận nơi'),
+(9, N'Khách hàng mẫu', N'user@banhang.com', N'0901000009', N'12 Nguyễn Trãi, Hà Nội', 3, N'Đơn mẫu để thử yêu cầu đổi', N'12/10/2026 09:00:00', '2026-10-12T09:00:00', '2026-10-12T16:00:00', N'Giao hàng tận nơi'),
+(10, N'Khách hàng mẫu', N'user@banhang.com', N'0901000010', N'12 Nguyễn Trãi, Hà Nội', 3, N'Đơn mẫu để thử yêu cầu trả', N'13/10/2026 09:00:00', '2026-10-13T09:00:00', '2026-10-13T16:00:00', N'Giao hàng tận nơi');
 SET IDENTITY_INSERT [hoa_don] OFF;
 
 INSERT INTO [chi_tiet_hoa_don] (
@@ -348,7 +354,25 @@ INSERT INTO [chi_tiet_hoa_don] (
 (5, 5, 2, N'499000', 230000.00),
 (6, 6, 1, N'499000', 230000.00),
 (7, 7, 1, N'599000', 290000.00),
-(8, 8, 1, N'599000', 290000.00);
+(8, 8, 1, N'599000', 290000.00),
+(9, 1, 1, N'199000', 80000.00),
+(10, 3, 1, N'349000', 150000.00);
+
+SET IDENTITY_INSERT [yeu_cau_doi_tra] ON;
+INSERT INTO [yeu_cau_doi_tra] (
+    [id], [mahoadon], [loai_yeu_cau], [trang_thai], [ly_do], [created_at]
+) VALUES
+(1, 9, N'DOI', N'CHO_XU_LY', N'Khách muốn đổi sang size M', '2026-10-13T10:00:00'),
+(2, 10, N'TRA', N'CHO_XU_LY', N'Sản phẩm không phù hợp nhu cầu', '2026-10-14T09:30:00');
+SET IDENTITY_INSERT [yeu_cau_doi_tra] OFF;
+
+SET IDENTITY_INSERT [chi_tiet_yeu_cau_doi_tra] ON;
+INSERT INTO [chi_tiet_yeu_cau_doi_tra] (
+    [id], [yeu_cau_id], [bien_the_id], [bien_the_thay_the_id], [so_luong]
+) VALUES
+(1, 1, 1, 2, 1),
+(2, 2, 3, NULL, 1);
+SET IDENTITY_INSERT [chi_tiet_yeu_cau_doi_tra] OFF;
 
 SET IDENTITY_INSERT [hoan_tien] ON;
 INSERT INTO [hoan_tien] ([id], [invoice_id], [refunded_at], [reason])
@@ -376,15 +400,17 @@ INSERT INTO [bien_dong_kho] (
 (5, N'SALE', -2, 230000.00, N'ORDER:5', '2026-10-10T08:45:00', N'Đơn hàng mẫu #5'),
 (6, N'SALE', -1, 230000.00, N'ORDER:6', '2026-10-10T15:00:00', N'Đơn hàng mẫu #6'),
 (6, N'ORDER_CANCELLATION', 1, 230000.00, N'ORDER:6', '2026-10-10T16:00:00', N'Hoàn tồn đơn mẫu #6'),
+(1, N'SALE', -1, 80000.00, N'ORDER:9', '2026-10-12T09:00:00', N'Đơn đổi trả mẫu #9'),
+(3, N'SALE', -1, 150000.00, N'ORDER:10', '2026-10-13T09:00:00', N'Đơn đổi trả mẫu #10'),
 (7, N'SALE', -1, 290000.00, N'ORDER:7', '2026-10-11T12:10:00', N'Đơn hàng mẫu #7'),
 (7, N'CUSTOMER_RETURN', 1, 290000.00, N'ORDER:7', '2026-10-13T12:00:00', N'Nhập lại hàng khách trả'),
 (8, N'SALE', -1, 290000.00, N'ORDER:8', '2026-10-12T16:40:00', N'Đơn hàng mẫu #8');
 
 UPDATE [chi_tiet_san_pham]
 SET [soluong] = CASE [machitietsanpham]
-    WHEN 1 THEN 28
+    WHEN 1 THEN 27
     WHEN 2 THEN 44
-    WHEN 3 THEN 23
+    WHEN 3 THEN 22
     WHEN 4 THEN 19
     WHEN 5 THEN 16
     WHEN 6 THEN 16

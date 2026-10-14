@@ -73,7 +73,7 @@ class QuanLyAdminControllerTest {
     when(sizeSanPhamService.getAllSizeSanPham()).thenReturn(List.of());
     ModelMap model = new ModelMap();
 
-    assertEquals("products_admin", controller.Default(model, sessionWithRole(1)));
+    assertEquals("admin/products_admin", controller.Default(model, sessionWithRole(1)));
     assertTrue(model.containsAttribute("listSanPhamss"));
     assertTrue(model.containsAttribute("danhMucSanPhams"));
     assertTrue(model.containsAttribute("mauSanPhams"));
@@ -112,7 +112,7 @@ class QuanLyAdminControllerTest {
     when(sanPhamService.getListSanPhamById(4)).thenReturn(product);
     ModelMap model = new ModelMap();
 
-    assertEquals("products_admin", controller.updatesanpham(4, model, sessionWithRole(1)));
+    assertEquals("admin/products_admin", controller.updatesanpham(4, model, sessionWithRole(1)));
     assertSame(product, model.get("sanphamRS"));
   }
 
@@ -130,7 +130,7 @@ class QuanLyAdminControllerTest {
     ModelMap model = new ModelMap();
 
     assertEquals(
-        "products_admin",
+        "admin/products_admin",
         controller.saveProduct(
             null,
             "",

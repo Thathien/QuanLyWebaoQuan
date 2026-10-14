@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class ReportsAdminViewTest {
   @Test
   void inlineJavaScriptDoesNotUseJspElInterpolationSyntax() throws IOException {
-    String view = Files.readString(Path.of("src/main/webapp/WEB-INF/view/reports_admin.jsp"));
+    String view = Files.readString(Path.of("src/main/webapp/WEB-INF/view/admin/reports_admin.jsp"));
     int scriptStart = view.indexOf("<script>");
     int scriptEnd = view.indexOf("</script>", scriptStart);
 

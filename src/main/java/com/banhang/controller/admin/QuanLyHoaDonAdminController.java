@@ -29,7 +29,7 @@ public class QuanLyHoaDonAdminController {
       return session.getAttribute("taikhoan") == null ? "redirect:/admin/dangnhap" : "401";
     }
     model.addAttribute("orders", hoaDonService.getAllHoaDon());
-    return "MG_order_admin";
+    return "admin/MG_order_admin";
   }
 
   @PostMapping("/{id}/status")
@@ -56,7 +56,7 @@ public class QuanLyHoaDonAdminController {
               : "Không thể cập nhật trạng thái đơn hàng.");
     }
     model.addAttribute("orders", hoaDonService.getAllHoaDon());
-    return "MG_order_admin";
+    return "admin/MG_order_admin";
   }
 
   private boolean isAdmin(HttpSession session) {

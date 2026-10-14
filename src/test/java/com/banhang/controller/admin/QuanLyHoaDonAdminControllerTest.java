@@ -22,7 +22,7 @@ class QuanLyHoaDonAdminControllerTest {
     assertEquals("401", controller.listOrders(new ModelMap(), sessionWithRole(3)));
     verifyNoInteractions(hoaDonService);
 
-    assertEquals("MG_order_admin", controller.listOrders(new ModelMap(), sessionWithRole(1)));
+    assertEquals("admin/MG_order_admin", controller.listOrders(new ModelMap(), sessionWithRole(1)));
     verify(hoaDonService).getAllHoaDon();
   }
 
@@ -30,7 +30,7 @@ class QuanLyHoaDonAdminControllerTest {
   void orderStatusMustMoveToNextSupportedState() {
     MockHttpSession adminSession = sessionWithRole(1);
     ModelMap invalidModel = new ModelMap();
-    assertEquals("MG_order_admin", controller.updateStatus(7, 2, invalidModel, adminSession));
+    assertEquals("admin/MG_order_admin", controller.updateStatus(7, 2, invalidModel, adminSession));
     assertEquals(
         "Không tìm thấy đơn hàng hoặc trạng thái không hợp lệ.", invalidModel.get("orderError"));
     verify(hoaDonService).getAllHoaDon();
@@ -41,7 +41,7 @@ class QuanLyHoaDonAdminControllerTest {
     when(hoaDonService.getHoaDonById(7)).thenReturn(order);
     when(hoaDonService.updateHoaDon(order)).thenReturn(true);
     ModelMap validModel = new ModelMap();
-    assertEquals("MG_order_admin", controller.updateStatus(7, 2, validModel, adminSession));
+    assertEquals("admin/MG_order_admin", controller.updateStatus(7, 2, validModel, adminSession));
     assertEquals(2, order.getTinhtrang());
     assertEquals("Đã cập nhật trạng thái đơn hàng.", validModel.get("orderResult"));
   }

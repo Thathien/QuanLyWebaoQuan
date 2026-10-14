@@ -13,7 +13,7 @@ public class KhoAdminPageController {
   public String inventory(HttpSession session) {
     Object account = session.getAttribute("taikhoan");
     if (account instanceof TaiKhoanLogin login && login.getMachucvu() == 1) {
-      return "inventory_admin";
+      return "admin/inventory_admin";
     }
     return account == null ? "redirect:/admin/dangnhap" : "401";
   }

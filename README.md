@@ -55,6 +55,8 @@ graph TD
     *   `admin/`: Phân hệ quản trị dành cho nhân viên/quản lý.
     *   `user/`: Phân hệ dành cho khách mua sắm.
 
+Phân hệ khách hàng hỗ trợ cập nhật hồ sơ và mật khẩu, xem lịch sử/chi tiết đơn hàng, hủy đơn đang chờ xác nhận, và gửi yêu cầu đổi/trả trong 30 ngày từ khi hoàn thành đơn. Yêu cầu đổi có thể chọn biến thể màu/kích cỡ thay thế; quản trị viên xem và tiếp nhận hoặc từ chối yêu cầu tại trang quản trị.
+
 ---
 
 ## 📂 Cấu Trúc Thư Mục Dự Án
@@ -80,7 +82,11 @@ QuanLyWebaoQuan/
 │   │       ├── resourcess/           # Assets tĩnh (admin, user CSS/JS, CKEditor)
 │   │       └── WEB-INF/
 │   │           ├── web.xml           # Cấu hình Servlet Web (kích hoạt DispatcherServlet)
-│   │           └── view/             # File giao diện JSP cho cả Admin và User
+│   │           └── view/
+│   │               ├── admin/       # JSP dành riêng cho quản trị viên
+│   │               ├── user/        # JSP dành riêng cho khách hàng
+│   │               ├── 401.jsp      # Trang lỗi dùng chung
+│   │               └── 404.jsp      # Trang lỗi dùng chung
 │   └── test/
 │       └── java/com/banhang/
 │           ├── controller/user/

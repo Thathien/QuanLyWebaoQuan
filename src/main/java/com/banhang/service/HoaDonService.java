@@ -36,6 +36,10 @@ public class HoaDonService implements HoaDonImp {
     return hoaDonDao.getListHoaDonByEmail(email);
   }
 
+  public HoaDon getCustomerOrderById(int orderId, String email) {
+    return hoaDonDao.getCustomerOrderById(orderId, email);
+  }
+
   public int addNewHoaDonUser(HoaDon hoaDon) {
     return hoaDonDao.addNewHoaDonUser(hoaDon);
   }

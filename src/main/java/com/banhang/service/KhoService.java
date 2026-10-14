@@ -240,6 +240,24 @@ public class KhoService {
             && order.getTinhtrang() != TrangThaiHoaDon.DA_DUYET.getCode())) {
       throw new IllegalArgumentException("Chỉ có thể hủy đơn đang chờ xử lý hoặc đã duyệt.");
     }
+    cancelOrder(orderId, order);
+  }
+
+  public void cancelCustomerOrder(int orderId, String customerEmail) {
+    HoaDon order = khoDao.findOrderForUpdate(orderId);
+    if (order == null
+        || customerEmail == null
+        || order.getEmailkhachhang() == null
+        || !order.getEmailkhachhang().equalsIgnoreCase(customerEmail.trim())) {
+      throw new IllegalArgumentException("Không tìm thấy đơn hàng.");
+    }
+    if (order.getTinhtrang() != TrangThaiHoaDon.CHO_XU_LY.getCode()) {
+      throw new IllegalArgumentException("Chỉ có thể hủy đơn đang chờ xác nhận.");
+    }
+    cancelOrder(orderId, order);
+  }
+
+  private void cancelOrder(int orderId, HoaDon order) {
     for (ChiTietHoaDon line : khoDao.getOrderLines(orderId)) {
       ChiTietSanPham variant =
           khoDao.findVariantForUpdate(line.getChiTietHoaDonId().getMachitietsanpham());
