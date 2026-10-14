@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.banhang.entity.NhanVien;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 class NhanVienDaoTest {
   @Mock private EntityManager entityManager;
   @Mock private TypedQuery<NhanVien> query;
+  @Mock private Query updateQuery;
 
   private NhanVienDao dao;
 
@@ -59,5 +61,26 @@ class NhanVienDaoTest {
     assertTrue(dao.getAdminByCredentials("  ", "secret") == null);
     assertTrue(dao.getCustomerByCredentials("user@example.com", "") == null);
     org.mockito.Mockito.verifyNoInteractions(entityManager);
+  }
+
+  @Test
+  void passwordChangeRequiresCurrentPasswordAndTargetsOnlyActiveVerifiedCustomers() {
+    when(entityManager.createQuery(anyString())).thenReturn(updateQuery);
+    when(updateQuery.setParameter(anyString(), org.mockito.ArgumentMatchers.any()))
+        .thenReturn(updateQuery);
+    when(updateQuery.executeUpdate()).thenReturn(1);
+
+    assertTrue(dao.changeCustomerPassword(12, "current", "newPassword"));
+
+    ArgumentCaptor<String> queryCaptor = ArgumentCaptor.forClass(String.class);
+    verify(entityManager).createQuery(queryCaptor.capture());
+    String jpql = queryCaptor.getValue();
+    assertTrue(jpql.contains("n.matkhau = :currentPassword"));
+    assertTrue(jpql.contains("n.chucVu.machucvu = 3"));
+    assertTrue(jpql.contains("n.xacthuc = true"));
+    assertTrue(jpql.contains("COALESCE(n.lock, false) = false"));
+    verify(updateQuery).setParameter("id", 12);
+    verify(updateQuery).setParameter("currentPassword", "current");
+    verify(updateQuery).setParameter("newPassword", "newPassword");
   }
 }

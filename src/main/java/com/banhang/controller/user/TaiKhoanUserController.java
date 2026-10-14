@@ -1,19 +1,29 @@
 package com.banhang.controller.user;
 
 import com.banhang.commons.TaiKhoanLogin;
+import com.banhang.entity.ChiTietHoaDon;
+import com.banhang.entity.ChiTietSanPham;
+import com.banhang.entity.HoaDon;
+import com.banhang.entity.LoaiYeuCauDoiTra;
 import com.banhang.entity.NhanVien;
 import com.banhang.model.DangKyModel;
 import com.banhang.model.DangNhapModel;
+import com.banhang.service.ChiTietSanPhamService;
 import com.banhang.service.ChucVuService;
 import com.banhang.service.HoaDonService;
+import com.banhang.service.KhoService;
 import com.banhang.service.NhanVienService;
+import com.banhang.service.YeuCauDoiTraService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HexFormat;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -25,9 +35,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
@@ -38,8 +50,8 @@ public class TaiKhoanUserController {
   private static final String LOGIN_FORM_ATTRIBUTE = "dangnhapuser";
   private static final String REGISTER_FORM_ATTRIBUTE = "dangkyuser";
 
-  private static final String LOGIN_VIEW = "login_user";
-  private static final String REGISTER_VIEW = "regester_user";
+  private static final String LOGIN_VIEW = "user/login_user";
+  private static final String REGISTER_VIEW = "user/regester_user";
 
   private static final int NO_ROLE = 0;
   private static final int ADMIN_ROLE = 1;
@@ -52,6 +64,9 @@ public class TaiKhoanUserController {
   private final NhanVienService nhanVienService;
   private final ChucVuService chucVuService;
   private final HoaDonService hoaDonService;
+  private final KhoService khoService;
+  private final ChiTietSanPhamService chiTietSanPhamService;
+  private final YeuCauDoiTraService yeuCauDoiTraService;
 
   @Value("${app.base-url:http://localhost:8080}")
   private String baseUrl;
@@ -150,7 +165,7 @@ public class TaiKhoanUserController {
         verified
             ? "Xác thực email thành công. Bạn có thể đăng nhập."
             : "Liên kết xác thực không hợp lệ hoặc đã hết hạn.");
-    return "xac_thuc_email_user";
+    return "user/xac_thuc_email_user";
   }
 
   @GetMapping("tai-khoan")
@@ -165,7 +180,7 @@ public class TaiKhoanUserController {
       return "redirect:/dangnhap";
     }
     model.addAttribute("customer", customer);
-    return "account_user";
+    return "user/account_user";
   }
 
   @PostMapping("tai-khoan")
@@ -186,7 +201,7 @@ public class TaiKhoanUserController {
         || normalizedAddress.length() > 255) {
       model.addAttribute("accountError", "Vui lòng nhập họ tên và địa chỉ hợp lệ.");
       model.addAttribute("customer", customer);
-      return "account_user";
+      return "user/account_user";
     }
 
     customer.setHoten(normalizedName);
@@ -198,7 +213,37 @@ public class TaiKhoanUserController {
       model.addAttribute("accountResult", "Đã cập nhật thông tin tài khoản.");
     }
     model.addAttribute("customer", customer);
-    return "account_user";
+    return "user/account_user";
+  }
+
+  @PostMapping("tai-khoan/doi-mat-khau")
+  public String changePassword(
+      @RequestParam String matKhauHienTai,
+      @RequestParam String matKhauMoi,
+      @RequestParam String xacNhanMatKhauMoi,
+      HttpSession session,
+      RedirectAttributes redirectAttributes) {
+    TaiKhoanLogin account = getCustomerAccount(session);
+    if (account == null) {
+      return session.getAttribute(ACCOUNT_ATTRIBUTE) == null ? "redirect:/dangnhap" : "redirect:/";
+    }
+    if (matKhauMoi.length() < 8
+        || matKhauMoi.length() > 100
+        || !matKhauMoi.equals(xacNhanMatKhauMoi)
+        || matKhauMoi.equals(matKhauHienTai)) {
+      redirectAttributes.addFlashAttribute(
+          "accountError",
+          "Mật khẩu mới phải từ 8 đến 100 ký tự, khác mật khẩu hiện tại và khớp xác nhận.");
+      return "redirect:/tai-khoan";
+    }
+    if (!nhanVienService.changeCustomerPassword(
+        account.getManhanvien(), matKhauHienTai, matKhauMoi)) {
+      redirectAttributes.addFlashAttribute(
+          "accountError", "Mật khẩu hiện tại không đúng hoặc không thể cập nhật mật khẩu.");
+      return "redirect:/tai-khoan";
+    }
+    redirectAttributes.addFlashAttribute("accountResult", "Đã đổi mật khẩu thành công.");
+    return "redirect:/tai-khoan";
   }
 
   @GetMapping("don-hang")
@@ -208,7 +253,158 @@ public class TaiKhoanUserController {
       return session.getAttribute(ACCOUNT_ATTRIBUTE) == null ? "redirect:/dangnhap" : "redirect:/";
     }
     model.addAttribute("orders", hoaDonService.getListHoaDonByEmail(account.getTendangnhap()));
-    return "orders_user";
+    return "user/orders_user";
+  }
+
+  @GetMapping("don-hang/{id}")
+  public String orderDetails(@PathVariable int id, HttpSession session, Model model) {
+    TaiKhoanLogin account = getCustomerAccount(session);
+    if (account == null) {
+      return session.getAttribute(ACCOUNT_ATTRIBUTE) == null ? "redirect:/dangnhap" : "redirect:/";
+    }
+    NhanVien customer = getCustomerDetails(account, session);
+    if (customer == null) {
+      return "redirect:/dangnhap";
+    }
+    HoaDon order = hoaDonService.getCustomerOrderById(id, customer.getEmail());
+    if (order == null) {
+      return "404";
+    }
+    model.addAttribute("order", order);
+    model.addAttribute("returnRequests", yeuCauDoiTraService.getRequestsForOrder(id));
+    model.addAttribute("canRequestReturn", yeuCauDoiTraService.isEligible(order));
+    return "user/order-details_user";
+  }
+
+  @PostMapping("don-hang/{id}/huy")
+  public String cancelOrder(
+      @PathVariable int id, HttpSession session, RedirectAttributes redirectAttributes) {
+    TaiKhoanLogin account = getCustomerAccount(session);
+    if (account == null) {
+      return session.getAttribute(ACCOUNT_ATTRIBUTE) == null ? "redirect:/dangnhap" : "redirect:/";
+    }
+    NhanVien customer = getCustomerDetails(account, session);
+    if (customer == null) {
+      return "redirect:/dangnhap";
+    }
+    try {
+      khoService.cancelCustomerOrder(id, customer.getEmail());
+      redirectAttributes.addFlashAttribute("orderResult", "Đã hủy đơn hàng.");
+    } catch (IllegalArgumentException exception) {
+      redirectAttributes.addFlashAttribute("orderError", exception.getMessage());
+    }
+    return "redirect:/don-hang";
+  }
+
+  @GetMapping("don-hang/{id}/doi-tra")
+  public String showReturnRequest(@PathVariable int id, HttpSession session, ModelMap model) {
+    TaiKhoanLogin account = getCustomerAccount(session);
+    if (account == null) {
+      return session.getAttribute(ACCOUNT_ATTRIBUTE) == null ? "redirect:/dangnhap" : "redirect:/";
+    }
+    NhanVien customer = getCustomerDetails(account, session);
+    if (customer == null) {
+      return "redirect:/dangnhap";
+    }
+    HoaDon order = hoaDonService.getCustomerOrderById(id, customer.getEmail());
+    if (order == null) {
+      return "404";
+    }
+    if (!yeuCauDoiTraService.isEligible(order)) {
+      model.addAttribute(
+          "orderError", "Chỉ có thể yêu cầu đổi/trả trong vòng 30 ngày từ khi đơn hoàn thành.");
+      model.addAttribute("order", order);
+      model.addAttribute("returnRequests", yeuCauDoiTraService.getRequestsForOrder(id));
+      model.addAttribute("canRequestReturn", false);
+      return "user/order-details_user";
+    }
+    model.addAttribute("order", order);
+    model.addAttribute("replacementVariants", getReplacementVariants(order));
+    return "user/return-request_user";
+  }
+
+  @PostMapping("don-hang/{id}/doi-tra")
+  public String createReturnRequest(
+      @PathVariable int id,
+      @RequestParam String loaiYeuCau,
+      @RequestParam String lyDo,
+      @RequestParam List<Integer> maBienThe,
+      @RequestParam List<Integer> soLuong,
+      @RequestParam(required = false) List<String> maBienTheThayThe,
+      HttpSession session,
+      RedirectAttributes redirectAttributes) {
+    TaiKhoanLogin account = getCustomerAccount(session);
+    if (account == null) {
+      return session.getAttribute(ACCOUNT_ATTRIBUTE) == null ? "redirect:/dangnhap" : "redirect:/";
+    }
+    NhanVien customer = getCustomerDetails(account, session);
+    if (customer == null) {
+      return "redirect:/dangnhap";
+    }
+    if (maBienThe.size() != soLuong.size()
+        || (maBienTheThayThe != null && maBienThe.size() != maBienTheThayThe.size())) {
+      redirectAttributes.addFlashAttribute(
+          "returnError", "Thông tin sản phẩm gửi lên không hợp lệ.");
+      return "redirect:/don-hang/" + id + "/doi-tra";
+    }
+    try {
+      LoaiYeuCauDoiTra requestType = LoaiYeuCauDoiTra.valueOf(loaiYeuCau);
+      List<YeuCauDoiTraService.RequestLine> lines =
+          java.util.stream.IntStream.range(0, maBienThe.size())
+              .mapToObj(
+                  index -> {
+                    String replacementId =
+                        maBienTheThayThe == null ? null : maBienTheThayThe.get(index);
+                    Integer replacement =
+                        replacementId == null || replacementId.isBlank()
+                            ? null
+                            : Integer.valueOf(replacementId);
+                    return new YeuCauDoiTraService.RequestLine(
+                        maBienThe.get(index), soLuong.get(index), replacement);
+                  })
+              .toList();
+      yeuCauDoiTraService.createRequest(id, customer.getEmail(), requestType, lyDo, lines);
+      redirectAttributes.addFlashAttribute(
+          "orderResult", "Đã gửi yêu cầu đổi/trả. Cửa hàng sẽ xác nhận trong thời gian sớm nhất.");
+      return "redirect:/don-hang/" + id;
+    } catch (IllegalArgumentException exception) {
+      redirectAttributes.addFlashAttribute("returnError", exception.getMessage());
+      return "redirect:/don-hang/" + id + "/doi-tra";
+    }
+  }
+
+  private Map<Integer, List<ChiTietSanPham>> getReplacementVariants(HoaDon order) {
+    Map<Integer, List<ChiTietSanPham>> replacementVariants = new HashMap<>();
+    if (order.getChiTietHoaDon() == null) {
+      return replacementVariants;
+    }
+    for (ChiTietHoaDon line : order.getChiTietHoaDon()) {
+      ChiTietSanPham original = line.getBienThe();
+      if (original == null
+          || original.getSanPham() == null
+          || original.getSanPham().getMasanpham() == null) {
+        continue;
+      }
+      int originalVariantId = original.getMachitietsanpham();
+      int productId = original.getSanPham().getMasanpham();
+      List<ChiTietSanPham> availableVariants =
+          chiTietSanPhamService.getInforCTSanPhambyID(productId).stream()
+              .filter(variant -> variant.getMachitietsanpham() != originalVariantId)
+              .filter(variant -> variant.getSoluong() > 0)
+              .filter(variant -> variant.getSanPham() != null)
+              .filter(variant -> Boolean.FALSE.equals(variant.getSanPham().getHiden()))
+              .toList();
+      replacementVariants.put(originalVariantId, availableVariants);
+    }
+    return replacementVariants;
+  }
+
+  private NhanVien getCustomerDetails(TaiKhoanLogin account, HttpSession session) {
+    NhanVien customer = nhanVienService.getInforbyId(account.getManhanvien());
+    if (customer == null) {
+      session.removeAttribute(ACCOUNT_ATTRIBUTE);
+    }
+    return customer;
   }
 
   private TaiKhoanLogin getCustomerAccount(HttpSession session) {

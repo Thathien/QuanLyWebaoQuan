@@ -83,7 +83,7 @@ class GioHangControllerTest {
     when(gioHangService.getCart(customerSession)).thenReturn(cart);
     ModelMap model = new ModelMap();
 
-    assertEquals("cart_user", controller.loadGioHang(customerSession, model));
+    assertEquals("user/cart_user", controller.loadGioHang(customerSession, model));
     assertEquals(false, model.get("isEmpty"));
     assertEquals(1, model.get("soluonggiohang"));
     assertEquals(cart, model.get("gioHangs"));

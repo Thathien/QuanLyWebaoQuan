@@ -32,7 +32,7 @@ class TaiKhoanAdminControllerTest {
   @Test
   void loginPageRedirectsExistingRolesOrShowsForm() {
     ExtendedModelMap model = new ExtendedModelMap();
-    assertEquals("login_admin", controller.showDangNhap(model, new MockHttpSession()));
+    assertEquals("admin/login_admin", controller.showDangNhap(model, new MockHttpSession()));
     assertTrue(model.containsAttribute("dangnhapadmin"));
     assertEquals("redirect:/admin", controller.showDangNhap(model, sessionWithRole(1)));
     assertEquals("redirect:/", controller.showDangNhap(model, sessionWithRole(3)));
@@ -45,7 +45,7 @@ class TaiKhoanAdminControllerTest {
     ModelMap model = new ModelMap();
     when(nhanVienService.getAdminByCredentials("admin@example.com", "secret")).thenReturn(null);
 
-    assertEquals("login_admin", controller.dangNhapProcess(credentials, binding, model));
+    assertEquals("admin/login_admin", controller.dangNhapProcess(credentials, binding, model));
     assertTrue(model.containsAttribute("resultsAdmin"));
 
     NhanVien admin = new NhanVien();
@@ -70,7 +70,7 @@ class TaiKhoanAdminControllerTest {
     ModelMap model = new ModelMap();
     when(nhanVienService.getAdminByCredentials("admin", "secret")).thenReturn(null);
 
-    assertEquals("login_admin", controller.dangNhapProcess(credentials, binding, model));
+    assertEquals("admin/login_admin", controller.dangNhapProcess(credentials, binding, model));
     assertTrue(model.containsAttribute("resultsAdmin"));
     verify(nhanVienService).getAdminByCredentials("admin", "secret");
   }

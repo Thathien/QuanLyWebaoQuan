@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="Header_admin.jsp"></jsp:include>
-<jsp:include page="Menu_admin.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/admin/Header_admin.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/admin/Menu_admin.jsp"></jsp:include>
 
 <div id="layoutSidenav_content">
   <main class="container-fluid">
@@ -57,4 +57,4 @@
   </main>
 </div>
 
-<jsp:include page="Footer_admin.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/admin/Footer_admin.jsp"></jsp:include>

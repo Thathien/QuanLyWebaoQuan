@@ -41,7 +41,7 @@ public class TaiKhoanAdminController {
       return "redirect:/";
     } else {
       m.addAttribute("dangnhapadmin", new DangNhapModel());
-      return "login_admin";
+      return "admin/login_admin";
     }
   }
 
@@ -51,7 +51,7 @@ public class TaiKhoanAdminController {
       BindingResult br,
       ModelMap map) {
     if (br.hasErrors()) {
-      return "login_admin";
+      return "admin/login_admin";
     }
 
     NhanVien tk =
@@ -67,7 +67,7 @@ public class TaiKhoanAdminController {
     }
     map.addAttribute(
         "resultsAdmin", "Bạn không đủ quyền để truy cập hoặc thông tin đăng nhập không đúng");
-    return "login_admin";
+    return "admin/login_admin";
   }
 
   @GetMapping("dangxuat")

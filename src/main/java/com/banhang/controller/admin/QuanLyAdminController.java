@@ -63,7 +63,7 @@ public class QuanLyAdminController {
       return httpSession.getAttribute("taikhoan") == null ? "redirect:/admin/dangnhap" : "401";
     }
     populateProductPage(modelMap);
-    return "products_admin";
+    return "admin/products_admin";
   }
 
   @GetMapping("/detal/{id}")
@@ -76,7 +76,7 @@ public class QuanLyAdminController {
       populateProductPage(map);
       map.addAttribute("sanphamRS", sanphamRS);
       map.addAttribute("editingProduct", true);
-      return "products_admin";
+      return "admin/products_admin";
     } else {
       return "401";
     }
@@ -140,7 +140,7 @@ public class QuanLyAdminController {
       populateProductPage(map);
       map.addAttribute("sanphamRS", sanPhamUpdate);
       map.addAttribute("editingProduct", true);
-      return "products_admin";
+      return "admin/products_admin";
     } else {
       return "401";
     }
@@ -232,7 +232,7 @@ public class QuanLyAdminController {
           mamau,
           soluong);
       model.addAttribute("formError", "Thông tin sản phẩm chưa hợp lệ hoặc còn thiếu.");
-      return "products_admin";
+      return "admin/products_admin";
     }
 
     product.setTensanpham(tensanpham.trim());
@@ -258,7 +258,7 @@ public class QuanLyAdminController {
             mamau,
             soluong);
         model.addAttribute("formError", "Tên sản phẩm đã tồn tại.");
-        return "products_admin";
+        return "admin/products_admin";
       }
     }
     if (imageFile != null && !imageFile.isEmpty()) {
@@ -283,7 +283,7 @@ public class QuanLyAdminController {
             mamau,
             soluong);
         model.addAttribute("formError", "Ảnh phải là JPG, PNG, GIF hoặc WebP và tối đa 5 MB.");
-        return "products_admin";
+        return "admin/products_admin";
       }
     }
     product.setHinhsanpham(

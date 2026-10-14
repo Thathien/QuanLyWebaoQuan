@@ -2,8 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %> 
-<jsp:include page="Header_user.jsp"></jsp:include>
-<jsp:include page="Menu_user.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/user/Header_user.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/user/Menu_user.jsp"></jsp:include>
 <section id="form"><!--form-->
 		<div class="container">
 			<div class="row">
@@ -49,4 +49,4 @@
 		</div>
 	</section><!--/form-->
 
-<jsp:include page="Footer_user.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/user/Footer_user.jsp"></jsp:include>

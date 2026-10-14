@@ -79,7 +79,7 @@ public class TrangChuUserController {
       map.addAttribute("minPrice", minPrice);
       map.addAttribute("maxPrice", maxPrice);
 
-      return "index_user";
+      return "user/index_user";
     }
   }
 
@@ -95,7 +95,7 @@ public class TrangChuUserController {
     map.addAttribute("productImageName", sanphamRS.getHinhsanpham());
     map.addAttribute("showListDanhMucSP", showListDanhMucSP);
 
-    return "product-details_user";
+    return "user/product-details_user";
   }
 
   public int checkSecurityUser(HttpSession httpSession) {

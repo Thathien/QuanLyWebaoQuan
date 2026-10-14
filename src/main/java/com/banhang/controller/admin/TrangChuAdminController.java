@@ -32,7 +32,7 @@ public class TrangChuAdminController {
           "completedInvoiceCount",
           invoices.stream().filter(invoice -> invoice.getTinhtrang() == 3).count());
       map.addAttribute("recentInvoices", invoices.stream().limit(5).toList());
-      return "index_admin";
+      return "admin/index_admin";
     }
     return httpSession.getAttribute("taikhoan") == null ? "redirect:/admin/dangnhap" : "401";
   }
@@ -40,7 +40,7 @@ public class TrangChuAdminController {
   @GetMapping("/reports")
   public String reports(HttpSession httpSession) {
     if (checkSecurity(httpSession)) {
-      return "reports_admin";
+      return "admin/reports_admin";
     }
     return httpSession.getAttribute("taikhoan") == null ? "redirect:/admin/dangnhap" : "401";
   }

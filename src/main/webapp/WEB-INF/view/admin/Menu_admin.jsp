@@ -34,6 +34,10 @@
               <div class="sb-nav-link-icon"><i class="fas fa-receipt"></i></div>
               Đơn hàng
             </a>
+            <a class="nav-link" href="<c:url value='/admin/doitra' />">
+              <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+              Yêu cầu đổi/trả
+            </a>
             <div class="sb-sidenav-menu-heading">Phân tích</div>
             <a class="nav-link" href="<c:url value='/admin/reports' />">
               <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>

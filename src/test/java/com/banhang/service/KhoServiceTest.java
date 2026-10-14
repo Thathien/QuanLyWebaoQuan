@@ -1,5 +1,6 @@
 package com.banhang.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -9,8 +10,11 @@ import static org.mockito.Mockito.when;
 import com.banhang.dao.KhoDao;
 import com.banhang.dto.report.RefundRequest;
 import com.banhang.entity.ChiTietHoaDon;
+import com.banhang.entity.ChiTietHoaDonId;
+import com.banhang.entity.ChiTietSanPham;
 import com.banhang.entity.HoaDon;
 import com.banhang.entity.HoanTien;
+import com.banhang.entity.LoaiBienDongKho;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -62,5 +66,56 @@ class KhoServiceTest {
 
     assertThrows(IllegalArgumentException.class, () -> khoService.refundOrder(21, request));
     verify(khoDao, never()).persist(any(HoanTien.class));
+  }
+
+  @Test
+  void customerCanCancelOnlyTheirOwnOrderWhileItIsAwaitingConfirmation() {
+    HoaDon order = new HoaDon();
+    order.setTinhtrang(0);
+    order.setEmailkhachhang("customer@example.com");
+    ChiTietHoaDon line = new ChiTietHoaDon();
+    ChiTietHoaDonId lineId = new ChiTietHoaDonId();
+    lineId.setMachitietsanpham(7);
+    line.setChiTietHoaDonId(lineId);
+    line.setSoluong(2);
+    when(khoDao.findOrderForUpdate(21)).thenReturn(order);
+    when(khoDao.getOrderLines(21)).thenReturn(List.of(line));
+    ChiTietSanPham variant = new ChiTietSanPham();
+    variant.setSoluong(4);
+    when(khoDao.findVariantForUpdate(7)).thenReturn(variant);
+
+    khoService.cancelCustomerOrder(21, "CUSTOMER@example.com");
+
+    assertEquals(6, variant.getSoluong());
+    assertEquals(4, order.getTinhtrang());
+    verify(khoDao)
+        .saveMovement(
+            variant,
+            LoaiBienDongKho.HUY_DON.getCode(),
+            2,
+            null,
+            "ORDER:21",
+            "Hoàn tồn kho do hủy đơn");
+  }
+
+  @Test
+  void customerCannotCancelSomeoneElsesOrAlreadyApprovedOrder() {
+    HoaDon someoneElsesOrder = new HoaDon();
+    someoneElsesOrder.setTinhtrang(0);
+    someoneElsesOrder.setEmailkhachhang("other@example.com");
+    when(khoDao.findOrderForUpdate(21)).thenReturn(someoneElsesOrder);
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> khoService.cancelCustomerOrder(21, "customer@example.com"));
+
+    HoaDon approvedOrder = new HoaDon();
+    approvedOrder.setTinhtrang(1);
+    approvedOrder.setEmailkhachhang("customer@example.com");
+    when(khoDao.findOrderForUpdate(22)).thenReturn(approvedOrder);
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> khoService.cancelCustomerOrder(22, "customer@example.com"));
+    verify(khoDao, never()).getOrderLines(21);
+    verify(khoDao, never()).getOrderLines(22);
   }
 }
