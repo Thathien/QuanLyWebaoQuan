@@ -54,7 +54,7 @@ public class TrangChuUserControllerTest {
     mockMvc
         .perform(get("/").session(session))
         .andExpect(status().isOk())
-        .andExpect(view().name("index_user"))
+        .andExpect(view().name("user/index_user"))
         .andExpect(model().attributeExists("showListDanhMucSP"))
         .andExpect(model().attributeExists("showListSanPham"))
         .andExpect(model().attributeExists("productPage"));
@@ -150,7 +150,7 @@ public class TrangChuUserControllerTest {
     mockMvc
         .perform(get("/chi-tiet-san-pham/{id}", productId))
         .andExpect(status().isOk())
-        .andExpect(view().name("product-details_user"))
+        .andExpect(view().name("user/product-details_user"))
         .andExpect(model().attribute("sanphamRS", product))
         .andExpect(model().attribute("productImageName", "product12.jpg"))
         .andExpect(model().attributeExists("showListDanhMucSP"));

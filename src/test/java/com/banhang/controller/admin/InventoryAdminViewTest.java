@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 class InventoryAdminViewTest {
   @Test
   void inventoryViewExposesReceiptSupplierAndStockActions() throws IOException {
-    String view = Files.readString(Path.of("src/main/webapp/WEB-INF/view/inventory_admin.jsp"));
+    String view =
+        Files.readString(Path.of("src/main/webapp/WEB-INF/view/admin/inventory_admin.jsp"));
 
     assertTrue(view.contains("id=\"receipt-form\""));
     assertTrue(view.contains("id=\"supplier-form\""));

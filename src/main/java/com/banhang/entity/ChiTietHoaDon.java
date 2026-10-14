@@ -3,6 +3,7 @@ package com.banhang.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -32,4 +33,8 @@ public class ChiTietHoaDon implements Serializable {
   @ManyToOne
   @JoinColumn(name = "mahoadon", insertable = false, updatable = false)
   private HoaDon hoaDon;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "machitietsanpham", insertable = false, updatable = false)
+  private ChiTietSanPham bienThe;
 }

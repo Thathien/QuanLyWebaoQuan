@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 class ProductsAdminViewTest {
   @Test
   void productsViewIncludesModalPaginationBulkDeleteImagesAndPriceFormatting() throws IOException {
-    String view = Files.readString(Path.of("src/main/webapp/WEB-INF/view/products_admin.jsp"));
+    String view =
+        Files.readString(Path.of("src/main/webapp/WEB-INF/view/admin/products_admin.jsp"));
 
     assertTrue(view.contains("<dialog id=\"product-modal\""));
     assertTrue(view.contains("id=\"product-page-size\""));

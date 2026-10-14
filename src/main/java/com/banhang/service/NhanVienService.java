@@ -65,6 +65,10 @@ public class NhanVienService implements NhanVienImp {
     return nhanVienDao.updateInfor(nv);
   }
 
+  public boolean changeCustomerPassword(int id, String currentPassword, String newPassword) {
+    return nhanVienDao.changeCustomerPassword(id, currentPassword, newPassword);
+  }
+
   public boolean deleteNhanVien(NhanVien nv) {
     return nhanVienDao.deleteNhanVien(nv);
   }

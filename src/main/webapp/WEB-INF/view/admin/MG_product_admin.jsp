@@ -2,8 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:include page="Header_admin.jsp"></jsp:include>
-<jsp:include page="Menu_admin.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/admin/Header_admin.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/admin/Menu_admin.jsp"></jsp:include>
 
             <div id="layoutSidenav_content">
                 <main>
@@ -89,7 +89,7 @@
                     </div>
                 </main>
 
-<jsp:include page="Footer_admin.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/admin/Footer_admin.jsp"></jsp:include>
 
             <!-- model addsanpham -->
             <div class="modal fade bd-example-modal-lg overflow-auto" id="addsanphammodel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

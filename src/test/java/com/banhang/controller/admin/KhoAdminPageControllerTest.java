@@ -29,12 +29,12 @@ class KhoAdminPageControllerTest {
     mockMvc
         .perform(get("/admin/inventory").session(sessionWithRole(1)))
         .andExpect(status().isOk())
-        .andExpect(view().name("inventory_admin"));
+        .andExpect(view().name("admin/inventory_admin"));
   }
 
   @Test
   void inventoryPageUsesExpectedRoute() {
-    assertEquals("inventory_admin", controller.inventory(sessionWithRole(1)));
+    assertEquals("admin/inventory_admin", controller.inventory(sessionWithRole(1)));
   }
 
   private MockHttpSession sessionWithRole(int role) {

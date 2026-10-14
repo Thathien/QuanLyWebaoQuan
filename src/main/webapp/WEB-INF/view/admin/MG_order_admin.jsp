@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<jsp:include page="Header_admin.jsp"></jsp:include>
-<jsp:include page="Menu_admin.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/admin/Header_admin.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/admin/Menu_admin.jsp"></jsp:include>
 
 <div id="layoutSidenav_content">
   <main class="container-fluid">
@@ -26,6 +26,7 @@
           <option value="1">Đã xác nhận</option>
           <option value="2">Đang giao</option>
           <option value="3">Đã hoàn thành</option>
+          <option value="4">Đã hủy</option>
         </select>
       </div>
       <div class="col-md-2 mb-2 text-md-right">
@@ -55,6 +56,7 @@
                   <c:when test="${order.tinhtrang == 1}">Đã xác nhận</c:when>
                   <c:when test="${order.tinhtrang == 2}">Đang giao</c:when>
                   <c:when test="${order.tinhtrang == 3}">Đã hoàn thành</c:when>
+                  <c:when test="${order.tinhtrang == 4}">Đã hủy</c:when>
                   <c:otherwise>Không xác định</c:otherwise>
                 </c:choose>
               </td>
@@ -108,4 +110,4 @@
     status.addEventListener('change', filterOrders);
   })();
 </script>
-<jsp:include page="Footer_admin.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/view/admin/Footer_admin.jsp"></jsp:include>

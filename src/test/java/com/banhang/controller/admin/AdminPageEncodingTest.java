@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class AdminPageEncodingTest {
   @Test
   void adminJspPagesAndServerResponsesUseUtf8() throws IOException {
-    Path viewDirectory = Path.of("src/main/webapp/WEB-INF/view");
+    Path viewDirectory = Path.of("src/main/webapp/WEB-INF/view/admin");
     try (Stream<Path> pages = Files.list(viewDirectory)) {
       pages
           .filter(path -> path.getFileName().toString().endsWith("admin.jsp"))

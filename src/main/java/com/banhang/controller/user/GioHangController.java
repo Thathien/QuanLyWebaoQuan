@@ -114,7 +114,7 @@ public class GioHangController {
         map.addAttribute("isEmpty", true);
         map.addAttribute("gioHangs", List.of());
       }
-      return "cart_user";
+      return "user/cart_user";
     }
   }
 

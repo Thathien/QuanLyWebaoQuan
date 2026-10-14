@@ -119,6 +119,31 @@ public class HoaDonDao implements HoaDonImp {
         .getResultList();
   }
 
+  @Transactional(readOnly = true)
+  public HoaDon getCustomerOrderById(int orderId, String email) {
+    if (email == null || email.isBlank()) {
+      return null;
+    }
+    return entityManager
+        .createQuery(
+            """
+            SELECT DISTINCT h FROM HoaDon h
+            LEFT JOIN FETCH h.chiTietHoaDon line
+            LEFT JOIN FETCH line.bienThe variant
+            LEFT JOIN FETCH variant.sanPham
+            LEFT JOIN FETCH variant.sizeSanPham
+            LEFT JOIN FETCH variant.mauSanPham
+            WHERE h.mahoadon = :orderId
+              AND LOWER(h.emailkhachhang) = LOWER(:email)
+            """,
+            HoaDon.class)
+        .setParameter("orderId", orderId)
+        .setParameter("email", email.trim())
+        .getResultStream()
+        .findFirst()
+        .orElse(null);
+  }
+
   /** Thêm hóa đơn mới. */
   @Override
   public int addNewHoaDonUser(HoaDon hoaDon) {

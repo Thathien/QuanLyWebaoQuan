@@ -38,14 +38,14 @@ class TrangChuAdminControllerTest {
     MockHttpSession customerSession = sessionWithRole(3);
     assertEquals("401", controller.index(new ModelMap(), customerSession));
 
-    assertEquals("index_admin", controller.index(new ModelMap(), sessionWithRole(1)));
+    assertEquals("admin/index_admin", controller.index(new ModelMap(), sessionWithRole(1)));
   }
 
   @Test
   void reportsPageRequiresAdminRole() {
     assertEquals("redirect:/admin/dangnhap", controller.reports(new MockHttpSession()));
     assertEquals("401", controller.reports(sessionWithRole(3)));
-    assertEquals("reports_admin", controller.reports(sessionWithRole(1)));
+    assertEquals("admin/reports_admin", controller.reports(sessionWithRole(1)));
   }
 
   @Test
@@ -55,7 +55,7 @@ class TrangChuAdminControllerTest {
     mockMvc
         .perform(get("/admin/reports").session(sessionWithRole(1)))
         .andExpect(status().isOk())
-        .andExpect(view().name("reports_admin"));
+        .andExpect(view().name("admin/reports_admin"));
     mockMvc
         .perform(get("/admin/reports").session(sessionWithRole(3)))
         .andExpect(status().isOk())
